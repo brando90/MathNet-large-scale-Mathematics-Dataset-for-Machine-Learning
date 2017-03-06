@@ -11,11 +11,13 @@ class AlgebraI(object):
         self.name = 'AlgebraI'
 
 
-class Make_Var_Subject(object):
+class Make_Var_Subject_Pilot(object):
 
     def __init__(self):
         self.name = 'Make_Var_subject'
         self.var_names = list(string.ascii_lowercase) # ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+
+        self.dropbox_proj_loc = '/Users/brandomiranda/Dropbox (MIT)/eit_proj1_data/algebra1/make_var_subj_pilot'
 
     def get_making_the_subject_exercises(self,nb_ex):
         pass
@@ -28,19 +30,39 @@ class Make_Var_Subject(object):
         variables_in_eq = np.random.choice( self.var_names, size=nb_variables, replace=False )
         # choose target variable
         target_var = np.random.choice( variables_in_eq, size=1 )
+        integer = np.random.randint(0,high=largest_int)
         # create equation
         equation = ''
         for i in range(0,len(variables_in_eq)-1):
             var = variables_in_eq[i]
             equation = equation + var + '+'
         equation = equation+variables_in_eq[-1]
-        equation = '%s=%d'%(equation,np.random.randint(0,high=largest_int))
+        equation = '%s=%d'%(equation,integer)
         # create problem msg
         problem_msg = 'Problem: make %s the subject of equation: %s'%(target_var[0],equation)
-        return problem_msg
+        # get solution
+        soln_msg = self.get_solution_to_problem(equation,target_var,variables_in_eq,integer)
+        return problem_msg, soln_msg
+
+    def get_solution_to_problem(self,equation,target_var,variables_in_eq,integer):
+        variables_in_eq = list( variables_in_eq[:] )
+        if not (target_var in variables_in_eq):
+            raise ValueError('Target Variable %s not in variables_in_eq %s'%(target_var,variables_in_eq))
+        else:
+            # get solution
+            variables_in_eq.remove(target_var)
+            lhs_variables = ''
+            for i in range(0,len(variables_in_eq)-1):
+                var = variables_in_eq[i]
+                lhs_variables = lhs_variables + var + '+'
+            lhs_variables = lhs_variables + var
+            soln_expression = '%s - %s'%(str(integer),lhs_variables)
+            return soln_expression
+
 
 
 if __name__ == '__main__':
-    maker_var_subject = Make_Var_Subject()
-    problem_msg = maker_var_subject.get_single_new_exercise_sums(nb_variables=5)
+    maker_var_subject = Make_Var_Subject_Pilot()
+    problem_msg,soln_msg = maker_var_subject.get_single_new_exercise_sums(nb_variables=5)
     print( problem_msg )
+    print( soln_msg )
