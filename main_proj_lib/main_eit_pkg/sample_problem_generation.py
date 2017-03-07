@@ -21,8 +21,8 @@ class Make_Var_Subject_Pilot(object):
 
     def get_making_the_subject_exercises(self,nb_ex=100):
         for exercise_index in range(nb_ex):
-            problem_loc = self.dropbox_proj_loc+'/make_subject_pilot_problem_'+str(exercise_index)
-            soln_loc = self.dropbox_proj_loc+'/make_subject_pilot_soln_'+str(exercise_index)
+            problem_loc = self.dropbox_proj_loc+'/make_subject_pilot_problem_'+str(exercise_index)+'.txt'
+            soln_loc = self.dropbox_proj_loc+'/make_subject_pilot_soln_'+str(exercise_index)+'.txt'
             with open(problem_loc,mode='w') as problem_file, open(soln_loc,mode='w') as soln_file:
                 nb_variables = np.random.randint(low=3,high=10)
                 problem_msg, soln_msg = self.get_single_new_exercise_sums(nb_variables,largest_int=100)
