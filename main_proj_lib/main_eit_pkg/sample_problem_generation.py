@@ -64,7 +64,7 @@ class Make_Var_Subject_Pilot(object):
                 var = variables_in_eq[i]
                 lhs_variables = lhs_variables + var + '+'
             lhs_variables = lhs_variables + variables_in_eq[-1]
-            soln_expression = '%s = %s - %s'%(target_var[0],str(integer),lhs_variables)
+            soln_expression = '%s = %s - (%s)'%(target_var[0],str(integer),lhs_variables)
             return soln_expression
 
 
