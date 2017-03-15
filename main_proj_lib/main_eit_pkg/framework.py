@@ -18,6 +18,38 @@ class Problem(object):
         self.g = maps.NamedDict() # global variables for this problem
         self.solution_creater = solution_creater
 
+    def generate_and_save_QAs_to_file(self,location,question_name,answer_name,n):
+        '''
+        generates n new questions and answers and saves them to location with corresponding question and answer names.
+        '''
+        question_answers = self._generate_new_QAs(n)
+        self._save_QAs_to_file(location,question_name,answer_name,question_answers)
+
+    def _save_QAs_to_file(self,location,question_name,answer_name,question_answers):
+        '''
+        save the array of question and answers [...,(q,a),...] to a location.
+        Things will be saved as location/question_name_id and location/answer_name_id.
+        '''
+        for i in range( len(question_answers) ):
+            q,a = question_answers[i]
+            #
+            loc_q = location+'/'+question_name+str(i)
+            loc_a = location+'/'+answer_name+str(i)
+            with open(loc_q,mode='w') as question_file, open(loc_a,mode='w') as answer_file:
+                question_file.write(q)
+                answer_file.write(a)
+
+    def _generate_new_QAs(self,n):
+        '''
+        generates exactly n number new question and answers.
+        '''
+        qas = []
+        for i in range(n):
+            q = self.generate_new_problem_statement() # note this resets the random state
+            a = self.generate_solution()
+            qas.append((q,a))
+        return qas
+
     def generate_problem_statement(self):
         '''
         Generates a specific problem
@@ -219,6 +251,23 @@ def probability_example_problem():
 class Test_problem(unittest.TestCase):
     #make sure methods start with word test
 
+    def get_problem(self):
+        first_seq_gen = [intro_sent]
+        permutation_gen = [prob_disease_sent,prob_shaky_given_disease_sent,prob_shaky_given_no_disease_sent]
+        last_seq_gen = [question]
+        # key words to random values that will be chose
+        key_words_values = {'disease_name':get_disease_names, 'p_f':get_p_f_test, 'p_s_nf':get_p_s_nf_test, 'p_s_f':get_p_s_f_test ,'symptom':get_symptom_names}
+        # actual generator nodes
+        first_seq_gen = SeqGen([intro_sent])
+        permutation_gen = PerGen([prob_disease_sent,prob_shaky_given_disease_sent,prob_shaky_given_no_disease_sent])
+        last_seq_gen = SeqGen([question])
+        #soln
+        soln_creater = solution_creater
+        # create
+        generators = [first_seq_gen,permutation_gen,last_seq_gen]
+        problem = Problem(array_generators=generators,key_words_values=key_words_values,solution_creater=soln_creater)
+        return problem
+
     def probability_example_problem_unit_test(self):
         # functions for generator
         first_seq_gen = [intro_sent]
@@ -243,6 +292,15 @@ class Test_problem(unittest.TestCase):
     def test_check_sample_problem(self):
         one_question, one_soln = self.probability_example_problem_unit_test()
         self.assertEqual(one_soln, 18.0/67 )
+
+    def test_check_sample_problem_save_to_file(self):
+        location = '/Users/brandomiranda/Dropbox (MIT)/eit_proj1_data/probability_example'
+        question_name = 'probability_disease_question'
+        answer_name = 'probability_disease_answer'
+        n = 10
+        #
+        problem = self.get_problem()
+        problem.generate_and_save_QAs_to_file(location,question_name,answer_name,n)
 
 if __name__ == '__main__':
     unittest.main()
