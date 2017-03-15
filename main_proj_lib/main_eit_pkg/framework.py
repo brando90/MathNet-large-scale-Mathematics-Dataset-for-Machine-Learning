@@ -3,6 +3,7 @@ import random
 import math
 
 import numpy as np
+import unittest
 
 import maps
 
@@ -40,8 +41,8 @@ class Problem(object):
             problem_statement = problem_statement + gen.get_statement(self.g)
         return problem_statement
 
-    def generate_solution(self,g):
-        soln = self.solution_creater(g)
+    def generate_solution(self):
+        soln = self.solution_creater(self.g)
         return soln
 
 class Gen(object):
@@ -93,11 +94,11 @@ def intro_sent(g):
     return sentence
 
 def prob_disease_sent(g):
-    sentence = 'A person selected uniformly at random has %s with probability %f'%(g.disease_name,g.p_f)
+    sentence = 'A person selected uniformly at random has %s with probability %f. '%(g.disease_name,g.p_f)
     return sentence
 
 def prob_shaky_given_disease_sent(g):
-    sentence = 'A person with %s has %s with probability %f'%(g.disease_name,g.symptom,g.p_s_f)
+    sentence = 'A person with %s has %s with probability %f. '%(g.disease_name,g.symptom,g.p_s_f)
     return sentence
 
 def prob_shaky_given_no_disease_sent(g):
@@ -105,7 +106,7 @@ def prob_shaky_given_no_disease_sent(g):
     return sentence
 
 def question(g):
-    sentence = 'What is the probability that a person selected uniformly at random has has %s, given that he or she has %s?'%(g.disease_name,g.symptom)
+    sentence = 'What is the probability that a person selected uniformly at random has has %s, given that he or she has %s? '%(g.disease_name,g.symptom)
     return sentence
 #
 
@@ -132,6 +133,17 @@ def get_p_s_f():
 def get_p_s_nf():
     return random.uniform(a=0, b=1) # Return a random floating point number N such that a <= N <= b for a <= b and b <= N <= a for b < a.
 
+#
+
+def get_p_f_test():
+    return 1.0/50 # Return a random floating point number N such that a <= N <= b for a <= b and b <= N <= a for b < a.
+
+def get_p_s_f_test():
+    return 9.0/10 # Return a random floating point number N such that a <= N <= b for a <= b and b <= N <= a for b < a.
+
+def get_p_s_nf_test():
+    return 1.0/20 # Return a random floating point number N such that a <= N <= b for a <= b and b <= N <= a for b < a.
+
 def solution_creater(g):
     p_f = g.p_f
     p_s_f = g.p_s_f
@@ -151,6 +163,7 @@ def probability_example_problem():
     last_seq_gen = [question]
     # key words to random values that will be chose
     key_words_values = {'disease_name':get_disease_names, 'p_f':get_p_f, 'p_s_nf':get_p_s_nf, 'p_s_f':get_p_s_f ,'symptom':get_symptom_names}
+    #key_words_values = {'disease_name':get_disease_names, 'p_f':get_p_f_test, 'p_s_nf':get_p_s_nf_test, 'p_s_f':get_p_s_f_test ,'symptom':get_symptom_names}
     # actual generator nodes
     first_seq_gen = SeqGen([intro_sent])
     permutation_gen = PerGen([prob_disease_sent,prob_shaky_given_disease_sent,prob_shaky_given_no_disease_sent])
@@ -160,10 +173,40 @@ def probability_example_problem():
     # create
     generators = [first_seq_gen,permutation_gen,last_seq_gen]
     problem = Problem(array_generators=generators,key_words_values=key_words_values,solution_creater=soln_creater)
-    #
+    # make Q&A
     one_question = problem.generate_problem_statement()
-    return one_question
+    one_soln = problem.generate_solution()
+    return one_question, one_soln
+
+#
+
+class Test_problem(unittest.TestCase):
+    #make sure methods start with word test
+
+    def probability_example_problem_unit_test(self):
+        # functions for generator
+        first_seq_gen = [intro_sent]
+        permutation_gen = [prob_disease_sent,prob_shaky_given_disease_sent,prob_shaky_given_no_disease_sent]
+        last_seq_gen = [question]
+        # key words to random values that will be chose
+        key_words_values = {'disease_name':get_disease_names, 'p_f':get_p_f_test, 'p_s_nf':get_p_s_nf_test, 'p_s_f':get_p_s_f_test ,'symptom':get_symptom_names}
+        # actual generator nodes
+        first_seq_gen = SeqGen([intro_sent])
+        permutation_gen = PerGen([prob_disease_sent,prob_shaky_given_disease_sent,prob_shaky_given_no_disease_sent])
+        last_seq_gen = SeqGen([question])
+        #soln
+        soln_creater = solution_creater
+        # create
+        generators = [first_seq_gen,permutation_gen,last_seq_gen]
+        problem = Problem(array_generators=generators,key_words_values=key_words_values,solution_creater=soln_creater)
+        # make Q&A
+        one_question = problem.generate_problem_statement()
+        one_soln = problem.generate_solution()
+        return one_question, one_soln
+
+    def test_check_sample_problem(self):
+        one_question, one_soln = self.probability_example_problem_unit_test()
+        self.assertEqual(one_soln, 18.0/67 )
 
 if __name__ == '__main__':
-    one_question = probability_example_problem()
-    print('one_question: ', one_question)
+    unittest.main()
