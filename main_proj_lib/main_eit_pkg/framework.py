@@ -15,41 +15,64 @@ class Problem(object):
     def __init__(self,array_generators,key_words_values,solution_creater):
         self.array_generators = array_generators
         self.key_words_values = key_words_values
-        self.g = maps.NamedDict()
+        self.g = maps.NamedDict() # global variables for this problem
         self.solution_creater = solution_creater
 
     def generate_problem_statement(self):
         '''
         Generates a specific problem
         '''
-        self.sample_random_state()
-        #
-        question = self.generate_statements()
+        question = self._generate_statements()
         return question
 
-    def sample_random_state(self):
+    def generate_new_problem_statement(self):
+        '''
+        Generates a specific problem
+        '''
+        self._sample_random_state()
+        #
+        question = self._generate_statements()
+        return question
+
+    def generate_solution(self):
+        '''
+        Generates a solution for the current specific problem according to the current
+        random state.
+        (note: that your solution creator will use the value of global variables for this specific problem to generate the solution)
+        '''
+        soln = self.solution_creater(self.g)
+        return soln
+
+    def _sample_random_state(self):
+        '''
+        Re-sets the random state for the current problem.
+        This function should be called when trying to generate a new problem
+        statement so that the names and values related to the problem change.
+        '''
         hash_map = {}
         #pdb.set_trace()
-        for k,v in self.key_words_values.items():
+        for key_words_in_problem, func_sets_state_for_key_word in self.key_words_values.items():
             #pdb.set_trace()
-            hash_map[k] = v()
+            hash_map[key_words_in_problem] = func_sets_state_for_key_word()
         self.g = maps.NamedDict(hash_map)
 
-    def generate_statements(self):
+    def _generate_statements(self):
+        '''
+        According to the generators that been given to the problem, go through them
+        and generate new problem statements according to the current random state.
+        (note this function will not change the random state, so you have to call the
+        change state first and then call this if you want to generate a new problem)
+        '''
         problem_statement = ''
         for gen in self.array_generators:
             problem_statement = problem_statement + gen.get_statement(self.g)
         return problem_statement
 
-    def generate_solution(self):
-        soln = self.solution_creater(self.g)
-        return soln
-
 class Gen(object):
 
     def process_chain(self,g):
         '''
-        processes the chain of statements and generates the string with the finished statement.
+        processes the chain of statements and generates the array string with the finished statement.
         '''
         each_statements = []
         for i in range(len(self.statements)):
@@ -59,6 +82,9 @@ class Gen(object):
         return each_statements
 
     def join_statements(self,statements):
+        '''
+        given an array of strings, joins them into one big string.
+        '''
         statement = ''
         for i in range(len(statements)):
             current_statement = statements[i]
@@ -71,6 +97,11 @@ class SeqGen(Gen):
         self.statements = statements # holds the functions that have the problem statements
 
     def get_statement(self,g):
+        '''
+        returns the string of the statements for this part of the problem.
+        Note that they will be in the ordered given in the initialization
+        (i.e. its a sequential generator)
+        '''
         each_statements = self.process_chain(g)
         statement = self.join_statements(each_statements)
         return statement
@@ -81,6 +112,11 @@ class PerGen(Gen):
         self.statements = statements # holds the functions that have the problem statements
 
     def get_statement(self,g):
+        '''
+        returns the string of the statements for this part of the problem.
+        Note that they will be permutated
+        (i.e. its a permutation generator)
+        '''
         each_statements = self.process_chain(g)
         #pdb.set_trace()
         random.shuffle(each_statements)
