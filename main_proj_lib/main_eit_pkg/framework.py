@@ -15,8 +15,10 @@ class Problem(object):
     def __init__(self,array_generators,key_words_values,solution_creater):
         self.array_generators = array_generators
         self.key_words_values = key_words_values
-        self.g = maps.NamedDict() # global variables for this problem
         self.solution_creater = solution_creater
+        #
+        self.g = maps.NamedDict() # global variables for this problem
+        self._sample_random_state()
 
     def generate_and_save_QAs_to_file(self,location,question_name,answer_name,n):
         '''
@@ -37,7 +39,7 @@ class Problem(object):
             loc_a = location+'/'+answer_name+str(i)
             with open(loc_q,mode='w') as question_file, open(loc_a,mode='w') as answer_file:
                 question_file.write(q)
-                answer_file.write(a)
+                answer_file.write(str(a))
 
     def _generate_new_QAs(self,n):
         '''
@@ -158,7 +160,7 @@ class PerGen(Gen):
 #
 
 def intro_sent(g):
-    sentence = '%s is a rare disease in which the victim has the delusion that he or she is being subjected to intense examination.'%(g.disease_name)
+    sentence = '%s is a rare disease in which the victim has the delusion that he or she is being subjected to intense examination. '%(g.disease_name)
     return sentence
 
 def prob_disease_sent(g):
@@ -170,7 +172,7 @@ def prob_shaky_given_disease_sent(g):
     return sentence
 
 def prob_shaky_given_no_disease_sent(g):
-    sentence = 'A person without %s has %s with probability %f'%(g.disease_name,g.symptom,g.p_s_nf)
+    sentence = 'A person without %s has %s with probability %f. '%(g.disease_name,g.symptom,g.p_s_nf)
     return sentence
 
 def question(g):
@@ -256,7 +258,7 @@ class Test_problem(unittest.TestCase):
         permutation_gen = [prob_disease_sent,prob_shaky_given_disease_sent,prob_shaky_given_no_disease_sent]
         last_seq_gen = [question]
         # key words to random values that will be chose
-        key_words_values = {'disease_name':get_disease_names, 'p_f':get_p_f_test, 'p_s_nf':get_p_s_nf_test, 'p_s_f':get_p_s_f_test ,'symptom':get_symptom_names}
+        key_words_values = {'disease_name':get_disease_names, 'p_f':get_p_f, 'p_s_nf':get_p_s_nf, 'p_s_f':get_p_s_f ,'symptom':get_symptom_names}
         # actual generator nodes
         first_seq_gen = SeqGen([intro_sent])
         permutation_gen = PerGen([prob_disease_sent,prob_shaky_given_disease_sent,prob_shaky_given_no_disease_sent])
