@@ -1,5 +1,6 @@
 import string
 import random
+import math
 
 import numpy as np
 
@@ -23,17 +24,19 @@ class Problem(object):
         self.sample_random_state()
         #
         question = self.generate_statements()
-        return
+        return question
 
     def sample_random_state(self):
-        d = {}
-        for k,v in self.key_words_values():
-            d[k] = v()
-        self.g = maps.NamedDict(d)
+        hash_map = {}
+        #pdb.set_trace()
+        for k,v in self.key_words_values.items():
+            #pdb.set_trace()
+            hash_map[k] = v()
+        self.g = maps.NamedDict(hash_map)
 
     def generate_statements(self):
         problem_statement = ''
-        for gen in self.array_generators():
+        for gen in self.array_generators:
             problem_statement = problem_statement + gen.get_statement(self.g)
         return problem_statement
 
@@ -78,7 +81,8 @@ class PerGen(Gen):
 
     def get_statement(self,g):
         each_statements = self.process_chain(g)
-        each_statements = random.shuffle(each_statements)
+        #pdb.set_trace()
+        random.shuffle(each_statements)
         statement = self.join_statements(each_statements)
         return statement
 
@@ -93,22 +97,29 @@ def prob_disease_sent(g):
     return sentence
 
 def prob_shaky_given_disease_sent(g):
-    sentence = 'A person with %s has %s with probability %f'(g.disease_name,g.symptom,g.p_s_f)
+    sentence = 'A person with %s has %s with probability %f'%(g.disease_name,g.symptom,g.p_s_f)
     return sentence
 
 def prob_shaky_given_no_disease_sent(g):
-    sentence = 'A person without %s has %s with probability %f'(g.disease_name,g.symptom,g.p_s_nf)
+    sentence = 'A person without %s has %s with probability %f'%(g.disease_name,g.symptom,g.p_s_nf)
     return sentence
 
 def question(g):
-    sentence = 'What is the probability that a person selected uniformly at random has has %s, given that he or she has %s?'%(g.disease_name,g.symtom)
+    sentence = 'What is the probability that a person selected uniformly at random has has %s, given that he or she has %s?'%(g.disease_name,g.symptom)
     return sentence
 #
 
 def get_disease_names():
     diseases = ['CSphobia','Biophobia','Mathphobia'] #TODO: re-think
     #
-    rand_i = random.randint(a=0,b=len(diseases)) # Return a random integer N such that a <= N <= b.
+    rand_i = random.randint(a=0,b=len(diseases)-1) # Return a random integer N such that a <= N <= b.
+    disease_name = diseases[rand_i]
+    return disease_name
+
+def get_symptom_names():
+    diseases = ['shaky arm','soft teeth','strident attitude'] #TODO: re-think
+    #
+    rand_i = random.randint(a=0,b=len(diseases)-1) # Return a random integer N such that a <= N <= b.
     disease_name = diseases[rand_i]
     return disease_name
 
@@ -129,24 +140,30 @@ def solution_creater(g):
     #
     p_s = p_s_f*p_f + p_s_nf*p_nf
     # bayes theorem
-
-    return
+    p_f_s = (p_s_f * p_f)/p_s
+    return p_f_s
 ##
 
 def probability_example_problem():
+    # functions for generator
     first_seq_gen = [intro_sent]
     permutation_gen = [prob_disease_sent,prob_shaky_given_disease_sent,prob_shaky_given_no_disease_sent]
     last_seq_gen = [question]
-    #
-    key_words_values = {'disease_name':get_disease_names, 'p_f':get_p_f, 'p_s_nf':get_p_s_nf}
-    #
+    # key words to random values that will be chose
+    key_words_values = {'disease_name':get_disease_names, 'p_f':get_p_f, 'p_s_nf':get_p_s_nf, 'p_s_f':get_p_s_f ,'symptom':get_symptom_names}
+    # actual generator nodes
     first_seq_gen = SeqGen([intro_sent])
     permutation_gen = PerGen([prob_disease_sent,prob_shaky_given_disease_sent,prob_shaky_given_no_disease_sent])
     last_seq_gen = SeqGen([question])
+    #soln
+    soln_creater = solution_creater
+    # create
     generators = [first_seq_gen,permutation_gen,last_seq_gen]
-    problem = Problem(generators)
+    problem = Problem(array_generators=generators,key_words_values=key_words_values,solution_creater=soln_creater)
     #
-    problem.
-    return
+    one_question = problem.generate_problem_statement()
+    return one_question
 
-if __name__ = '__main__':
+if __name__ == '__main__':
+    one_question = probability_example_problem()
+    print('one_question: ', one_question)
