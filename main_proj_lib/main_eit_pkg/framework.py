@@ -34,6 +34,14 @@ def perg(*generator):
             sentence = sentence + gen
     return sentence
 
+def demo():
+    sentence1 = seqg('solve x, ', perg( ' a = b, ', seqg( ' x = 2*', 'b,' ), ' a = 8,' ), ' can you do it?')
+    def func1():
+        return perg( ' a = b, ', seqg( ' x = 2*', 'b,' ), ' a = 8,' )
+    sentence2 = seqg('solve x, ', func1() , ' can you do it?')
+    print(sentence1)
+    print(sentence2)
+
 ##
 
 class Test_problem(unittest.TestCase):
@@ -46,4 +54,5 @@ class Test_problem(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    demo()
     unittest.main()
