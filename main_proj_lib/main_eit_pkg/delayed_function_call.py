@@ -1,7 +1,7 @@
 
 
 class FuncCall:
-    def __init__(self,name, func, *args):
+    def __init__(self,name, func, *args ):
         self.args = args
 
     def apply(self):
