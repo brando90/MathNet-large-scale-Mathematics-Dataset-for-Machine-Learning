@@ -1,5 +1,7 @@
 import unittest
 from sympy import *
+import numpy as np
+import random
 
 from funcflow import *
 
@@ -30,6 +32,14 @@ class Test_problem(unittest.TestCase):
         question = seqg(first_part, permutable_part, 'can you do it?')
         print(question.execute())
 
+    def test_example_subs(self):
+        x,y,a,b = symbols('x y a b')
+        e,f,g,h = symbols('e f g h')
+        ## solve x,  a = b,  x = 2*b, a = 8, can you do it?
+        question = seqg(seqg('solve ',x,', '), perg( seqg(Eq(a,b),', ') , seqg(Eq(x,2*b),', ') , seqg(Eq(a,8),', ') ),'can you do it?')
+        assigments = {a:[e,f,g,h]}
+        print(question.execute(assigments))
+
     def test_example_subs_seq(self):
         x,y,a,b = symbols('x y a b')
         e,f,g,h = symbols('e f g h')
@@ -38,12 +48,13 @@ class Test_problem(unittest.TestCase):
         assigments = {a:[e,f,g,h]}
         print(question.execute(assigments))
 
-    def test_example_subs(self):
-        x,y,a,b = symbols('x y a b')
+    def test_example_subs_seq(self):
+        x,y,a,b, X = symbols('x y a b X')
         e,f,g,h = symbols('e f g h')
         ## solve x,  a = b,  x = 2*b, a = 8, can you do it?
-        question = seqg(seqg('solve ',x,', '), perg( seqg(Eq(a,b),', ') , seqg(Eq(x,2*b),', ') , seqg(Eq(a,8),', ') ),'can you do it?')
-        assigments = {a:[e,f,g,h]}
+        question = seqg(seqg('solve ',x,', '), seqg( seqg(Eq(a,b),', ') , seqg(Eq(x,2*b),', ') , seqg(Eq(a,8),', ') ),'can you do it?')
+        #assigments = {a:[e,f,g,h],x:[x,X],8: list(random.randint(0,high=100,size=15)) }
+        assigments = {a:[e,f,g,h],x:[x,X],8: [ random.randint(0,100) for i in range(13)] }
         print(question.execute(assigments))
 
 if __name__ == '__main__':

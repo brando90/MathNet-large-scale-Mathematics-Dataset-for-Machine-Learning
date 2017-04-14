@@ -65,6 +65,8 @@ def sympy2text(sympy_var):
 def handle_sympy(arg,assigments):
     #print(assigments)
     for key, substitution_opts in assigments.items():
+        #substitution_opts = substitution_opts() if callable(substitution_opts) else substitution_opts
+        #substitution_opts = substitution_opts() if callable(substitution_opts) else substitution_opts
         substitution = random.sample(substitution_opts,1)[0]
         arg = arg.subs(key,substitution)
     return arg
