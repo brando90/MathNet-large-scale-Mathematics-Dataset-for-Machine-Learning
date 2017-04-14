@@ -1,3 +1,5 @@
+from sympy import *
+
 def _resolve(arg, assignments={}):
     if isinstance(arg, DelayedExecution):
         return arg.execute(assignments)
