@@ -5,6 +5,9 @@ import pdb
 
 def _resolve(arg, assignments={}):
     #print('->resolve arg: ', arg)
+    #print('->resolve assignments: ', assignments)
+    if arg in assignments:
+        arg = random.sample(assignments[arg],1)[0]
     if isinstance(arg, DelayedExecution):
         return arg.execute(assignments) # recursion
     elif isinstance(arg, Variable):
@@ -48,16 +51,28 @@ class Variable:
     def __hash__(self):
         return id(self)
 
+def to_list_strings(args):
+    args = [str(arg) for arg in args]
+    return args
+
 @func_flow
 def seqg(*args):
+    args = to_list_strings(args)
     return ' '.join(args) # concatenates the
 #seqg = func_flow(seqg)
 
 @func_flow
 def perg(*args):
-    args = random.sample( args, len(args) ) #
+    args = random.sample( args, len(args) ) # Return a len(args) length list of unique elements chosen from args
+    args = to_list_strings(args)
     return ' '.join(args)
 #perg = func_flow(perg)
+
+@func_flow
+def choiceg(*args):
+    args = random.sample( args, 1 ) # samples a single element randomly from args
+    return args[0]
+#choiceg = func_flow(choiceg)
 
 def sympy2text(sympy_var):
     return str(sympy_var)
@@ -68,5 +83,5 @@ def handle_sympy(arg,assigments):
         #substitution_opts = substitution_opts() if callable(substitution_opts) else substitution_opts
         #substitution_opts = substitution_opts() if callable(substitution_opts) else substitution_opts
         substitution = random.sample(substitution_opts,1)[0]
-        arg = arg.subs(key,substitution)
-    return arg
+        new_arg = arg.subs(key,substitution)
+    return new_arg
