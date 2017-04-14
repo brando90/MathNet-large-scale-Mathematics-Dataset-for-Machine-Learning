@@ -56,7 +56,7 @@ class Test_problem(unittest.TestCase):
     def test_get_problem(self):
         #seqg( ' a = b, ', seqg( ' x = 2*', 'b,' ), ' a = 8,' )
         question = seqg('solve x, ', seqg( ' a = b, ', seqg( ' x = 2*', 'b,' ), ' a = 8,' ), ' can you do it?')
-        #self.assertEqual(question, 'solve x,  a = b,  x = 2*b, a = 8, can you do it?')
+        self.assertEqual(question, 'solve x,  a = b,  x = 2*b, a = 8, can you do it?')
 
 
 
