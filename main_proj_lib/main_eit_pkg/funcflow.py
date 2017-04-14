@@ -1,11 +1,15 @@
 from sympy import *
+import random
 
 def _resolve(arg, assignments={}):
     if isinstance(arg, DelayedExecution):
-        return arg.execute(assignments)
+        return arg.execute(assignments) # recursion
     elif isinstance(arg, Variable):
         return assignments[arg]
-    return arg
+    elif isinstance(arg, symbol.Symbol):
+        return sympy2text(arg,assignments)
+    else:
+        return arg
 
 class DelayedExecution:
     # builds delayed execution objects
@@ -25,12 +29,28 @@ class DelayedExecution:
 def func_flow(func):
     '''
     decorates func: now when the original func is called, it returns an object
-    storing the delayed execution of func (and its arguments).
+    storing the **delayed execution** of func (and its arguments).
     '''
     def wrapper(*args, **kwargs):
         return DelayedExecution(func, *args, **kwargs)
     return wrapper
 
+##
+
 class Variable:
     def __hash__(self):
         return id(self)
+
+@func_flow
+def seqg(*args):
+    return ' '.join(args) # concatenates the
+#seqg = func_flow(seqg)
+
+@func_flow
+def perg(*args):
+    args = random.sample( args, len(args) ) #
+    return ' '.join(args)
+#perg = func_flow(perg)
+
+def sympy2text(sympy_var):
+    return str(sympy_var)
