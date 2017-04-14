@@ -6,8 +6,9 @@ def _resolve(arg, assignments={}):
         return arg.execute(assignments) # recursion
     elif isinstance(arg, Variable):
         return assignments[arg]
-    elif isinstance(arg, symbol.Symbol):
-        return sympy2text(arg,assignments)
+    elif isinstance(arg, Expr):
+        arg = handle_sympy(arg,assignments)
+        return sympy2text(arg)
     else:
         return arg
 
@@ -54,3 +55,9 @@ def perg(*args):
 
 def sympy2text(sympy_var):
     return str(sympy_var)
+
+def handle_sympy(arg,assigments):
+    for key, substitution_opts in assigments:
+        substitution = random.sample(substitution_opts,1)
+        arg = arg.subs(key,substitution)
+    return arg
