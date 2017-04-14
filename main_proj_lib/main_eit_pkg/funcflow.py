@@ -4,6 +4,7 @@ import random
 import pdb
 
 def _resolve(arg, assignments={}):
+    #print('->resolve arg: ', arg)
     if isinstance(arg, DelayedExecution):
         return arg.execute(assignments) # recursion
     elif isinstance(arg, Variable):
@@ -28,6 +29,9 @@ class DelayedExecution:
         kwargs = {k: _resolve(v, assigments) for k, v in self.kwargs.items()}
         # step 2: resolve function call
         return self.func(*args, **kwargs)
+
+    def __repr__(self):
+        return str((self.func, self.args, self.kwargs))
 
 def func_flow(func):
     '''
@@ -59,8 +63,8 @@ def sympy2text(sympy_var):
     return str(sympy_var)
 
 def handle_sympy(arg,assigments):
-    print(assigments)
+    #print(assigments)
     for key, substitution_opts in assigments.items():
-        substitution = random.sample(substitution_opts,1)
+        substitution = random.sample(substitution_opts,1)[0]
         arg = arg.subs(key,substitution)
     return arg
