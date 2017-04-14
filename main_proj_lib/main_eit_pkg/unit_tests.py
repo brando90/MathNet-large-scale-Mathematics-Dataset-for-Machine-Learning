@@ -30,5 +30,13 @@ class Test_problem(unittest.TestCase):
         question = seqg(first_part, permutable_part, 'can you do it?')
         print(question.execute())
 
+    # def test_example_subs(self):
+    #     x,y,a,b = symbols('x y a b')
+    #     e,f,g,h = symbols('e f g h')
+    #     ## solve x,  a = b,  x = 2*b, a = 8, can you do it?
+    #     question = seqg(seqg('solve ',x,', '), perg( seqg(Eq(x,y),', ') , seqg(Eq(x,2*b),', ') , seqg(Eq(x,8),', ') ),'can you do it?')
+    #     assigments = {x:[e,f,g,h]}
+    #     print(question.execute(assigments))
+
 if __name__ == '__main__':
     unittest.main()

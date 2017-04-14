@@ -1,6 +1,8 @@
 from sympy import *
 import random
 
+import pdb
+
 def _resolve(arg, assignments={}):
     if isinstance(arg, DelayedExecution):
         return arg.execute(assignments) # recursion
@@ -57,7 +59,8 @@ def sympy2text(sympy_var):
     return str(sympy_var)
 
 def handle_sympy(arg,assigments):
-    for key, substitution_opts in assigments:
+    print(assigments)
+    for key, substitution_opts in assigments.items():
         substitution = random.sample(substitution_opts,1)
         arg = arg.subs(key,substitution)
     return arg
