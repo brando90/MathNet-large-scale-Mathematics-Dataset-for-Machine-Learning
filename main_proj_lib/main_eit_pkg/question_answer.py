@@ -5,17 +5,17 @@ import random
 
 from funcflow import *
 
-def make_qa_pair(question,answer,assigments={},seed=None):
+def make_qa_pair(question,answer,assignments={},seed=None):
     '''
-    Given a question, answer (and optional assigments) written with the funcflow
+    Given a question, answer (and optional assignments) written with the funcflow
     framework, returns a tuple with two strings with the question and answer.
     '''
     #np.random.seed(arg.rand_x)
     #tf.set_random_seed( arg.rand_x )
     if seed != None:
         random.seed(seed)
-    assigments = { key: [random.sample(value,1)[0]] for key,value in assigments.items() }
-    #print('new_assigments: ', assigments)
-    q = question.execute(assigments)
-    a = answer.execute(assigments)
+    assignments = { key: [random.sample(value,1)[0]] for key,value in assignments.items() }
+    #print('new_assignments: ', assignments)
+    q = question.execute(assignments)
+    a = answer.execute(assignments)
     return (q,a)

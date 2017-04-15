@@ -24,7 +24,7 @@ class DelayedExecution:
         '''
         return str((self.func, self.args, self.kwargs))
 
-    def execute(self, assigments={}):
+    def execute(self, assignments={}):
         '''
         Executes the delayed function.
         To do this it goes through all its arguments and resolves them.
@@ -32,8 +32,8 @@ class DelayedExecution:
         they are and handles them properly.
         '''
         # step 1: resolve inputs
-        args = [self._resolve(arg, assigments) for arg in self.args]
-        kwargs = {k: _resolve(v, assigments) for k, v in self.kwargs.items()}
+        args = [self._resolve(arg, assignments) for arg in self.args]
+        kwargs = {k: _resolve(v, assignments) for k, v in self.kwargs.items()}
         # step 2: resolve function call
         return self.func(*args, **kwargs)
 
@@ -57,10 +57,10 @@ class DelayedExecution:
         if isinstance(arg, DelayedExecution):
             return arg.execute(assignments) # recursively execute arg
         elif isinstance(arg, Expr):
-            # go through all the possible assigments and try to substitute them with the current expression
-            for key, substitution_options in assigments.items():
-                substitution = random.sample(substitution_opts,1)[0]
-                new_arg = arg.subs(key,substitution) # note if key is not aprt of expr, the expr remains unchanged (note arg is an expression ath this point)
+            # go through all the possible assignments and try to substitute them with the current expression
+            for key, substitution_options in assignments.items():
+                substitution = random.sample(substitution_options,1)[0]
+                arg = arg.subs(key,substitution) # note if key is not aprt of expr, the expr remains unchanged (note arg is an expression ath this point)
             return sympy2text(arg)
         else:
             return arg
