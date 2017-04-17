@@ -3,7 +3,7 @@ from sympy import *
 import numpy as np
 import random
 
-from funcflow import *
+from qaflow.funcflow import *
 
 def make_qa_pair(question,answer,assignments={},seed=None):
     '''
