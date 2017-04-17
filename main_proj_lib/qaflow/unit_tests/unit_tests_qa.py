@@ -10,20 +10,24 @@ from qaflow.question_answer import *
 class Test_problem(unittest.TestCase):
 
     def ans_with_sympy(self,x,two,eight):
-        ans = seqg(x, ' = ', two*eight )
-        return ans
+        return seqg(x, ' = ', two*eight )
 
     def ans_with_delayed_multiplication(self,x):
         ##
         @func_flow
         def my_mult(a,b):
             return a*b
-        ans = seqg(x, ' = ', seqg( my_mult(2,8) ) )
-        return ans
+        return seqg(x, ' = ', seqg( my_mult(2,8) ) )
 
     def ans_with_string(self,x):
-        ans = seqg(x,' = ',2,'*',8)
-        return ans
+        return seqg(x,' = ',2,'*',8)
+
+    def explicit_delay_executor(self,x,a,b):
+        return seqg( DelayedExecution(lambda a,b: a*b, a, b) )
+
+    def just_pass_lambda_func(self,x,a,b):
+        # Doesn't quite work!
+        return seqg( lambda a,b: a*b, a, b )
 
     def ans_with_delayed_and_straight_mult(self,x):
         explicit_mul = self.ans_with_string(x)
@@ -31,8 +35,7 @@ class Test_problem(unittest.TestCase):
         def my_mult(a,b):
             return a*b
         evaluated_mul = seqg( my_mult(2,8) )
-        ans = seqg( explicit_mul,' = ', evaluated_mul )
-        return ans
+        return seqg( explicit_mul,' = ', evaluated_mul )
 
     ##
 
@@ -68,8 +71,11 @@ class Test_problem(unittest.TestCase):
         ans1 = self.ans_with_string(x)
         ans2 = self.ans_with_delayed_multiplication(x)
         ans3 = self.ans_with_delayed_and_straight_mult(x)
+        ans4 = self.explicit_delay_executor(x,2,8)
+        #ans5 = self.just_pass_lambda_func(x,2,8)
         ## generator for a choice of answer
-        answer = choiceg( ans1,ans2,ans3 )
+        answer = choiceg( ans1,ans2,ans3,ans4 )
+        #answer = choiceg(ans5)
         q,a = make_qa_pair(question,answer,assignments)
         print('question: %s \nanswer %s'%(q,a))
 

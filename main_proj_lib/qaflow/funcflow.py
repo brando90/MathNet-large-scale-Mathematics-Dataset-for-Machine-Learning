@@ -56,6 +56,8 @@ class DelayedExecution:
         # resolve the arg after an alternative was chose
         if isinstance(arg, DelayedExecution):
             return arg.execute(assignments) # recursively execute arg
+        # elif callable(arg): # doesn't wite work
+        #     return DelayedExecution(arg, assignments)
         elif isinstance(arg, Expr):
             # go through all the possible assignments and try to substitute them with the current expression
             for key, substitution_options in assignments.items():
