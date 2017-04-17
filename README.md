@@ -4,8 +4,7 @@ Welcome!
 
 To install the framework go to:
 
-LINK
-
+https://github.com/brando90/eit_proj1/wiki/Installing-framework
 
 for a simple example on how to generate a question,answer go to:
 
