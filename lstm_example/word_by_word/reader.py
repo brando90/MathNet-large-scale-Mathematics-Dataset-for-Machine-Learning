@@ -26,9 +26,12 @@ def _build_vocab(filename):
   data = _read_words(filename) # array of words: ['solve', 'x', ',', 'Eq(a,', 'b)', ',', 'Eq(x,', '2*b)', ',', 'Eq(a,', '19)', ',', 'can', 'you', 'do', 'it?']
   #pdb.set_trace()
 
-  counter = collections.Counter(data)
-  pdb.set_trace()
+  counter = collections.Counter(data) # creates a dictionary matting word to counts: e.g. Counter({',': 4, 'Eq(a,': 2, 'solve': 1, 'x': 1, 'b)': 1, 'Eq(x,': 1, '2*b)': 1, '19)': 1, 'can': 1, 'you': 1, 'do': 1, 'it?': 1})
+  #pdb.set_trace()
+  # counter.items() returns a list of dict's (key, value) tuple pairs e.g.dict_items([('solve', 1), ('x', 1), (',', 4), ('Eq(a,', 2), ('b)', 1), ('Eq(x,', 1), ('2*b)', 1), ('19)', 1), ('can', 1), ('you', 1), ('do', 1), ('it?', 1)])
+  # key parameter to specify a function to be called on each list element prior to making comparisons.
   count_pairs = sorted(counter.items(), key=lambda x: (-x[1], x[0]))
+  pdb.set_trace()
 
   words, _ = list(zip(*count_pairs))
   word_to_id = dict(zip(words, range(len(words))))
