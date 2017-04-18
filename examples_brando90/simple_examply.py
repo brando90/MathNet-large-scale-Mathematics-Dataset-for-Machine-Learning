@@ -52,9 +52,29 @@ def example3():
     ## generator for a choice of answer
     answer = choiceg( ans1,ans2,ans3,ans4 )
     q,a = make_qa_pair(question,answer,assignments,seed=5)
-    print('question: %s \nanswer: %s'%(q,a))
+    #print('question: %s \nanswer: %s'%(q,a))
+    return question,answer,assignments
+
+def example4():
+    '''
+    Makes data set and saves to dropbox
+    '''
+    print('--> Making data set')
+    # specify where to save it and name of question and answer
+    location = '/Users/brandomiranda/Dropbox (MIT)/eit_proj1_data/simple_algebra_question'
+    question_name = 'simple_algebra_question'
+    answer_name = 'simple_algebra_question'
+    # makes directory structure if it doesn't exist already
+    make_and_check_dir(path=location)
+    # get question, answer parameters
+    nb_data_points = 10
+    question,answer,assignments = example3()
+    # make data set
+    make_qa_to_data_set(question,answer,assignments,nb_data_points, location,question_name,answer_name)
+
 
 if __name__ == '__main__':
     #example1()
     #example2()
-    example3()
+    #example3()
+    example4()
