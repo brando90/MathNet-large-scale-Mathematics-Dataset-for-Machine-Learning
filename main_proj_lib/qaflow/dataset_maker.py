@@ -14,7 +14,7 @@ def make_and_check_dir(path):
         #    raise
         pass
 
-def make_qa_to_data_set(question,answer,assignments,nb_data_points, location,question_name,answer_name):
+def make_qa_to_data_set(question,answer,assignments,nb_data_points, location,question_fname,answer_fname,file_extension='.txt'):
     '''
     Creates a data set file based on question,answer given.
     Data set files will be saved as location/question_name_id and location/answer_name_id.
@@ -26,8 +26,8 @@ def make_qa_to_data_set(question,answer,assignments,nb_data_points, location,que
         q,a = make_qa_pair(question,answer,assignments,seed)
         print(q,a)
         #
-        loc_q = location+'/'+question_name+str(i)
-        loc_a = location+'/'+answer_name+str(i)
+        loc_q = os.path.join(location,question_fname+str(i)+file_extension)
+        loc_a = os.path.join(location,answer_fname+str(i)+file_extension)
         with open(loc_q,mode='w') as question_file, open(loc_a,mode='w') as answer_file:
             question_file.write(q)
             answer_file.write(str(a))
