@@ -63,11 +63,11 @@ def example4():
     # specify where to save it and name of question and answer
     location = '/Users/brandomiranda/Dropbox (MIT)/eit_proj1_data/simple_algebra_question'
     question_name = 'simple_algebra_question'
-    answer_name = 'simple_algebra_question'
+    answer_name = 'simple_algebra_answer'
     # makes directory structure if it doesn't exist already
     make_and_check_dir(path=location)
     # get question, answer parameters
-    nb_data_points = 10
+    nb_data_points = 500
     question,answer,assignments = example3()
     # make data set
     make_qa_to_data_set(question,answer,assignments,nb_data_points, location,question_name,answer_name)
