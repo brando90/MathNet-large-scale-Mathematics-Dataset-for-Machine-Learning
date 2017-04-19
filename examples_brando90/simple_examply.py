@@ -17,7 +17,7 @@ def example2():
     x,y,a,b, X = symbols('x y a b X')
     e,f,g,h = symbols('e f g h')
     ## solve x,  a = b,  x = 2*b, a = 8, can you do it?
-    question = seqg(seqg('solve ',x,', '), seqg( seqg(Eq(a,b),', ') , seqg(Eq(x,2*b),', ') , seqg(Eq(a,8),', ') ), 'can you do it?')
+    question = seqg(seqg('solve ',x,', '), perg( seqg(Eq(a,b),', ') , seqg(Eq(x,2*b),', ') , seqg(Eq(a,8),', ') ), 'can you do it?')
     ## pssible alternative assignments for symbols
     assignments = {}
     assignments[a] = [a,e,f,g,h]
@@ -35,7 +35,7 @@ def example3():
     x,y,a,b, X = symbols('x y a b X')
     e,f,g,h = symbols('e f g h')
     ## solve x,  a = b,  x = 2*b, a = 8, can you do it?
-    question = seqg(seqg('solve ',x,', '), seqg( seqg(Eq(a,b),', ') , seqg(Eq(x,2*b),', ') , seqg(Eq(a,8),', ') ), 'can you do it?')
+    question = seqg(seqg('solve ',x,', '), perg( seqg(Eq(a,b),', ') , seqg(Eq(x,2*b),', ') , seqg(Eq(a,8),', ') ), 'can you do it?')
     ## pssible alternative assignments for symbols
     assignments = {}
     assignments[a] = [a,e,f,g,h]

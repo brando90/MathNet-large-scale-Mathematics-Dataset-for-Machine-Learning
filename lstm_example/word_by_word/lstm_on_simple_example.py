@@ -52,6 +52,12 @@ def main():
     with tf.Graph().as_default():
         minval, maxval = -config.init_scale, config.init_scale
         initializer = tf.random_uniform_initializer(minval, maxval)
+        with tf.name_scope("Train"):
+            train_input = PTBInput(config=config, data=train_data, name="TrainInput")
+            with tf.variable_scope("Model", reuse=None, initializer=initializer):
+            m = PTBModel(is_training=True, config=config, input_=train_input)
+            tf.summary.scalar("Training Loss", m.cost)
+            tf.summary.scalar("Learning Rate", m.lr)
 
 
 
