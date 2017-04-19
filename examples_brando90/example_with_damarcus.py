@@ -28,5 +28,19 @@ def example2():
     q,a = make_qa_pair(question,answer,seed=3)
     print('question: %s \nanswer: %s'%(q,a))
 
+def example3():
+    a,b,c,x = symbols('a b c x')
+    wrt = perg('wrt','w.r.t.','with respect to ')
+    expr = a**2+b**2+c**2
+    question = seqg('Do derivative of ',expr,wrt,x)
+    assignments = {}
+    assignments[x] = [a,b,c]
+    def my_derivative(expr,x):
+        return diff(expr,x)
+    derivative_ans = DelayedExecution(my_derivative,expr,x)
+    answer = choiceg(derivative_ans)
+    q,a = make_qa_pair(question,answer,assignments)
+    print('question: %s \nanswer: %s'%(q,a))
+
 if __name__ == '__main__':
-    example2()
+    example3()
