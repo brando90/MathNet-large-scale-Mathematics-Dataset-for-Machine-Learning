@@ -4,8 +4,6 @@ import random
 from qaflow import *
 from qaflow.question_answer import *
 
-x,y,a,b = symbols('x y a b')
-
 def example1():
     ## solve x,  a = b,  x = 2*b, a = 8, can you do it?
     question = seqg('solve x ,', perg( 'a = b, ' , 'x = 2*b, ' , 'x = 8, ' ),'can you do it?')
