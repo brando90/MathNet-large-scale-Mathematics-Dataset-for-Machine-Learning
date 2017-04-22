@@ -23,6 +23,7 @@ def example():
 
     part1 = seqg( "Mathphobia", "is a rare disease in which the victim has the delusion that he or she is being subjected to intense examination." )
     perm1 = segq('A person selected uniformly at random has','Mathphobia', 'with probability ', 0.2)
+    perm2 = segq('A person without', 'Mathphobia','has shaky arm with probability,' 0.5)
     permutable_part = perg(perm1,perm2,perm3)
 
     assignments = {}
