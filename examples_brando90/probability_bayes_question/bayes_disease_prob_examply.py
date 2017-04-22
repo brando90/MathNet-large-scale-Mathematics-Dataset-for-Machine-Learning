@@ -13,9 +13,21 @@ What is the probability that a person selected uniformly at random has has Mathp
 
 '''
 
+def get_list_silly_diseases():
+    # TODO: one way to improve this could be to loop through some encyclopedia of words or something and have a bunch of phobia things.
+    silly_disease_names = ['Mathphobia', 'Biophobia', 'Chemphobia','Enginerphobia']
+    silly_disease_names += ['Brainphobia', 'CSphobia', 'Statsphobia','Probailityphobia']
+    return silly_disease_names
 
 def example():
-    #TODO
+
+    part1 = seqg( "Mathphobia", "is a rare disease in which the victim has the delusion that he or she is being subjected to intense examination." )
+    perm1 = segq('A person selected uniformly at random has','Mathphobia', 'with probability ', 0.2)
+    permutable_part = perg(perm1,perm2,perm3)
+
+    assignments = {}
+    assignments["Mathphobia"] = get_list_silly_diseases()
+    assignments[0.2] = get_list_prob_vals()
     pass
 
 
