@@ -40,6 +40,7 @@ def example():
     assignments[0.2] = [random.uniform(lb, ub) for i in range(1000)]
     assignments[0.5] = [random.uniform(lb, ub) for i in range(1000)]
     assignments[0.5] = [random.uniform(lb, ub) for i in range(1000)]
+    question = segq(beginning_q,permutable_part,end_q)
 
 
 
