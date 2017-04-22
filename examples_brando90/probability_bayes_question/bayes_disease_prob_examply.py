@@ -20,29 +20,35 @@ def get_list_silly_diseases():
     return silly_disease_names
 
 def symptoms_list():
-    symptoms = ['shaky arm','runny nose']
+    symptoms = ['shaky arm','runny nose','inflated cheek','sore arm','dry eye']
+    symptoms += ['purple pinky finger','fever','fatigue','muscle aches','coughing']
+    symptoms += ['joint warmth', 'hand numbness','watery eye','white tongue']
     return symptoms
 
 def example():
-
-    part1 = seqg( "Mathphobia", "is a rare disease in which the victim has the delusion that he or she is being subjected to intense examination." )
-    perm1 = segq('A person selected uniformly at random has ','Mathphobia', ' with probability ', 0.2)
-    perm2 = segq('A person without ', 'Mathphobia','has ','shaky arm', 'with probability,' 0.5)
-    perm3 = segq('A person with ', 'Mathphobia',' has shaky arm with probability ,' 0.5)
+    beginning_q = seqg( "Mathphobia", "is a rare disease in which the victim has the delusion that he or she is being subjected to intense examination." )
+    perm1 = segq('A person selected uniformly at random has ','Mathphobia', ' with probability ', 0.2) #P(H)
+    perm2 = segq('A person without ', 'Mathphobia','has ','shaky arm', 'with probability,' 0.5) # P(Symptom|No disease)
+    perm3 = segq('A person with ', 'Mathphobia',' has ','shaky arm', ' with probability ,' 0.3) # P(Symptom|disease)
+    end_q = segq('What is the probability that a person selected uniformly at random, ','Mathphobia',', given that he or she has','shaky arm','?')
     permutable_part = perg(perm1,perm2,perm3)
 
     assignments = {}
     assignments['Mathphobia'] = get_list_silly_diseases()
     assignments['shaky arm'] = symptoms_list()
-    assignments[0.2] = get_list_prob_vals()
-    pass
+    lb, ub = 0, 1
+    assignments[0.2] = [random.uniform(lb, ub) for i in range(1000)]
+    assignments[0.5] = [random.uniform(lb, ub) for i in range(1000)]
+    assignments[0.5] = [random.uniform(lb, ub) for i in range(1000)]
+
 
 
 def example_make_dataset():
     '''
-    Makes data set and saves to dropbox
+    Makes data set and saves
     '''
-    location = '/Users/brandomiranda/Dropbox (MIT)/eit_proj1_data/probability_example'
+    #location = '/Users/brandomiranda/Dropbox (MIT)/eit_proj1_data/probability_example'
+    location = '../../data'
     question_name = 'probability_disease_question'
     answer_name = 'probability_disease_answer'
     # TODO
