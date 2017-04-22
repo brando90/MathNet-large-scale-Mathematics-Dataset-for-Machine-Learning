@@ -19,15 +19,21 @@ def get_list_silly_diseases():
     silly_disease_names += ['Brainphobia', 'CSphobia', 'Statsphobia','Probailityphobia']
     return silly_disease_names
 
+def symptoms_list():
+    symptoms = ['shaky arm','runny nose']
+    return symptoms
+
 def example():
 
     part1 = seqg( "Mathphobia", "is a rare disease in which the victim has the delusion that he or she is being subjected to intense examination." )
-    perm1 = segq('A person selected uniformly at random has','Mathphobia', 'with probability ', 0.2)
-    perm2 = segq('A person without', 'Mathphobia','has shaky arm with probability,' 0.5)
+    perm1 = segq('A person selected uniformly at random has ','Mathphobia', ' with probability ', 0.2)
+    perm2 = segq('A person without ', 'Mathphobia','has ','shaky arm', 'with probability,' 0.5)
+    perm3 = segq('A person with ', 'Mathphobia',' has shaky arm with probability ,' 0.5)
     permutable_part = perg(perm1,perm2,perm3)
 
     assignments = {}
-    assignments["Mathphobia"] = get_list_silly_diseases()
+    assignments['Mathphobia'] = get_list_silly_diseases()
+    assignments['shaky arm'] = symptoms_list()
     assignments[0.2] = get_list_prob_vals()
     pass
 
