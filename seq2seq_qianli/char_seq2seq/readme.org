@@ -1,0 +1,19 @@
+Change in the .py file the path to your dataset
+X_FILE = home_path + '/Dropbox/eit_proj1_data/algebra1/make_var_subj_pilot/make_subject_pilot_problem_'
+Y_FILE = home_path + '/Dropbox/eit_proj1_data/algebra1/make_var_subj_pilot/make_subject_pilot_soln_'
+
+The files have to be ordered by numbers 1,2,...,101,...,1001,...
+
+Training:
+
+     #+BEGIN_SRC shell
+python char_seq2seq.py train --epoch 50 --model_path ./
+     #+END_SRC
+
+Test:
+     #+BEGIN_SRC shell
+python char_seq2seq.py test --model_path ./ /home/loop/Dropbox/eit_proj1_data/algebra1/make_var_subj_pilot/make_subject_pilot_problem_0.txt
+     #+END_SRC
+
+
+
