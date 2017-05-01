@@ -17,6 +17,22 @@ def ex1():
 	ans = choiceg(solve_deriv(expr, x))
 	q,a = make_qa_pair(question, ans, assignments)
 	print('question {0}\nanswer{1}'.format(q, a))
-
+def ex2():
+    A, B, C, D = symbols('A B C D')
+    assignments = {}
+    assignments[A] = [A, B, C, D]
+    'for the matrix A, find a basis for the image and kernel'
+    r1 = []
+    r2 = []
+    r3 = []
+    for i in range(3):
+        r1.append(random.randint(1, 10))
+        r2.append(random.randint(1, 10))
+        r3.append(random.randint(1, 10))
+    A = Matrix([r1, r2, r3])
+    question = perg(seqg('for the matrix A=', sympy2text(A)), seqg('find a basis for the', perg('image', 'kernel')))
+    ans = choiceg(seqg('kernel = ',A.nullspace()), seqg('image = ',A.columnspace()))
+    q,a = make_qa_pair(question, ans, assignments)
+    print('question {0}\nanswer {1}'.format(q, a))
 if __name__ == '__main__':
-	ex1()
+	ex2()
