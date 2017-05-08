@@ -25,6 +25,26 @@ class DelayedExecution:
         '''
         return str((self.func, self.args, self.kwargs))
 
+    def __add__(self, other):
+        if isinstance(other, DelayedExecution):
+            #func = lambda x, y, assignments: x.execute(assignments) + y.execute(assignments)
+            func = lambda x, y: x + y 
+            return DelayedExecution(func, x=self, y=other)
+        elif isinstance(other, str) or isinstance(other, Basic):
+            #func = lambda x, y, assignments: x.execute(assignments) + str(y)
+            func = lambda x, y: x + str(y)
+            return DelayedExecution(func, x=self, y=other)
+
+    def __radd__(self, other):
+        if isinstance(other, DelayedExecution):
+            #func = lambda x, y, assignments: y.execute(assignments) + x.execute(assignments=assignments) 
+            func = lambda x, y: y + x
+            return DelayedExecution(func, x=self, y=other)
+        elif isinstance(other, str) or isinstance(other, Basic):
+            #func = lambda x, y, assignments: str(y) + x.execute(assignments)
+            func = lambda x, y: str(y) + x
+            return DelayedExecution(func, x=self, y=other)
+
     def execute(self, assignments={}):
         '''
         Executes the delayed function.
@@ -33,9 +53,10 @@ class DelayedExecution:
         they are and handles them properly.
         '''
         # step 1: resolve inputs
-        assignments = {hash(str(key)): assignments[key] for key in assignments.keys()}
+        #assignments = {hash(str(key)): assignments[key] for key in assignments.keys()}
+        #assignments[hash(str("assignments"))] = [assignments]
         args = [self._resolve(arg, assignments) for arg in self.args]
-        kwargs = {k: _resolve(v, assignments) for k, v in self.kwargs.items()}
+        kwargs = {k: self._resolve(v, assignments) for k, v in self.kwargs.items()}
         # step 2: resolve function call
         return self.func(*args, **kwargs)
 
@@ -53,9 +74,9 @@ class DelayedExecution:
         #print('->resolve arg: ', arg)
         #print('->resolve assignments: ', assignments)
         # choose a random alternative fto the arg if the key is in the assignments options
-        #if isinstance(arg, collections.Hashable) and arg in assignments:
-        if hash(str(arg)) in assignments:
-            arg = random.sample(assignments[hash(str(arg))],1)[0]
+        if isinstance(arg, collections.Hashable) and arg in assignments:
+        #if hash(str(arg)) in assignments:
+            arg = random.sample(assignments[arg],1)[0]
         # resolve the arg after an alternative was chose
         if isinstance(arg, DelayedExecution):
             return arg.execute(assignments) # recursively execute arg
@@ -123,11 +144,13 @@ def choiceg(*args):
     return args[0]
 #choiceg = func_flow(choiceg)
 
-def sympy2text(sympy_var):
+def sympy2text(sympy_var, use_latex=False):
     '''
     Converts sympy expression to text.
     '''
     # TODO: improve this!
-    #str_symp_var = latex(sympy_var)
-    str_symp_var = srepr(sympy_var)
+    if use_latex:
+        str_symp_var = latex(sympy_var)
+    else:
+        str_symp_var = srepr(sympy_var)
     return str_symp_var
