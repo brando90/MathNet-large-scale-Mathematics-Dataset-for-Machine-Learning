@@ -5,6 +5,17 @@ import random
 
 from qaflow.funcflow import *
 
+class Q(DelayedExecution):
+    
+    def __init__(self):
+        func = lambda *args: '' 
+        DelayedExecution.__init__(self, func)
+class A(DelayedExecution):
+
+    def __init__(self):
+        func = lambda *args: '' 
+        DelayedExecution.__init__(self, func)
+
 def make_qa_pair(question,answer,assignments={},seed=None):
     '''
     Given a question, answer (and optional assignments) written with the funcflow
@@ -17,9 +28,11 @@ def make_qa_pair(question,answer,assignments={},seed=None):
     #np.random.seed(arg.rand_x)
     #tf.set_random_seed( arg.rand_x )
     # seed = int.from_bytes(os.urandom(4), sys.byteorder)
-    if seed != None:
-        random.seed(seed)
-    assignments = { key: [random.sample(value,1)[0]] for key,value in assignments.items() }
+    if seed == None:
+        seed = random.random()
+    random.seed(seed)
+    seed = random.random()
+    assignments = { key: [value[int(seed*len(value))]] for key,value in assignments.items() }
     #print('new_assignments: ', assignments)
     q = question.execute(assignments)
     a = answer.execute(assignments)
