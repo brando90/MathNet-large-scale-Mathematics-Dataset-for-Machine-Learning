@@ -1,5 +1,6 @@
 from sympy import *
 import random
+import collections
 
 import pdb
 
@@ -32,6 +33,7 @@ class DelayedExecution:
         they are and handles them properly.
         '''
         # step 1: resolve inputs
+        assignments = {hash(str(key)): assignments[key] for key in assignments.keys()}
         args = [self._resolve(arg, assignments) for arg in self.args]
         kwargs = {k: _resolve(v, assignments) for k, v in self.kwargs.items()}
         # step 2: resolve function call
@@ -51,8 +53,9 @@ class DelayedExecution:
         #print('->resolve arg: ', arg)
         #print('->resolve assignments: ', assignments)
         # choose a random alternative fto the arg if the key is in the assignments options
-        if arg in assignments:
-            arg = random.sample(assignments[arg],1)[0]
+        #if isinstance(arg, collections.Hashable) and arg in assignments:
+        if hash(str(arg)) in assignments:
+            arg = random.sample(assignments[hash(str(arg))],1)[0]
         # resolve the arg after an alternative was chose
         if isinstance(arg, DelayedExecution):
             return arg.execute(assignments) # recursively execute arg
@@ -125,6 +128,6 @@ def sympy2text(sympy_var):
     Converts sympy expression to text.
     '''
     # TODO: improve this!
-    str_symp_var = str(sympy_var)
-    #str_symp_var = srepr(sympy_var)
+    #str_symp_var = latex(sympy_var)
+    str_symp_var = srepr(sympy_var)
     return str_symp_var
