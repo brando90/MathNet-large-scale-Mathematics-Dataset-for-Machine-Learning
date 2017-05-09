@@ -29,34 +29,48 @@ def example():
     disease = 'Mathphobia'
     symptom = 'shaky arms'
     p_d = 1.0/50
+    p_nd = 1.0 - p_d
     p_s_d = 9.0/10
     p_s_nd = 1.0/20
     beginning_q = seqg( disease, "is a rare disease in which the victim has the delusion that he or she is being subjected to intense examination." )
-    perm1 = segq('A person selected uniformly at random has ',disease, ' with probability ', p_d) #P(disease)
-    perm2 = segq('A person without ', disease,'has ',symptom, 'with probability,' p_s_nd) # P(Symptom|No disease)
-    perm3 = segq('A person with ', disease,' has ',symptom, ' with probability ,' p_s_d) # P(Symptom|disease)
-    end_q = segq('What is the probability that a person selected uniformly at random, ',disease,', given that he or she has',symptom,'?')
+    perm1 = seqg('A person selected uniformly at random has ',disease, ' with probability ', p_d) #P(disease)
+    perm2 = seqg('A person without ', disease,'has ',symptom, 'with probability,', p_s_nd) # P(Symptom|No disease)
+    perm3 = seqg('A person with ', disease,' has ',symptom, ' with probability ,', p_s_d) # P(Symptom|disease)
+    end_q = seqg('What is the probability that a person selected uniformly at random, ',disease,', given that he or she has',symptom,'?')
     permutable_part = perg(perm1,perm2,perm3)
 
-    assignments = {}
-    assignments[disease] = get_list_silly_diseases()
-    assignments[symptom] = symptoms_list()
+    replacements = {}
+    replacements[disease] = get_list_silly_diseases()
+    replacements[symptom] = symptoms_list()
     lb, ub = 0, 1
-    assignments[p_d] = [random.uniform(lb, ub) for i in range(1000)]
-    assignments[p_s_d] = [random.uniform(lb, ub) for i in range(1000)]
-    assignments[p_s_nd] = [random.uniform(lb, ub) for i in range(1000)]
+    replacements[p_d] = [random.uniform(lb, ub) for i in range(1000)]
+    replacements[p_s_d] = [random.uniform(lb, ub) for i in range(1000)]
+    replacements[p_s_nd] = [random.uniform(lb, ub) for i in range(1000)]
     question = seqg(beginning_q,permutable_part,end_q)
     #
     @func_flow
-    def my_mult(a,b):
+    def m(a,b):
         return a*b
+    @func_flow
+    def a(a,b):
+        return a+b
+    @func_flow
+    def d(a,b):
+        return a/b
     #
-    num = segq('( Pr[',symptom,'|',disease,']*','Pr[',disease,']' ) # Pr[S|D]*Pr[D]
-    den2 = segq('Pr[',symptom,'])')
-    den1 = segq('Pr[',symptom,'|',disease,']*Pr[',disease,']+Pr[',symptom,'| no',disease,']*Pr[ no',disease,']') # Pr[S] = Pr[S|D]*Pr[D] + Pr[S|nD]*Pr[nD]
-    ans1 = seqg( num,'/',den1,'=',num,'/',den2 )
-    possible_answers = [ans1]
-    ans = choiceg(*possible_answers)
+    term1 = m(p_s_d,p_d)
+    term2 = m(p_s_nd,p_nd)
+    p_s_Comp = a(term1,term2)
+    num_comp = d( m(p_s_d,p_d), p_s_Comp )
+    num = seqg('( Pr[',symptom,'|',disease,']*','Pr[',disease,']' ) # Pr[S|D]*Pr[D]
+    den2 = seqg('Pr[',symptom,'])')
+    den1 = seqg('Pr[',symptom,'|',disease,']*Pr[',disease,']+Pr[',symptom,'| no',disease,']*Pr[ no',disease,']') # Pr[S] = Pr[S|D]*Pr[D] + Pr[S|nD]*Pr[nD]
+    ans1 = seqg( num,'/',den1,'=',num,'/',den2,'=',num_comp)
+    ans2 = num_comp
+    possible_answers = [ans1,ans2]
+    answer = choiceg(*possible_answers)
+    q,a = make_qa_pair(question,answer,replacements,seed=4)
+    print('question: %s \nanswer: %s'%(q,a))
 
 def example_make_dataset():
     '''

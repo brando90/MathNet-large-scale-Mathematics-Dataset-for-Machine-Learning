@@ -1,4 +1,5 @@
 from sympy import *
+import numpy as np
 import random
 
 from qaflow import *
@@ -29,10 +30,13 @@ def ex2():
         r1.append(random.randint(1, 10))
         r2.append(random.randint(1, 10))
         r3.append(random.randint(1, 10))
-    A = Matrix([r1, r2, r3])
-    question = perg(seqg('for the matrix A=', sympy2text(A)), seqg('find a basis for the', perg('image', 'kernel')))
-    ans = choiceg(seqg('kernel = ',A.nullspace()), seqg('image = ',A.columnspace()))
+    #A = ImmutableMatrix([[1,3,6],[1,2,5],[1,1,4]])
+    A = ImmutableMatrix(Matrix(np.array([r1, r2, r3])))
+    question = perg(seqg('for the matrix A=', A), 'for the image')
+    ans = choiceg(seqg('image =', A.columnspace()))
     q,a = make_qa_pair(question, ans, assignments)
     print('question {0}\nanswer {1}'.format(q, a))
+    
+
 if __name__ == '__main__':
 	ex2()
