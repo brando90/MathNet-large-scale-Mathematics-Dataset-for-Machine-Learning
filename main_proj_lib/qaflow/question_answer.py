@@ -3,17 +3,19 @@ from sympy import *
 import numpy as np
 import random
 
+import pdb
+
 from qaflow.funcflow import *
 
 class Q(DelayedExecution):
-    
+
     def __init__(self):
-        func = lambda *args: '' 
+        func = lambda *args: ''
         DelayedExecution.__init__(self, func)
 class A(DelayedExecution):
 
     def __init__(self):
-        func = lambda *args: '' 
+        func = lambda *args: ''
         DelayedExecution.__init__(self, func)
 
 def make_qa_pair(question,answer,assignments={},seed=None):
