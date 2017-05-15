@@ -28,7 +28,7 @@ class DelayedExecution:
     def __add__(self, other):
         if isinstance(other, DelayedExecution):
             #func = lambda x, y, assignments: x.execute(assignments) + y.execute(assignments)
-            func = lambda x, y: x + y 
+            func = lambda x, y: x + y
             return DelayedExecution(func, x=self, y=other)
         elif isinstance(other, str) or isinstance(other, Basic):
             #func = lambda x, y, assignments: x.execute(assignments) + str(y)
@@ -37,7 +37,7 @@ class DelayedExecution:
 
     def __radd__(self, other):
         if isinstance(other, DelayedExecution):
-            #func = lambda x, y, assignments: y.execute(assignments) + x.execute(assignments=assignments) 
+            #func = lambda x, y, assignments: y.execute(assignments) + x.execute(assignments=assignments)
             func = lambda x, y: y + x
             return DelayedExecution(func, x=self, y=other)
         elif isinstance(other, str) or isinstance(other, Basic):
@@ -87,7 +87,8 @@ class DelayedExecution:
             for key, substitution_options in assignments.items():
                 substitution = random.sample(substitution_options,1)[0]
                 arg = arg.subs(key,substitution) # note if key is not aprt of expr, the expr remains unchanged (note arg is an expression ath this point)
-            return sympy2text(arg)
+            #return sympy2text(arg)
+            return arg
         else:
             return arg
 
