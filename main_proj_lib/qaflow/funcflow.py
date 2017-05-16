@@ -114,13 +114,13 @@ def convert_to_list_of_string(args):
         args - array of arguments for the framework in string form.
 
     '''
-    args = []
+    args_out = []
     for arg in args:
         if isinstance(arg, Expr):
-            args.append( sympy2text(arg) )
+            args_out.append( sympy2text(arg) )
         else:
-            args.append( str(arg) )
-    return args
+            args_out.append( str(arg) )
+    return args_out
 
 ## decorations (note if you don't know what decorations are look at the
 ##decoration explanation file or google it), note I wrote at the end of the decorated functions what decorators do
