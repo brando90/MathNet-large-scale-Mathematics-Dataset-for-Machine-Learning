@@ -27,8 +27,17 @@ def example1():
     @func_flow
     def find_dist(t, v, a):
         return v*t+.5*a*t**2
-
     answer = find_dist(t, v, a)
+
+    def find_dist2(t, v, a):
+        return v*t+.5*a*t**2
+    answer = DelayedExecution(find_dist2,t,v,a)
+
+    answer = DelayedExecution(lambda t, v, a:v*t+.5*a*t**2 ,t,v,a)
+
+    find_dist3 = lambda t, v, a:v*t+.5*a*t**2
+    answer =  DelayedExecution(find_dist3,t,v,a)
+
     #q,a = make_qa_pair(question,answer,assignments, seed=2)
     q,a = make_qa_pair(question,answer,assignments)
     print('question: %s \nanswer: %s'%(q,a))
