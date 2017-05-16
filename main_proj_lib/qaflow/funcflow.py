@@ -164,5 +164,6 @@ def sympy2text(sympy_var, use_latex=False):
     if use_latex:
         str_symp_var = latex(sympy_var)
     else:
-        str_symp_var = srepr(sympy_var)
+        #str_symp_var = srepr(sympy_var) #TODO why do we have this? it seems to make things be displayed weirdly
+        str_symp_var = str(sympy_var)
     return str_symp_var
