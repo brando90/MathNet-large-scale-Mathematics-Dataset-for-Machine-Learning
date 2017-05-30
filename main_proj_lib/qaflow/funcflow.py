@@ -27,26 +27,32 @@ class DelayedExecution:
 
     def __add__(self, other):
         '''
+        Overloading add function for DelayedExecution class to allow for '+' operator to be used to create questions (E.g., Q() + 'solve' + x + perg( Eq(a,b),Eq(x,2*b),Eq(a,8)) + 'can you do it?'). 
+
+        This resolves recursively upon execute(), base case relies on evaluation of primitives to strings.
         '''
         if isinstance(other, DelayedExecution):
-            #func = lambda x, y, assignments: x.execute(assignments) + y.execute(assignments)
+            '''
+            if other is also instance of DelayedExecution, create new DelayedExecution object whose delayed function is the addition of self and other, using the '+' operator.
+            '''
             func = lambda x, y: x + y
             return DelayedExecution(func, x=self, y=other)
         elif isinstance(other, str) or isinstance(other, Basic):
-            #func = lambda x, y, assignments: x.execute(assignments) + str(y)
-            func = lambda x, y: x + str(y)
+            '''
+            elif other is string or Sympy expression, create new DelayedExecution object whose delayed function is the addition of self and str of other, using the '+' operator.
+            '''
+            func = lambda x, y: x + seqg(y).execute()
             return DelayedExecution(func, x=self, y=other)
 
     def __radd__(self, other):
         '''
+        Overloading radd function for DelayedExecution class to allow for '+' operator to be used to create questions (E.g., Q() + 'solve' + x + perg( Eq(a,b),Eq(x,2*b),Eq(a,8)) + 'can you do it?'). Same as above, but for cases where self is on right hand side.
         '''
         if isinstance(other, DelayedExecution):
-            #func = lambda x, y, assignments: y.execute(assignments) + x.execute(assignments=assignments)
             func = lambda x, y: y + x
             return DelayedExecution(func, x=self, y=other)
         elif isinstance(other, str) or isinstance(other, Basic):
-            #func = lambda x, y, assignments: str(y) + x.execute(assignments)
-            func = lambda x, y: str(y) + x
+            func = lambda x, y: seqg(y).execute() + x
             return DelayedExecution(func, x=self, y=other)
 
     def execute(self, assignments={}):

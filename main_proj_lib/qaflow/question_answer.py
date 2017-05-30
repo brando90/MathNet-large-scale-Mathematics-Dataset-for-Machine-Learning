@@ -9,20 +9,20 @@ from qaflow.funcflow import *
 
 
 class Q(DelayedExecution):
-'''
-Question subclass of DelayedExecution
-Acts as recursive base case for overloaded adding operations of all DelayedExecution subclasses.
+    '''
+    Question subclass of DelayedExecution
+    Acts as recursive base case for overloaded adding operations of all DelayedExecution subclasses.
 
-E.g., Q() + 'solve' + x + perg( Eq(a,b),Eq(x,2*b),Eq(a,8)) + 'can you do it?'
-'''
+    E.g., Q() + 'solve' + x + perg( Eq(a,b),Eq(x,2*b),Eq(a,8)) + 'can you do it?'
+    '''
     def __init__(self):
         func = lambda *args: ''
         DelayedExecution.__init__(self, func)
 
 class A(DelayedExecution):
-'''
-Answer subclass of DelayedExecution. Same as Q subclass above, but meant as syntactic sugar for composing answers instead of questions.
-'''
+    '''
+    Answer subclass of DelayedExecution. Same as Q subclass above, but meant as syntactic sugar for composing answers instead of questions.
+    '''
 
     def __init__(self):
         func = lambda *args: ''
