@@ -3,6 +3,8 @@ from sympy import *
 import numpy as np
 import random
 
+import pdb
+
 from qaflow.funcflow import *
 
 
@@ -13,9 +15,8 @@ Acts as recursive base case for overloaded adding operations of all DelayedExecu
 
 E.g., Q() + 'solve' + x + perg( Eq(a,b),Eq(x,2*b),Eq(a,8)) + 'can you do it?'
 '''
-    
     def __init__(self):
-        func = lambda *args: '' 
+        func = lambda *args: ''
         DelayedExecution.__init__(self, func)
 
 class A(DelayedExecution):
@@ -24,7 +25,7 @@ Answer subclass of DelayedExecution. Same as Q subclass above, but meant as synt
 '''
 
     def __init__(self):
-        func = lambda *args: '' 
+        func = lambda *args: ''
         DelayedExecution.__init__(self, func)
 
 def make_qa_pair(question,answer,assignments={},seed=None):
