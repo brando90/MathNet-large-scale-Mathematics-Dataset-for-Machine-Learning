@@ -26,6 +26,8 @@ class DelayedExecution:
         return str((self.func, self.args, self.kwargs))
 
     def __add__(self, other):
+        '''
+        '''
         if isinstance(other, DelayedExecution):
             #func = lambda x, y, assignments: x.execute(assignments) + y.execute(assignments)
             func = lambda x, y: x + y 
@@ -36,6 +38,8 @@ class DelayedExecution:
             return DelayedExecution(func, x=self, y=other)
 
     def __radd__(self, other):
+        '''
+        '''
         if isinstance(other, DelayedExecution):
             #func = lambda x, y, assignments: y.execute(assignments) + x.execute(assignments=assignments) 
             func = lambda x, y: y + x
