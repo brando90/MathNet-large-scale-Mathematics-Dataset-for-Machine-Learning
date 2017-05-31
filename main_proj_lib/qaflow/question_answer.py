@@ -49,11 +49,16 @@ def make_qa_pair(question,answer,assignments={},seed=None, use_latex=False):
     mapped_seed = random.random() #get deterministic value of seed mapped to [0, 1)
     assignments = { key: [value[int(mapped_seed*len(value))]] for key,value in assignments.items() } #choose value from assignments based on 
     #print('new_assignments: ', assignments)
+    
+    #execute question and answer, conver to lists of strings, join
     q = ' '.join(convert_to_list_of_string(question.execute(assignments), use_latex=use_latex))
     a = ' '.join(convert_to_list_of_string(answer.execute(assignments), use_latex=use_latex))
-    rcParams['text.usetex'] = True
-    rcParams['text.latex.preamble'] = r'\usepackage{amsmath}'
-    fig = plt.figure()
+
+    '''Start code for latex visualization'''
+    rcParams['text.usetex'] = True #use local latex compiler
+    rcParams['text.latex.preamble'] = r'\usepackage{amsmath}' #use amsmath package
+    
+    fig = plt.figure() #plot question and answer using matplotlib
     renderer = fig.canvas.get_renderer()
     t = plt.text(0.001, 0.001, "Question: %s \n Answer: %s" % (q, a), fontsize = 12)
     wext = t.get_window_extent(renderer=renderer)
@@ -63,4 +68,7 @@ def make_qa_pair(question,answer,assignments={},seed=None, use_latex=False):
     plt.axis('off')
     plt.tight_layout()
     plt.show()
+    '''End code for latex visualization'''
+    
+    
     return (q,a)
