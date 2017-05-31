@@ -3,6 +3,7 @@ from sympy import *
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+from matplotlib import rcParams
 
 import pdb
 
@@ -17,7 +18,7 @@ class Q(DelayedExecution):
     E.g., Q() + 'solve' + x + perg( Eq(a,b),Eq(x,2*b),Eq(a,8)) + 'can you do it?'
     '''
     def __init__(self):
-        func = lambda *args: ['']
+        func = lambda *args: []
         DelayedExecution.__init__(self, func)
 
 class A(DelayedExecution):
@@ -26,7 +27,7 @@ class A(DelayedExecution):
     '''
 
     def __init__(self):
-        func = lambda *args: ['']
+        func = lambda *args: []
         DelayedExecution.__init__(self, func)
 
 def make_qa_pair(question,answer,assignments={},seed=None, use_latex=False):
@@ -50,4 +51,16 @@ def make_qa_pair(question,answer,assignments={},seed=None, use_latex=False):
     #print('new_assignments: ', assignments)
     q = ' '.join(convert_to_list_of_string(question.execute(assignments), use_latex=use_latex))
     a = ' '.join(convert_to_list_of_string(answer.execute(assignments), use_latex=use_latex))
+    rcParams['text.usetex'] = True
+    rcParams['text.latex.preamble'] = r'\usepackage{amsmath}'
+    fig = plt.figure()
+    renderer = fig.canvas.get_renderer()
+    t = plt.text(0.001, 0.001, "Question: %s \n Answer: %s" % (q, a), fontsize = 12)
+    wext = t.get_window_extent(renderer=renderer)
+
+    fig.set_size_inches(wext.width / 65, wext.height / 40, forward=True)
+    fig.patch.set_facecolor('white')
+    plt.axis('off')
+    plt.tight_layout()
+    plt.show()
     return (q,a)
