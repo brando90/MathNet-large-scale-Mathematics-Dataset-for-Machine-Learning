@@ -9,6 +9,20 @@ import pdb
 
 from qaflow.funcflow import *
 
+class DuplicateAssignmentError(Exception):
+    '''Exception raised when different variables share the same possible assignment
+    
+    Attributes:
+        message: error message
+        duplicates: set of duplicated assignments
+    '''
+    def __init__(self, duplicates):
+        self.duplicates = duplicates
+        self.message = "Assignments to variables must be unique - each possible assignment can only be assigned to one variable. The following assignments are duplicated across different variables: "
+
+    def __str__(self):
+        return self.message + str(self.duplicates)
+
 
 class Q(DelayedExecution):
     '''
@@ -30,6 +44,22 @@ class A(DelayedExecution):
         func = lambda *args: []
         DelayedExecution.__init__(self, func)
 
+def check_for_duplicate_assignments(assignments):
+    '''
+    Checks for assignments assigned to multiple variables, raises DuplicateAssignmentError if duplicate detected
+    E.g.: assignments[x] = [a, b, X]
+           assignments[y] = [A, B, X]
+    Should raise a DuplicateAssignmentError for "X"
+    '''
+    assignment_set = set()
+    for key in assignments.keys():
+        value_set = set(assignments[key])
+        intersection = value_set.intersection(assignment_set)
+        if len(intersection) > 0:
+            raise DuplicateAssignmentError(intersection)
+        assignment_set.update(value_set)
+        
+
 def make_qa_pair(question,answer,assignments={},seed=None, use_latex=False):
     '''
     @question, @answer: DelayedExecution that returns sequential list of elements
@@ -43,6 +73,7 @@ def make_qa_pair(question,answer,assignments={},seed=None, use_latex=False):
     #np.random.seed(arg.rand_x)
     #tf.set_random_seed( arg.rand_x )
     # seed = int.from_bytes(os.urandom(4), sys.byteorder)
+    check_for_duplicate_assignments(assignments)
     if seed == None:
         seed = random.random() #if no seed given, choose random seed
     random.seed(seed) #set random with seed to generate deterministic values
