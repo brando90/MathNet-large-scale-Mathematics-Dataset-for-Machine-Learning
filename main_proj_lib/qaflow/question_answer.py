@@ -2,6 +2,7 @@ import unittest
 from sympy import *
 import numpy as np
 import random
+import matplotlib.pyplot as plt
 
 import pdb
 
@@ -11,12 +12,12 @@ from qaflow.funcflow import *
 class Q(DelayedExecution):
     '''
     Question subclass of DelayedExecution
-    Acts as recursive base case for overloaded adding operations of all DelayedExecution subclasses.
+    Acts as recursive base case for overloaded adding operations of all DelayedExecution subclasses. Base case is a list containing null string.
 
     E.g., Q() + 'solve' + x + perg( Eq(a,b),Eq(x,2*b),Eq(a,8)) + 'can you do it?'
     '''
     def __init__(self):
-        func = lambda *args: ''
+        func = lambda *args: ['']
         DelayedExecution.__init__(self, func)
 
 class A(DelayedExecution):
@@ -25,11 +26,12 @@ class A(DelayedExecution):
     '''
 
     def __init__(self):
-        func = lambda *args: ''
+        func = lambda *args: ['']
         DelayedExecution.__init__(self, func)
 
-def make_qa_pair(question,answer,assignments={},seed=None):
+def make_qa_pair(question,answer,assignments={},seed=None, use_latex=False):
     '''
+    @question, @answer: DelayedExecution that returns sequential list of elements
     Given a question, answer (and optional assignments) written with the funcflow
     framework, returns a tuple with two strings with the question and answer.
 
@@ -46,6 +48,6 @@ def make_qa_pair(question,answer,assignments={},seed=None):
     mapped_seed = random.random() #get deterministic value of seed mapped to [0, 1)
     assignments = { key: [value[int(mapped_seed*len(value))]] for key,value in assignments.items() } #choose value from assignments based on 
     #print('new_assignments: ', assignments)
-    q = question.execute(assignments)
-    a = answer.execute(assignments)
+    q = ' '.join(convert_to_list_of_string(question.execute(assignments), use_latex=use_latex))
+    a = ' '.join(convert_to_list_of_string(answer.execute(assignments), use_latex=use_latex))
     return (q,a)

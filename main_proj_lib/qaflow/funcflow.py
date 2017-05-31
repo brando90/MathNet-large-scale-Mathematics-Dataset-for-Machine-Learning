@@ -39,22 +39,24 @@ class DelayedExecution:
             return DelayedExecution(func, x=self, y=other)
         elif isinstance(other, str) or isinstance(other, Basic):
             '''
-            elif other is string or Sympy expression, create new DelayedExecution object whose delayed function is the addition of self and str of other, using the '+' operator.
+            elif other is string or Sympy expression, create new DelayedExecution object whose delayed function is the addition of self and str of other, using the '+' operator.           
             '''
-            func = lambda x, y: x + seqg(y).execute()
+            func = lambda x, y: x + [y]
             return DelayedExecution(func, x=self, y=other)
+            
 
     def __radd__(self, other):
         '''
         Overloading radd function for DelayedExecution class to allow for '+' operator to be used to create questions (E.g., Q() + 'solve' + x + perg( Eq(a,b),Eq(x,2*b),Eq(a,8)) + 'can you do it?'). Same as above, but for cases where self is on right hand side.
         '''
+        
         if isinstance(other, DelayedExecution):
             func = lambda x, y: y + x
             return DelayedExecution(func, x=self, y=other)
         elif isinstance(other, str) or isinstance(other, Basic):
-            func = lambda x, y: seqg(y).execute() + x
+            func = lambda x, y: [y] + x
             return DelayedExecution(func, x=self, y=other)
-
+        
     def execute(self, assignments={}):
         '''
         Executes the delayed function.
@@ -112,7 +114,7 @@ def func_flow(func):
 
 ##
 
-def convert_to_list_of_string(args):
+def convert_to_list_of_string(args, use_latex=False):
     '''
     Given a list of arguments from the framework, concatenates them into a string
     according to its type. Specifically, if something is of a sympy type, it will
@@ -127,7 +129,7 @@ def convert_to_list_of_string(args):
     args_out = []
     for arg in args:
         if isinstance(arg, Expr):
-            args_out.append( sympy2text(arg) )
+            args_out.append( sympy2text(arg, use_latex) )
         else:
             args_out.append( str(arg) )
     return args_out
@@ -137,24 +139,23 @@ def convert_to_list_of_string(args):
 @func_flow
 def seqg(*args):
     '''
-    Returns a sequentialls generated sentence.
+    Returns a sequentialls generated sentence as a list
 
-    Essentially concatenates all the arguments into a string.
     '''
-    args = convert_to_list_of_string(args)
-    return ' '.join(args) # concatenates the
+    #args = convert_to_list_of_string(args)
+    #return ' '.join(args) # concatenates the
+    return args
 #seqg = func_flow(seqg) #<- this is what decorators do
 
 @func_flow
 def perg(*args):
     '''
-    Returns a sequentialls generated sentence.
-
-    Essentially concatenates all the arguments into a string but randomly permutes things.
+    Returns a permuted list of the arguments
     '''
     args = random.sample( args, len(args) ) # Return a len(args) length list of unique elements chosen from args
-    args = convert_to_list_of_string(args)
-    return ' '.join(args)
+    #args = convert_to_list_of_string(args)
+    #return ' '.join(args)
+    return args
 #perg = func_flow(perg)  #<- this is what decorators do
 
 @func_flow
