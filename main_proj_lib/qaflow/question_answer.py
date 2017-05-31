@@ -24,7 +24,7 @@ class DuplicateAssignmentError(Exception):
         return self.message + str(self.duplicates)
 
 
-class Q(DelayedExecution):
+class Question(DelayedExecution):
     '''
     Question subclass of DelayedExecution
     Acts as recursive base case for overloaded adding operations of all DelayedExecution subclasses. Base case is a list containing null string.
@@ -35,7 +35,7 @@ class Q(DelayedExecution):
         func = lambda *args: []
         DelayedExecution.__init__(self, func)
 
-class A(DelayedExecution):
+class Answer(DelayedExecution):
     '''
     Answer subclass of DelayedExecution. Same as Q subclass above, but meant as syntactic sugar for composing answers instead of questions.
     '''
@@ -49,15 +49,21 @@ def check_for_duplicate_assignments(assignments):
     Checks for assignments assigned to multiple variables, raises DuplicateAssignmentError if duplicate detected
     E.g.: assignments[x] = [a, b, X]
            assignments[y] = [A, B, X]
+    or
+        assignments[x] = [y]
+        assignments[y] = [a]
     Should raise a DuplicateAssignmentError for "X"
     '''
     assignment_set = set()
     for key in assignments.keys():
         value_set = set(assignments[key])
-        intersection = value_set.intersection(assignment_set)
-        if len(intersection) > 0:
-            raise DuplicateAssignmentError(intersection)
+        value_intersect = value_set.intersection(assignment_set)
+        if len(value_intersect) > 0:
+            raise DuplicateAssignmentError(value_intersect)
+        if key in assignment_set:
+            raise DeplicateAssignmentError(key, key_duplicate=True)
         assignment_set.update(value_set)
+        assignment_set.add(key)
         
 
 def make_qa_pair(question,answer,assignments={},seed=None, use_latex=False):
