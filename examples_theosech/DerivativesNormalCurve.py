@@ -13,7 +13,7 @@ def example(seed=None):
 	const1 = random.randint(-1000,1000)
 	const2 = random.randint(-1000,1000)
 
-	first_sentence = "Let y = 3*x + 5*sin(x)."
+	first_sentence = "Let y = {}*x + {}*sin(x).".format(const1, const2)
 	second_sentence = "Find the gradient of the normal to the curve of f at x={}.".format(value)
 	question = seqg(first_sentence, second_sentence)
 
