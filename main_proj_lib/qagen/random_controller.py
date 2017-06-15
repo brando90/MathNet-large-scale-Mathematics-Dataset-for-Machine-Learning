@@ -5,19 +5,25 @@ import unittest
 
 import pdb
 
+global_seed = 0
+
 def register_random_seeding_funcs(*args):
     #TODO
     pass
 
-def consistent_variable(*args,f=None,seed=1,**kwargs):
+def set_global_q_seed(seed):
+    # TODO
+    global_seed = seed
+    pass
+
+def consistent_variable(f,*args,**kwargs):
     '''
 
     '''
-    if f != None:
-        if callable(f):
-            return f(args,kwargs)
-        else:
-            raise ValueError('The type {} is not supported.'.format(type(f)))
+    set_all_seeds(global_seed)
+    if callable(f):
+        f_val = f(args,kwargs)
+        return f_val
     else:
         raise ValueError('The type {} is not supported.'.format(type(f)))
 
