@@ -19,7 +19,7 @@ def consistent_variable(*args,f=None,seed=1,**kwargs):
         else:
             raise ValueError('The type {} is not supported.'.format(type(f)))
     else:
-        return f
+        raise ValueError('The type {} is not supported.'.format(type(f)))
 
 
 class random_controll_tests(unittest.TestCase):

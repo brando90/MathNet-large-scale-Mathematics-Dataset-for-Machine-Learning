@@ -4,6 +4,15 @@ import collections
 
 import pdb
 
+def get_list_sympy_variables():
+    '''
+
+    '''
+    #TODO maybe extend this to provide greek letters too? latex?
+    letters = list(string.ascii_letters)
+    " ".join(letters)
+    return letters
+
 def _resolve(self, arg, assignments={}):
     '''
     arg - the arg to resolve

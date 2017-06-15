@@ -36,8 +36,8 @@ def gen_mc(user_qa_func):
 def genenerate_multiple_choice_pair(user_qa_func,nb_choices):
     '''
 
-    TODO: an only numeric version of this code
     '''
+    #TODO: an only numeric version of this code
     # get function pointers/handles for q & a generators
     q = lambda seed: user_qa_func(seed)[0]
     a = lambda seed: user_qa_func(seed)[1]
@@ -47,7 +47,8 @@ def genenerate_multiple_choice_pair(user_qa_func,nb_choices):
     correct_ans = a(q_seed)
     ans = []
     for mc_i in range(nb_choices-1):
-        a_choice = a(q_seed)
-        # TODO: it would be nice to guarnatee that no other answer will be the same as another answer
+        wrong_seed = random.randint()
+        a_choice = a(wrong_seed)
+        # TODO: it would be nice to guarnatee that no other answer will be the same as another answer or as the correct
         ans.append()
     return
