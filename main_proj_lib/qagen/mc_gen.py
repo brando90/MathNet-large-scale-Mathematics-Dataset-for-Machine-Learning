@@ -42,10 +42,9 @@ def genenerate_multiple_choice_pair(user_qa_func,nb_choices):
     q = lambda seed: user_qa_func(seed)[0]
     a = lambda seed: user_qa_func(seed)[1]
     #
-    q_seed = random.randint()
-    question = q(q_seed)
-    correct_ans = a(q_seed)
     ans = []
+    q_seed = random.randint()
+    question, correct_ans = q(q_seed), a(q_seed)
     for mc_i in range(nb_choices-1):
         wrong_seed = random.randint()
         a_choice = a(wrong_seed)
