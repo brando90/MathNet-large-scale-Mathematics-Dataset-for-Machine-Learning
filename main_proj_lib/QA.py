@@ -9,37 +9,78 @@ class NL():
     def __init__(self, seed):
 
 
-#TODO: Perg
 #TODO: how to substitute in NL
 
        
-#TODO: when question creators start to use more libraries, we can create functions that create generators from the libraries so that question creators can select which generators to use/keep track of generators by themselves
+# when question creators start to use more libraries, we can create functions that create generators from the libraries so that question creators can select which generators to use/keep track of generators by themselves
 
 
 class QAFormat():
 
-    def __init__(self, variable_seed, const_seed):
-        self.variable_seed = variable_seed
-        self.const_seed = const_seed
-        
-        self.sympy_vars = Set() #to check for repeats
-        self.names = Set() #to check for repeats
-        self.faker = faker.Faker()
-        self.random_gen = np.random.RandomState(variable_seed)
+    def __init__(self, variable_seed, correct_seed):
+        self.correct_seed = correct_seed
+        self.question = Question(variable_seed)
+        self.answer = Answer(variable_seed)
 
-    #maybe we can wrap around these to automatically set global randomState so that question creator doesn't have to remember to? Same applies to generate_mc methods 
-    def create_question(self, const_seed):
-        except NotImplementedError
+    '''
+    Right now there is implicit consistency enforced across all names/sympy variables. 
 
-    def create_answer(self, const_seed):
+    Should we make explicit consistency an option? It would probably involve the functions below (i.e., explicitly defining which variables are consistent acrosquestion and answer. Are there any cases where there will need to be variables that are inconsistent?)
+    
+    def init_consistent(self):
+        #runs initialization function as both question, answer
+        self.question =   
+        self.answer =  
+
+    def init(self):
+
+    def create_variables(self):
         except NotImplementedError
+    '''
     
     def generate_mc_q(self, q_format_seed):
+        #TODO
+        #q_format_seed would probably involve changing NL around questions
+        #do formatting with seed here? Unclear what formatting would be rn
+        #maybe change it to NL format seed (consistent w/ answer) instead?
+        correct_q = self.generate_q(self.correct_seed)
+        
+
+    def generate_mc_a(self, a_format_seed, num_answers):
+        answers = []
+        correct_answer = generate_a(self.correct_seed)
+        answers.append(correct_answer)
+        for n in xrange(num_answers-1):
+            #TODO
+            #generate incorrect answers
+        #permute answer order based on a_format_seed
+            
+
+    def generate_q(self, seed):
+        '''Take the question expression and turn it into an answer'''
+        except NotImplementedError
+    
+    def generate_a(self, seed):
+        '''Take the answer expression and turn it into an answer'''
         except NotImplementedError
 
-    def generate_mc_a(self, a_format_seed):
+    def perm(self, elements_list):
         except NotImplementedError
 
+
+
+
+class QA():
+
+    def __init__(self, variable_seed):
+        
+        self.variable_seed = variable_seed #this is used to generate sympy variables and faker. It is consistent across both question and answer
+        self.sympy_vars = set()
+        self.names = set()
+        self.faker = faker.Faker()
+        self.random_gen = np.random.RandomState(variable_seed)
+    
+    
     def get_symbols(num, symbols_str=None):
         '''
         Gets random symbol from string of sympy symbols
@@ -82,24 +123,21 @@ class QAFormat():
     def get_name():
         return self.get_name(1)[0]
 
-
-class QA():
-
-    def __init__(self, seed):
-        np.random.seed(seed)
+    def set_expression(self, func):
+        self.create_expression = func
     
-    def create_expression(self):
+    def create_expression(self, seed):
         except NotImplementedError
 
 class Question():
     
-    def __init__(self, seed):
-        QA.__init__(self, seed):
+    def __init__(self, variable_seed):
+        QA.__init__(self,  variable_seed):
 
 class Answer():
     
-    def __init__(self, seed):
-        QA.__init__(self, seed):
+    def __init__(self, variable_seed):
+        QA.__init__(self, variable_seed):
 
 
 def main():
