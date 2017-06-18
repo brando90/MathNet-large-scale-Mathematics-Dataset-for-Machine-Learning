@@ -21,11 +21,14 @@ class TemplateMC(QAFormat):
     
     def question_expression(self, seed):
     '''generate the expression for the question'''
+        np.random.seed(seed)
     '''Implement this method below'''
+        #TODO: maybe something that would make it so that you only had to declare these variables once across the question and answer?
         except NotImplementedError
 
     def answer_expression(self, seed):
     '''generate the expression for the answer'''
+        np.random.seed(seed)
     '''Implement this method below'''
         except NotImplementedError
         

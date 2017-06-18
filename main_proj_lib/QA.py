@@ -4,15 +4,8 @@ from qagen import utils
 import sympy
 from question_answer import DuplicateAssignmentError
 
-class NL():
-
-    def __init__(self, seed):
-
-
-#TODO: how to substitute in NL
-
        
-# when question creators start to use more libraries, we can create functions that create generators from the libraries so that question creators can select which generators to use/keep track of generators by themselves
+#TODO: when question creators start to use more libraries, we can create functions that create generators from the libraries so that question creators can select which generators to use/keep track of generators by themselves
 
 
 class QAFormat():
@@ -38,22 +31,28 @@ class QAFormat():
         except NotImplementedError
     '''
     
-    def generate_mc_q(self, q_format_seed):
+    def generate_mc_q(self, q_format_seed=None):
         #TODO
         #q_format_seed would probably involve changing NL around questions
         #do formatting with seed here? Unclear what formatting would be rn
         #maybe change it to NL format seed (consistent w/ answer) instead?
         correct_q = self.generate_q(self.correct_seed)
+        return "Select the best answer to the following question: " + correct_q
         
 
-    def generate_mc_a(self, a_format_seed, num_answers):
+    def generate_mc_a(self, num_answers, a_format_seed=None):
         answers = []
         correct_answer = generate_a(self.correct_seed)
         answers.append(correct_answer)
+        incorrect_gen = np.random.RandomState()
         for n in xrange(num_answers-1):
-            #TODO
+            seed = incorrect_gen.random()
+            answers.append(self.generate_a(seed)
             #generate incorrect answers
         #permute answer order based on a_format_seed
+        format_gen = np.random.RandomState(a_format_seed)
+        return format_gen.shuffle(answers)
+        
             
 
     def generate_q(self, seed):
@@ -104,6 +103,7 @@ class QA():
         return self.get_symbol(1)[0]
 
     def get_names(num, names=None):
+    #TODO: Take advantage of Faker's uniqueness option for generating names
         if names == None:
             names = Set()
             while len(names) < num:
@@ -138,6 +138,13 @@ class Answer():
     
     def __init__(self, variable_seed):
         QA.__init__(self, variable_seed):
+
+class NL():
+
+    def __init__(self, seed):
+
+
+#TODO: how to substitute in NL
 
 
 def main():
