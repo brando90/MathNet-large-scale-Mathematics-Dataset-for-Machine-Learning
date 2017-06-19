@@ -11,8 +11,8 @@ class SimpleQuestionExample1(QAFormat):
         '''output formatted string for question'''
         self.question.set_expression(self.question_expression)
         '''Implement this method below'''
-    #anything involve permutations would probably go here
-        question = self.question_expression(seed)
+        #anything involve permutations would probably go here
+        question = self.question.create_expression(seed)
         return "Solve: %s, %s, find %s" % question
         
     
@@ -20,7 +20,7 @@ class SimpleQuestionExample1(QAFormat):
         '''output formatted string for answer'''
         self.answer.set_expression(self.answer_expression)
         '''Implement this method below'''
-        answer = self.answer_expression(seed)
+        answer = self.answer.create_expression(seed)
         return str(answer)
  
     def question_expression(self, seed):
@@ -127,8 +127,8 @@ if __name__ == "__main__":
     print(example1_instance.generate_mc_q(0))
     print(example2_instance.generate_mc_q(1))
     print(example2_instance.generate_mc_q(1))
-    print(example1_instance.generate_mc_a(0))
-    print(example1_instance.generate_mc_a(0))
-    print(example2_instance.generate_mc_a(1))
-    print(example2_instance.generate_mc_a(1))
+    print(example1_instance.generate_mc_a(4, 0))
+    print(example1_instance.generate_mc_a(4, 0))
+    print(example2_instance.generate_mc_a(4, 1))
+    print(example2_instance.generate_mc_a(3, 1))
  
