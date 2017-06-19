@@ -56,6 +56,43 @@ def example(seed=None):
     q,a = make_qa_pair(question, answer, replacemements)
     print('question: %s \nanswer: %s'%(q,a))
 
+def example1(seed=None):
+    random.seed(seed)
+    # first_college = "Yale"
+    # second_college = "MIT"
+    # third_college = "Little Hoop Community College"
+    first_college = get_college_rand()
+    second_college = get_college_rand()
+    third_college = get_college_rand()
+    person = get_person_rand()
+
+    lb, ub = 0, 1
+    prob_col_1 = random.uniform(lb, ub)
+    prob_col_2 = random.uniform(lb, 1-prob_col_1)
+    prob_col_3 = 1 - prob_col_1 - prob_col_2
+    prob_happy_1 = random.uniform(lb,ub)
+    prob_happy_2 = random.uniform(lb, ub)
+    prob_happy_3 = random.uniform(lb, ub)
+
+    beggining_q = seqg(person, "just graduated from high school. She was accepted to three reputable colleges.")
+
+    perm1 = seqg("With probability", prob_col_1, "she attends ", first_college)
+    perm2 = seqg("With probability", prob_col_2, "she attends ", second_college)
+    perm3 = seqg("With probability", prob_col_3, "she attends ", third_college)
+    perm4 = seqg("If she attends", first_college, "she is happy with probability", prob_happy_1)
+    perm5 = seqg("If she attends", second_college, "she is happy with probability", prob_happy_2)
+    perm6 = seqg("If she attends", third_college, "she is happy with probability", prob_happy_3)
+
+    permutable_part_1 = perg(perm1, perm2, perm3)
+    permutable_part_2 = perg(perm4, perm5, perm6)
+
+    question = seqg(beggining_q, permutable_part_1, permutable_part_2)
+
+    ans = [prob_col_1*prob_happy_1 + prob_col_2*prob_happy_2 + prob_col_3*prob_happy_3]
+    answer = choiceg(*ans)
+    q,a = make_qa_pair(question, answer, replacemements)
+    print('question: %s \nanswer: %s'%(q,a))
+
 def example(seed=None):
     random.seed(seed)
     i,j,k = rand(1)
