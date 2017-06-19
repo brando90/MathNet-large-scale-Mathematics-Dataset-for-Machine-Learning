@@ -5,7 +5,7 @@ from qaflow import *
 from qaflow.question_answer import *
 
 
-# Examples involving 2 or 3 iterated integrals.
+# Examples involving 2 or 3 iterated integrals. - Ivan Jutamulia
 
 
 def example1():
