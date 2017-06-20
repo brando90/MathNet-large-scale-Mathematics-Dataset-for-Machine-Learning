@@ -1,40 +1,42 @@
 import numpy as np
 
-class TemplateMC(QAFormat):
+class Template(QAFormat):
     
-    def __init__(variable_seed, correct_seed):
-        QAFormat.__init__(variable_seed, correct_seed)
+    def __init__(self):
+        QAFormat.__init__(self)
          
     def generate_q(self, seed):
-    '''created formatted string for question'''
-        self.question.set_expression(question_expression)
-        question_expression = self.question.create_expression(seed)
-    '''Implement this method below'''
-        except NotImplementedError
+        '''output formatted string for question'''
+        self.question.set_expression(self.question_expression)
+        question = self.question.create_expression(*self.const_vars, *self.vars)
+        '''Implement this method below'''
+        #anything involve permutations would probably go here
+        raise NotImplementedError 
     
     def generate_a(self, seed):
-    '''create formatted string for answer'''
-        self.answer.set_expression(answer_expression)
-        answer_expression = self.answer.create_expression(seed)
-    '''Implement this method below'''
-        except NotImplementedError
-    
-    def question_expression(self, seed):
-    '''generate the mathematical expressions for the question'''
-        np.random.seed(seed)
-    '''Implement this method below'''
-        #TODO: maybe something that would make it so that you only had to declare these variables once across the question and answer?
-        except NotImplementedError
+        '''output formatted string for answer'''
+        self.answer.set_expression(self.answer_expression)
+        answer = self.answer.create_expression(*self.const_vars, *self.vars)
+        '''Implement this method below'''
+        raise NotImplementedError
 
-    def answer_expression(self, seed):
-    '''generate the mathematical expressions for the answer'''
-        np.random.seed(seed)
-    '''Implement this method below'''
-        except NotImplementedError
-        
+    def create_const_variables(self):
+        '''function that returns variables constant across question and answer'''
+        '''Implement this method below'''
+        raise NotImplementedError
 
-        
+    def create_variables(self):
+        '''function that returns variables that are not constant across question and answer'''
+        '''Implement this method below'''
+        raise NotImplementedError
 
- 
+    def question_expression(self):
+        '''generate the mathematical expressions for the question'''
+        '''Implement this method below'''
+        raise NotImplementedError
 
+    def answer_expression(self):
+        '''generate the mathematical expressions for the answer'''
+        '''Implement this method below'''
+        raise NotImplementedError
 
