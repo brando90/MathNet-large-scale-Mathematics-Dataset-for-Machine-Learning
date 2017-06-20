@@ -49,3 +49,14 @@ def genenerate_multiple_choice_pair(user_qa_func,nb_choices):
         # TODO: it would be nice to guarnatee that no other answer will be the same as another answer or as the correct
         ans.append()
     return
+
+def generate_MC(seed):
+    variables_consistent = Init_consistent(seed)
+    q_str = Q(variables,seed)
+    ans_list = []
+    for i in range():
+        variables = Init(seed)
+        a_str = A(variables,seed)
+        ans_list.append(a_str)
+    mc = q_str, ans_list
+    return mc
