@@ -30,12 +30,12 @@ class Template(QAFormat):
         '''Implement this method below'''
         raise NotImplementedError
 
-    def question_expression(self, var1, var2, var3, const1, const2):
+    def question_expression(self):
         '''generate the mathematical expressions for the question'''
         '''Implement this method below'''
         raise NotImplementedError
 
-    def answer_expression(self, var1, var2, var3, const1, const2):
+    def answer_expression(self):
         '''generate the mathematical expressions for the answer'''
         '''Implement this method below'''
         raise NotImplementedError
