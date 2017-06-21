@@ -24,6 +24,7 @@ class QA_constraint(QAGen):
     def seed_all(self,seed):
         random.seed(seed)
         np.random.seed(seed)
+        fake.random.seed(seed)
 
     def init_consistent_qa_variables(self):
         x,y,z,d = get_symbols()
@@ -32,20 +33,22 @@ class QA_constraint(QAGen):
         return x,y,z,d,Mary,Gary
 
     def init_qa_variables(self):
-        x_val,y_val,z_val,d_val = np.random.randint(1,1000,[4])
+        x_val,y_val,z_val = np.random.randint(1,1000,[3])
+        d_val = np.random.randint(1,np.min([x_val,y_val,z_val]))
         return x_val,y_val,z_val,d_val
 
     def Q(self, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary):
         permutable_part = perg(Eq(x,x_val),Eq(y,y_val),Eq(z,z_val))
-        question1 = seqg(Mary+' had',
-        permutable_part,' and each was decreased by',Eq(d,d_val),'by the wolf named '+Gary+'.')
+        question1 = seqg(Mary+' had ',
+        permutable_part,' sheep and each was decreased by',Eq(d,d_val),'by the wolf named '+Gary+'.')
         q = choiceg(question1)
         return q
 
     def A(self, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary):
         permutable_part = perg(Eq(x-d,x_val-d_val),Eq(y-d,y_val-d_val),Eq(z-d,z_val-d_val))
-        ans_vnl_vsympy = seqg(Mary+' has',permutable_part, 'and each was decreased by the wolf named '+Gary+'.')
-        a = choiceg(ans_vnl_vsympy)
+        ans_vnl_vsympy = seqg(Mary+' has ',permutable_part, ' sheeps left and each was decreased by the wolf named '+Gary+'.')
+        ans_vnl_vsympy2 = seqg('The wolf named '+Gary+' decreased each of '+Mary+'\'s sheep and has ',permutable_part,' left.')
+        a = choiceg(ans_vnl_vsympy,ans_vnl_vsympy2)
         return a
 
     def get_qa(self,seed):
@@ -74,7 +77,23 @@ def check_mc(qagenerator):
         print('ans_list: ',ans_list)
         print(len(ans_list))
 
+def check_one_to_many(qagenerator):
+    for seed in range(3):
+        q,a = qagenerator.generate_one_to_many(nb_answers=3,seed=seed)
+        print('q: ', q)
+        print("\n".join(a))
+
+def check_many_to_one(qagenerator):
+    for seed in range(3):
+        print()
+        q,a = qagenerator.generate_many_to_one(nb_questions=5,seed=seed)
+        print("\n".join(q))
+        print('a: ', a)
+        #print("\n".join(a))
+
 if __name__ == '__main__':
     qagenerator = QA_constraint()
     #check_single_question(qagenerator)
-    check_mc(qagenerator)
+    #check_mc(qagenerator)
+    check_many_to_one(qagenerator)
+    #check_one_to_many(qagenerator)
