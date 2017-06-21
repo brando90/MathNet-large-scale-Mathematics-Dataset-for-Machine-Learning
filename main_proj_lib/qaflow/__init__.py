@@ -1,9 +1,7 @@
 # helps users of project/pkg from knowning the internal structure of modules
 # easier to use funcs in all modules
 # following line imports (i.e. similar to copying the code) from the declared packages
-from qaflow.funcflow import *
-from qaflow.question_answer import *
-from qaflow.dataset_maker import *
+from class_prototype.QA import *
 
 #from pkg_1.module1 import f1 as superduperf1
 # 2 options to import
