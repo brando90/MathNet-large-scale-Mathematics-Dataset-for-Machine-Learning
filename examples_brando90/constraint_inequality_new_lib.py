@@ -19,7 +19,13 @@ def get_symbols():
 class QA_constraint(QAGen):
 
     def __init__(self):
-        pass
+        super.__init__()
+        self.author = 'Brando Miranda'
+        self.description = ''' Mary had x=10 lambs, y=9 goats, z=8 dogs and each was decreased by d=2 units
+        by the wolf named Gary. How many of each are there left?'''
+        # keywords about the question that could help to make this more searchable in the future
+        self.keywords = ['basic algebra']
+        self.use_latex = False
 
     def seed_all(self,seed):
         random.seed(seed)
@@ -37,9 +43,13 @@ class QA_constraint(QAGen):
             Gary = fake.name()
         return x,y,z,d,Mary,Gary
 
-    def init_qa_variables(self):
-        x_val,y_val,z_val = np.random.randint(1,1000,[3])
-        d_val = np.random.randint(1,np.min([x_val,y_val,z_val]))
+    def init_qa_variables(self,debug=False):
+        if debug:
+            x_val,y_val,z_val = 2,3,4
+            d_val = 1
+        else:
+            x_val,y_val,z_val = np.random.randint(1,1000,[3])
+            d_val = np.random.randint(1,np.min([x_val,y_val,z_val]))
         return x_val,y_val,z_val,d_val
 
     def Q(self, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary):
