@@ -82,9 +82,9 @@ class QAGen(QAFormat):
 
         '''
         #TODO: doesn't actually work. Why?
-        q_list = []
         qa_pair_list = []
         for seed_qa in range(nb_different_qa):
+            q_list = []
             self.seed_all(seed_qa)
             # get variables for qa
             variables_consistent = self.init_consistent_qa_variables()
