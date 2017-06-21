@@ -8,14 +8,12 @@ fake = Factory.create()
 from qagen import *
 #import qagen
 
-print(QAFormat)
-
 # Mary had x=10 lambs, y=9 goats, z=8 dogs and each was decreased by d=2 units
 # by the wolf named Gary. How many of each are there left?
 
 def get_symbols():
     letters = get_list_sympy_variables()
-    x,y,z,d = random.sample(letters,4)
+    x,y,z,d = symbols( random.sample(letters,4) )
     return x,y,z,d
 
 class QA_constraint(QAGen):
@@ -37,14 +35,15 @@ class QA_constraint(QAGen):
         x_val,y_val,z_val,d_val = np.random.randint(1,1000,[4])
         return x_val,y_val,z_val,d_val
 
-    def Q(self, x_val,y_val,z_val,d_val, x,y,z,Mary,Gary,d):
+    def Q(self, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary):
+
         permutable_part = perg(Eq(x,x_val),Eq(y,y_val),Eq(z,z_val))
         question1 = seqg(Mary+'had',
         permutable_part,'and each was decreased by',d,'by the wolf named '+Gary+'.')
         q = choiceg(question1)
         return q
 
-    def A(self, x_val,y_val,z_val, x,y,z,Mary,Gary,d):
+    def A(self, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary):
         permutable_part = perg(Eq(x-d,x_val-d_val),Eq(y-d,y_val-d_val),Eq(z-d,z_val-d_val))
         ans_vnl_vsympy = seqg(Mary+'has',permutable_part, 'and each was decreased by the wolf named '+Gary+'.')
         a = choiceg(ans_vnl_vsympy)
@@ -60,7 +59,7 @@ class QA_constraint(QAGen):
         print('variables = ',variables)
         # get qa
         q_str = self.Q(*variables,*variables_consistent)
-        a_str = A(*variables,*variables_consistent)
+        a_str = self.A(*variables,*variables_consistent)
         return q_str, a_str
 
 if __name__ == '__main__':
