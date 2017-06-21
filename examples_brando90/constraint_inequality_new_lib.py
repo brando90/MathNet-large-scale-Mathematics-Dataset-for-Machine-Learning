@@ -47,7 +47,7 @@ class QA_constraint(QAGen):
     def A(self, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary):
         permutable_part = perg(Eq(x-d,x_val-d_val),Eq(y-d,y_val-d_val),Eq(z-d,z_val-d_val))
         ans_vnl_vsympy = seqg(Mary+' has ',permutable_part, ' sheeps left and each was decreased by the wolf named '+Gary+'.')
-        ans_vnl_vsympy2 = seqg('The wolf named '+Gary+' decreased each of '+Mary+'\'s sheep and has ',permutable_part,' left.')
+        ans_vnl_vsympy2 = seqg('The wolf named '+Gary+' decreased each of '+Mary+'\'s sheep and she now has ',permutable_part,' sheep left.')
         a = choiceg(ans_vnl_vsympy,ans_vnl_vsympy2)
         return a
 
@@ -83,7 +83,7 @@ def check_one_to_many(qagenerator):
         print('q: ', q)
         print("\n".join(a))
 
-def check_many_to_one(qagenerator):
+def check_many_to_one_consis(qagenerator):
     for seed in range(3):
         print()
         q,a = qagenerator.generate_many_to_one(nb_questions=5,seed=seed)
@@ -91,9 +91,20 @@ def check_many_to_one(qagenerator):
         print('a: ', a)
         #print("\n".join(a))
 
+def check_many_to_one_consistent_format(qagenerator):
+    nb_different_qa = 3
+    seed_output_format = 0
+    nb_different_q = 2
+    qa_pair_list = qagenerator.generate_many_to_one_consistent_format(nb_different_qa,seed_output_format,nb_different_q=nb_different_q)
+    for q_list,a_consistent_format in qa_pair_list:
+        print()
+        print("\n".join(q_list))
+        print('a: ', a_consistent_format)
+
 if __name__ == '__main__':
     qagenerator = QA_constraint()
     #check_single_question(qagenerator)
     #check_mc(qagenerator)
-    check_many_to_one(qagenerator)
+    #check_many_to_one(qagenerator)
     #check_one_to_many(qagenerator)
+    check_many_to_one_consistent_format(qagenerator)
