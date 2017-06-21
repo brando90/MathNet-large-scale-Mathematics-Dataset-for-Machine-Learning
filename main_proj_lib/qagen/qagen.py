@@ -19,17 +19,6 @@ class QAFormat:
 
 class QAGen(QAFormat):
 
-    def get_qa(self,seed):
-        # set seed
-        self.seed_all(seed)
-        # get variables
-        variables_consistent = self.init_consistent_qa_variables()
-        variables = self.init_qa_variables()
-        # get qa
-        q_str = self.Q(*variables,*variables_consistent)
-        a_str = A(*variables,*variables_consistent)
-        return q_str, a_str
-
     def generate_MC(self,seed):
         self.seed_all(seed)
         # get variables for qq
@@ -37,13 +26,13 @@ class QAGen(QAFormat):
         variables = self.init_qa_variables()
         # set q and correct a
         q_str = self.Q(*variables,*variables_consistent)
-        correct_a_str = A(*variables,*variables_consistent)
+        correct_a_str = self.A(*variables,*variables_consistent)
         # collect alternative answers
         ans_list = [correct_a_str]
         for i in range():
             #self.seed_all(seed)
             variables = self.init()
-            a_str = A(*variables,*variables_consistent)
+            a_str = self.A(*variables,*variables_consistent)
             ans_list.append(a_str)
         # randomize where the answer is
         args = random.sample( args, len(args) )
