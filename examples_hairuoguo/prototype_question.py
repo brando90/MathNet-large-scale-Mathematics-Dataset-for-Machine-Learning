@@ -3,6 +3,10 @@ import sympy as sympy
 from class_prototype import *
 
 class SimpleQuestionExample1(QAFormat):
+    '''
+    Question: var1 = const1*var2, var2 = var3/const2, find var1 in terms of var3.
+
+    '''
 
     def __init__(self):
         QAFormat.__init__(self)
