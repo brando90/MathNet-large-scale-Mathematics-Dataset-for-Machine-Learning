@@ -26,10 +26,15 @@ class QA_constraint(QAGen):
         np.random.seed(seed)
         fake.random.seed(seed)
 
-    def init_consistent_qa_variables(self):
-        x,y,z,d = get_symbols()
-        Mary = fake.name()
-        Gary = fake.name()
+    def init_consistent_qa_variables(self,debug=False):
+        if debug:
+            x,y,z,d = get_symbols()
+            Mary = fake.name()
+            Gary = fake.name()
+        else:
+            x,y,z,d = Symbols('x y z d')
+            Mary = 'Mary'
+            Gary = 'Gary'
         return x,y,z,d,Mary,Gary
 
     def init_qa_variables(self):
