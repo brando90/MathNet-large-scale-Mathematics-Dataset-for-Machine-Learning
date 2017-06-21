@@ -36,16 +36,15 @@ class QA_constraint(QAGen):
         return x_val,y_val,z_val,d_val
 
     def Q(self, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary):
-
         permutable_part = perg(Eq(x,x_val),Eq(y,y_val),Eq(z,z_val))
-        question1 = seqg(Mary+'had',
-        permutable_part,'and each was decreased by',d,'by the wolf named '+Gary+'.')
+        question1 = seqg(Mary+' had',
+        permutable_part,' and each was decreased by',Eq(d,d_val),'by the wolf named '+Gary+'.')
         q = choiceg(question1)
         return q
 
     def A(self, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary):
         permutable_part = perg(Eq(x-d,x_val-d_val),Eq(y-d,y_val-d_val),Eq(z-d,z_val-d_val))
-        ans_vnl_vsympy = seqg(Mary+'has',permutable_part, 'and each was decreased by the wolf named '+Gary+'.')
+        ans_vnl_vsympy = seqg(Mary+' has',permutable_part, 'and each was decreased by the wolf named '+Gary+'.')
         a = choiceg(ans_vnl_vsympy)
         return a
 
@@ -62,13 +61,20 @@ class QA_constraint(QAGen):
         a_str = self.A(*variables,*variables_consistent)
         return q_str, a_str
 
-if __name__ == '__main__':
-    qagenerator = QA_constraint()
+def check_single_question(qagenerator):
     q,a = qagenerator.get_qa(1)
     print('q: ', q)
     print('a: ', a)
-    # for seed in range(3):
-    #     q_str, ans_list = qagenerator.generate_MC(seed)
-    #     print('seed: ',seed)
-    #     print('q_str: ',q_str)
-    #     print('a_str: ',a_str)
+
+def check_mc(qagenerator):
+    for seed in range(3):
+        q_str, ans_list = qagenerator.generate_MC(nb_answers=3,seed=seed)
+        print('seed: ',seed)
+        print('q_str: ',q_str)
+        print('ans_list: ',ans_list)
+        print(len(ans_list))
+
+if __name__ == '__main__':
+    qagenerator = QA_constraint()
+    #check_single_question(qagenerator)
+    check_mc(qagenerator)

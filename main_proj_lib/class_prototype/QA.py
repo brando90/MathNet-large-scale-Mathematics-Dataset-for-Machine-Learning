@@ -5,13 +5,13 @@ import sympy
 from qaflow.question_answer import DuplicateAssignmentError
 from faker import Faker
 
-       
+
 #TODO: when question creators start to use more libraries, we can create functions that create generators from the libraries so that question creators can select which generators to use/keep track of generators by themselves
 
 
 class QAFormat():
     '''
-    Class for entire question, answer generating object. 
+    Class for entire question, answer generating object.
     '''
 
     def __init__(self):
@@ -41,12 +41,12 @@ class QAFormat():
             return func(self, seed, *args, **kwargs)
         return seeding_func
 
-    #TODO: test cases for get_symbols 
+    #TODO: test cases for get_symbols
     def get_symbols(self, num, symbols_str=None):
-        '''
-        Gets n=num random symbols, either from given string of symbols separated by spaces (sympy format) or generates them randomly.
+    '''
+    Gets n=num random symbols, either from given string of symbols separated by spaces (sympy format) or generates them randomly.
 
-        Supports maximum of 26 symbols in question overall
+    Supports maximum of 26 symbols in question overall
         '''
         if symbols_str != None: #if drawing from all 26 lowercase (no list given)
             symbols = sympy.symbols(symbols_str)
@@ -64,18 +64,16 @@ class QAFormat():
         symbols = [symbols[i] for i in sample_index]
         self.sympy_vars += symbols
         return tuple(symbols)
-            
-             
 
     def get_symbol(self):
-        '''Used for getting single symbol'''
+    '''Used for getting single symbol'''
         return self.get_symbols(1)[0]
 
     #TODO: Test cases for get_names
     def get_names(self, num, names=None):
-        '''
-        Get n=num names from list of given names, or draw them randomly using Faker
-        '''
+    '''
+    Get n=num names from list of given names, or draw them randomly using Faker
+    '''
         if names == None: #if no given list, generate using faker
             names = []
             while len(names) < num:
@@ -89,13 +87,13 @@ class QAFormat():
             duplicates = [x for x in names if x in self.names]
             if len(duplicates) > 0: #if assigned duplicates, throw error
                 raise DuplicateAssignmentError(duplicates)
-            names_indices = self.random_gen.randint(0, len(names), num) 
+            names_indices = self.random_gen.randint(0, len(names), num)
             names = [names[i] for i in names_indices]
             self.names += (names)
             return tuple(names)
-            
+
     def get_name(self):
-        '''used for getting single name'''
+    '''used for getting single name'''
         return self.get_names(1)[0]
 
     def set_correct_seed(self, seed):
@@ -124,16 +122,16 @@ class QAFormat():
         Returns the variables as tuple (separated by commas)
         '''
         raise NotImplementedError
-    
+
     def set_const_variable_creation(self, func):
         '''Method for setting the function for creating consistent variables'''
-        self._create_const_variables = func    
+        self._create_const_variables = func
 
     def set_variable_creation(self, func):
         '''Method for setting function for creating inconsistent variables'''
         self._create_variables = func
 
-    
+
     def generate_mc_q(self, seed):
         '''
         Outputs MC question as string
@@ -142,10 +140,10 @@ class QAFormat():
         #q_format_seed would probably involve changing NL around questions
         #do formatting with seed here? Unclear what formatting would be rn
         #maybe change it to NL format seed (consistent w/ answer) instead?
-        self.init(self.correct_seed) 
+        self.init(self.correct_seed)
         correct_q = self.generate_q(self.correct_seed)
         return "Select the best answer to the following question: " + correct_q
-        
+
     def generate_mc_a(self, num_answers, a_format_seed, incorrect_seed=0):
         '''
         Outputs MC answer as list of strings
@@ -164,13 +162,13 @@ class QAFormat():
         format_gen = np.random.RandomState(a_format_seed)
         format_gen.shuffle(answers)
         return answers
-        
-            
+
+
 
     def generate_q(self, seed):
         '''Take the question expression and turn it into a formatted string'''
         raise NotImplementedError
-    
+
     def generate_a(self, seed):
         '''Take the answer expression and turn it into a formatted string'''
         raise NotImplementedError
@@ -182,9 +180,9 @@ class QAFormat():
 
 
 class QA():
-    
+
     '''
-    General expression class for a type of question or answer. Enforces no duplicate assignments of names or sympy variables. 
+    General expression class for a type of question or answer. Enforces no duplicate assignments of names or sympy variables.
     '''
 
     def __init__(self):
@@ -195,21 +193,19 @@ class QA():
         Set function for outputting the pure mathematical expressions for the instance. Question creator defines func.
         '''
         self.create_expression = func
-    
+
     def create_expression(self):
         raise NotImplementedError
 
 class Question(QA):
-    
+
     def __init__(self):
         QA.__init__(self)
 
 class Answer(QA):
-    
+
     def __init__(self):
         QA.__init__(self)
-
-
 
 def main():
     pass

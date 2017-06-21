@@ -1,3 +1,9 @@
+from sympy import *
+import random
+import collections
+import string
+
+import pdb
 import unittest
 
 class QAFormat:
@@ -19,7 +25,7 @@ class QAFormat:
 
 class QAGen(QAFormat):
 
-    def generate_MC(self,seed):
+    def generate_MC(self,nb_answers,seed):
         self.seed_all(seed)
         # get variables for qq
         variables_consistent = self.init_consistent_qa_variables()
@@ -29,13 +35,13 @@ class QAGen(QAFormat):
         correct_a_str = self.A(*variables,*variables_consistent)
         # collect alternative answers
         ans_list = [correct_a_str]
-        for i in range():
+        for i in range(nb_answers-1):
             #self.seed_all(seed)
-            variables = self.init()
+            variables = self.init_qa_variables()
             a_str = self.A(*variables,*variables_consistent)
             ans_list.append(a_str)
         # randomize where the answer is
-        args = random.sample( args, len(args) )
+        ans_list = random.sample( ans_list, len(ans_list) )
         mc = q_str, ans_list
         return mc
 
