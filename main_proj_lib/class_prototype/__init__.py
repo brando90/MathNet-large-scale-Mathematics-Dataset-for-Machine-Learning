@@ -2,6 +2,7 @@
 # easier to use funcs in all modules
 # following line imports (i.e. similar to copying the code) from the declared packages
 from class_prototype.QA import *
+from class_prototype.question_tests import *
 
 #from pkg_1.module1 import f1 as superduperf1
 # 2 options to import
