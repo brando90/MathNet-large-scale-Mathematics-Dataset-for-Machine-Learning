@@ -28,13 +28,13 @@ class QA_constraint(QAGen):
 
     def init_consistent_qa_variables(self,debug=False):
         if debug:
-            x,y,z,d = get_symbols()
-            Mary = fake.name()
-            Gary = fake.name()
-        else:
             x,y,z,d = Symbols('x y z d')
             Mary = 'Mary'
             Gary = 'Gary'
+        else:
+            x,y,z,d = get_symbols()
+            Mary = fake.name()
+            Gary = fake.name()
         return x,y,z,d,Mary,Gary
 
     def init_qa_variables(self):
