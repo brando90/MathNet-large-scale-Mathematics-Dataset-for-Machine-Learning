@@ -12,7 +12,7 @@ from faker import Faker
 class QAFormat():
     '''
     Class for entire question, answer generating object. 
-    '''
+   '''
 
     def __init__(self):
         self.question = Question()#seed question with seed for variables/names

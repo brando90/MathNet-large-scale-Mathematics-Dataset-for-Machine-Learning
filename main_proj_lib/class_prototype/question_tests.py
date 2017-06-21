@@ -18,10 +18,18 @@ class TestQAFormatFields(unittest.TestCase):
 
 class TestQAFormatMethods(unittest.TestCase):
 
-    def test_generate_q(self):
+    def __init__(self, QAFormat_instance):
+        unittest.TestCase.__init__(self)
+        self.QAFormat = QAFormat_instance
 
+    def test_generate_q(self):
+        self.QAFormat.generate_q(0)
+          
     def test_generate_a(self):
+        self.QAFormat.generate_a(0)
 
     def test_question_expression(self):
+        self.QAFormat.question.create_expression()
 
-    def test_answer_expression(self): 
+    def test_answer_expression(self):
+        self.QAFormat.answer.create_expression()
