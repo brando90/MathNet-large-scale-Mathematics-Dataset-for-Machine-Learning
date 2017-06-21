@@ -26,25 +26,37 @@ class DelayedExecution:
         return str((self.func, self.args, self.kwargs))
 
     def __add__(self, other):
+        '''
+        Overloading add function for DelayedExecution class to allow for '+' operator to be used to create questions (E.g., Q() + 'solve' + x + perg( Eq(a,b),Eq(x,2*b),Eq(a,8)) + 'can you do it?'). 
+
+        This resolves recursively upon execute(), base case relies on evaluation of primitives to strings.
+        '''
         if isinstance(other, DelayedExecution):
-            #func = lambda x, y, assignments: x.execute(assignments) + y.execute(assignments)
-            func = lambda x, y: x + y 
+            '''
+            if other is also instance of DelayedExecution, create new DelayedExecution object whose delayed function is the addition of self and other, using the '+' operator.
+            '''
+            func = lambda x, y: x + y
             return DelayedExecution(func, x=self, y=other)
         elif isinstance(other, str) or isinstance(other, Basic):
-            #func = lambda x, y, assignments: x.execute(assignments) + str(y)
-            func = lambda x, y: x + str(y)
+            '''
+            elif other is string or Sympy expression, create new DelayedExecution object whose delayed function is the addition of self and str of other, using the '+' operator.           
+            '''
+            func = lambda x, y: x + [y]
             return DelayedExecution(func, x=self, y=other)
+            
 
     def __radd__(self, other):
+        '''
+        Overloading radd function for DelayedExecution class to allow for '+' operator to be used to create questions (E.g., Q() + 'solve' + x + perg( Eq(a,b),Eq(x,2*b),Eq(a,8)) + 'can you do it?'). Same as above, but for cases where self is on right hand side.
+        '''
+        
         if isinstance(other, DelayedExecution):
-            #func = lambda x, y, assignments: y.execute(assignments) + x.execute(assignments=assignments) 
             func = lambda x, y: y + x
             return DelayedExecution(func, x=self, y=other)
         elif isinstance(other, str) or isinstance(other, Basic):
-            #func = lambda x, y, assignments: str(y) + x.execute(assignments)
-            func = lambda x, y: str(y) + x
+            func = lambda x, y: [y] + x
             return DelayedExecution(func, x=self, y=other)
-
+        
     def execute(self, assignments={}):
         '''
         Executes the delayed function.
@@ -87,7 +99,7 @@ class DelayedExecution:
             for key, substitution_options in assignments.items():
                 substitution = random.sample(substitution_options,1)[0]
                 arg = arg.subs(key,substitution) # note if key is not aprt of expr, the expr remains unchanged (note arg is an expression ath this point)
-            return sympy2text(arg)
+            return arg
         else:
             return arg
 
@@ -102,37 +114,51 @@ def func_flow(func):
 
 ##
 
-# class Variable:
-#     def __hash__(self):
-#         return id(self)
+def convert_to_list_of_string(args, use_latex=False):
+    '''
+    Given a list of arguments from the framework, concatenates them into a string
+    according to its type. Specifically, if something is of a sympy type, it will
+    convert it using the framework's sympy2text rather than python default methods.
 
-def convert_to_list_of_string(args):
-    args = [str(arg) for arg in args]
-    return args
+    argument
+        args - array of arguments for the framework.
+    return
+        args - array of arguments for the framework in string form.
+
+    '''
+    args_out = []
+    for arg in args:
+        if isinstance(arg, Basic):
+            args_out.append( sympy2text(arg, use_latex) )
+        elif isinstance(arg, (list, tuple)): #for nested lists that happen with nested perg or seqg
+            string_list = convert_to_list_of_string(arg, use_latex) #call convert_to_list_of_string recursively
+            args_out += string_list
+        else:
+            args_out.append( str(arg) )
+    return args_out
 
 ## decorations (note if you don't know what decorations are look at the
 ##decoration explanation file or google it), note I wrote at the end of the decorated functions what decorators do
 @func_flow
 def seqg(*args):
     '''
-    Returns a sequentialls generated sentence.
+    Returns a sequentialls generated sentence as a list
 
-    Essentially concatenates all the arguments into a string.
     '''
-    args = convert_to_list_of_string(args)
-    return ' '.join(args) # concatenates the
+    #args = convert_to_list_of_string(args)
+    #return ' '.join(args) # concatenates the
+    return args
 #seqg = func_flow(seqg) #<- this is what decorators do
 
 @func_flow
 def perg(*args):
     '''
-    Returns a sequentialls generated sentence.
-
-    Essentially concatenates all the arguments into a string but randomly permutes things.
+    Returns a permuted list of the arguments
     '''
     args = random.sample( args, len(args) ) # Return a len(args) length list of unique elements chosen from args
-    args = convert_to_list_of_string(args)
-    return ' '.join(args)
+    #args = convert_to_list_of_string(args)
+    #return ' '.join(args)
+    return args
 #perg = func_flow(perg)  #<- this is what decorators do
 
 @func_flow
@@ -150,7 +176,8 @@ def sympy2text(sympy_var, use_latex=False):
     '''
     # TODO: improve this!
     if use_latex:
-        str_symp_var = latex(sympy_var)
+        str_symp_var = '$' + latex(sympy_var) + '$'
     else:
-        str_symp_var = srepr(sympy_var)
+        #str_symp_var = srepr(sympy_var) #TODO why do we have this? it seems to make things be displayed weirdly
+        str_symp_var = str(sympy_var)
     return str_symp_var

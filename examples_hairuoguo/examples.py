@@ -5,7 +5,6 @@ import random
 from qaflow import *
 from qaflow.question_answer import *
 
-
 #word problem 1
 
 def example():
@@ -16,7 +15,7 @@ def example():
     ## solve x,  a = b,  x = 2*b, a = 8, can you do it?
     #first possible syntax using + for seqg
     question = seqg() + 'solve' + x +  Eq(a,b)/Eq(x,2*b)/Eq(a,8) + ' can you do it?'
-    #question = seqg(Eq(a,b)) 
+    #question = seqg(Eq(a,b))
     #second possible syntax for using >
     '''
     question = solve > x >  Eq(a,b)/Eq(x,2*b)/Eq(a,8) >'can you do it?'

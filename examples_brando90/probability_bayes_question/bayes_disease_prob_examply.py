@@ -68,6 +68,8 @@ def example():
     ans1 = seqg( num,'/',den1,'=',num,'/',den2,'=',num_comp)
     ans2 = num_comp
     possible_answers = [ans1,ans2]
+    possible_answers = [ans1]
+    possible_answers = [ans2]
     answer = choiceg(*possible_answers)
     q,a = make_qa_pair(question,answer,replacements,seed=4)
     print('question: %s \nanswer: %s'%(q,a))
