@@ -17,34 +17,36 @@ def get_symbols():
     return x,y,z,d
 
 class QA_constraint(QAGen):
+    #seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
 
     def __init__(self):
-        super.__init__()
+        super().__init__()
         self.author = 'Brando Miranda'
-        self.description = ''' Mary had x=10 lambs, y=9 goats, z=8 dogs and each was decreased by d=2 units
+        self.description = ''' Mary had x=10, y=9, z=8, goats, lambs, dogs, and each was decreased by d=2 units
         by the wolf named Gary. How many of each are there left?'''
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['basic algebra']
-        self.use_latex = False
+        self.use_latex = True
 
     def seed_all(self,seed):
         random.seed(seed)
         np.random.seed(seed)
         fake.random.seed(seed)
 
-    def init_consistent_qa_variables(self,debug=False):
-        if debug:
-            x,y,z,d = Symbols('x y z d')
-            Mary = 'Mary'
-            Gary = 'Gary'
+    def init_consistent_qa_variables(self):
+        if self.debug:
+            x,y,z,d = symbols('x y z d')
+            Mary, Gary = 'Mary', 'Gary'
+            goats,lambs,dogs = 'goats','lambs','dogs'
         else:
             x,y,z,d = get_symbols()
             Mary = fake.name()
             Gary = fake.name()
-        return x,y,z,d,Mary,Gary
+            goats,lambs,dogs = 'goats','lambs','dogs'
+        return x,y,z,d,Mary,Gary,goats,lambs,dogs
 
-    def init_qa_variables(self,debug=False):
-        if debug:
+    def init_qa_variables(self):
+        if self.debug:
             x_val,y_val,z_val = 2,3,4
             d_val = 1
         else:
@@ -52,19 +54,31 @@ class QA_constraint(QAGen):
             d_val = np.random.randint(1,np.min([x_val,y_val,z_val]))
         return x_val,y_val,z_val,d_val
 
-    def Q(self, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary):
-        permutable_part = perg(Eq(x,x_val),Eq(y,y_val),Eq(z,z_val))
-        question1 = seqg(Mary+' had ',
-        permutable_part,' sheep and each was decreased by',Eq(d,d_val),'by the wolf named '+Gary+'.')
-        q = choiceg(question1)
+    @language_permuters
+    def Q(s, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary,goats,lambs,dogs):
+        #define some short cuts
+        seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
+        #
+        permutable_part = s.perg(seqg(Eq(x,x_val),','),Eq(y,y_val),Eq(z,z_val))
+        animal_list = s.seqg(goats, lambs, dogs)
+        question1 = s.seqg(Mary+' had ',
+        permutable_part, animal_list,' respectively. Each was decreased by',Eq(d,d_val),'by the wolf named '+Gary+'.')
+        q = s.choiceg(question1)
         return q
 
-    def A(self, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary):
-        permutable_part = perg(Eq(x-d,x_val-d_val),Eq(y-d,y_val-d_val),Eq(z-d,z_val-d_val))
-        ans_vnl_vsympy = seqg(Mary+' has ',permutable_part, ' sheeps left and each was decreased by the wolf named '+Gary+'.')
-        ans_vnl_vsympy2 = seqg('The wolf named '+Gary+' decreased each of '+Mary+'\'s sheep and she now has ',permutable_part,' sheep left.')
-        a = choiceg(ans_vnl_vsympy,ans_vnl_vsympy2)
+    @language_permuters
+    def A(s, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary,goats,lambs,dogs):
+        #define some short cuts
+        seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
+        #
+        permutable_part = s.perg(Eq(x-d,x_val-d_val),Eq(y-d,y_val-d_val),Eq(z-d,z_val-d_val))
+        animal_list = s.seqg( goats, lambs, dogs)
+        ans_vnl_vsympy = s.seqg(Mary+' has ',permutable_part, animal_list, 'left and each was decreased by the wolf named '+Gary+'.')
+        ans_vnl_vsympy2 = s.seqg('The wolf named '+Gary+' decreased each of '+Mary+'\'s sheep and she now has ',permutable_part,' sheep left.')
+        a = s.choiceg(ans_vnl_vsympy,ans_vnl_vsympy2)
         return a
+
+    ##
 
     def get_qa(self,seed):
         # set seed
@@ -79,8 +93,12 @@ class QA_constraint(QAGen):
         a_str = self.A(*variables,*variables_consistent)
         return q_str, a_str
 
+##
+
 def check_single_question(qagenerator):
+    qagenerator.debug = True
     q,a = qagenerator.get_qa(1)
+    print('qagenerator.debug = ', qagenerator.debug)
     print('q: ', q)
     print('a: ', a)
 
@@ -118,8 +136,8 @@ def check_many_to_one_consistent_format(qagenerator):
 
 if __name__ == '__main__':
     qagenerator = QA_constraint()
-    #check_single_question(qagenerator)
+    check_single_question(qagenerator)
     #check_mc(qagenerator)
     #check_many_to_one(qagenerator)
     #check_one_to_many(qagenerator)
-    check_many_to_one_consistent_format(qagenerator)
+    #check_many_to_one_consistent_format(qagenerator)
