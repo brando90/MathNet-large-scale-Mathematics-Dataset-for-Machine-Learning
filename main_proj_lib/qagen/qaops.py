@@ -4,24 +4,24 @@ import inspect
 
 import pdb
 
-def language_permuters(func):
-    '''
-    Im a decorator
-    '''
-    #TODO
-    print('here \n')
-    # the following is the wrapper function
-    def wrapper(*args,**kwargs):
-        self = args[0]
-        seqg, perg, choiceg = self.seqg, self.perg, self.choiceg
-        # TODO: have maybe inspect set the names seqg, etc
-        print( func )
-        print( inspect.ismethod(func) )
-        func.seqg = seqg
-        print( dir(func) )
-        print(  )
-        return func(*args,**kwargs)
-    return wrapper
+# def language_permuters(func):
+#     '''
+#     Im a decorator
+#     '''
+#     #TODO have a way for users to avoid having to do self.seqg etc
+#     print('here \n')
+#     # the following is the wrapper function
+#     def wrapper(*args,**kwargs):
+#         self = args[0]
+#         seqg, perg, choiceg = self.seqg, self.perg, self.choiceg
+#         # TODO: have maybe inspect set the names seqg, etc
+#         print( func )
+#         print( inspect.ismethod(func) )
+#         func.seqg = seqg
+#         print( dir(func) )
+#         print(  )
+#         return func(*args,**kwargs)
+#     return wrapper
 
 class QAOps:
     '''
@@ -158,13 +158,19 @@ class QAOps:
                 name = self.faker.name()
                 name = name.split(" ")[0]
                 if name in self.names:
+                    # TODO: how do we avoid infinite loops?
+                    # faker probably has enough long enough list no collisons?
                     continue
                 names.append(name)
             return tuple(names)
         else:
             duplicates = [x for x in names if x in self.names]
             if len(duplicates) > 0: #if assigned duplicates, throw error
+                #TODO: isn't it better that it just keeps trying to generate
+                # until no collision. We should avoid this continuous trying to
+                # lead to an infinite loop
                 raise DuplicateAssignmentError(duplicates)
+            # TODO: how does this guarantee no collisions? distinct objects
             names_indices = self.random_gen.randint(0, len(names), num)
             names = [names[i] for i in names_indices]
             self.names += (names)

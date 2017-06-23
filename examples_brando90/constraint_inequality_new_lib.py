@@ -17,7 +17,6 @@ def get_symbols():
     return x,y,z,d
 
 class QA_constraint(QAGen):
-    #seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
 
     def __init__(self):
         super().__init__()
@@ -39,10 +38,10 @@ class QA_constraint(QAGen):
             Mary, Gary = 'Mary', 'Gary'
             goats,lambs,dogs = 'goats','lambs','dogs'
         else:
-            x,y,z,d = get_symbols()
-            Mary = fake.name()
-            Gary = fake.name()
-            goats,lambs,dogs = 'goats','lambs','dogs'
+            x,y,z,d = self.get_symbols(4)
+            Mary, Gary = self.get_names(2)
+            farm_animals = utils.get_farm_animals()
+            goats,lambs,dogs = self.get_names(self,3, names=farm_animals)
         return x,y,z,d,Mary,Gary,goats,lambs,dogs
 
     def init_qa_variables(self):
@@ -54,7 +53,6 @@ class QA_constraint(QAGen):
             d_val = np.random.randint(1,np.min([x_val,y_val,z_val]))
         return x_val,y_val,z_val,d_val
 
-    @language_permuters
     def Q(s, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary,goats,lambs,dogs):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
@@ -66,7 +64,6 @@ class QA_constraint(QAGen):
         q = s.choiceg(question1)
         return q
 
-    @language_permuters
     def A(s, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary,goats,lambs,dogs):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
