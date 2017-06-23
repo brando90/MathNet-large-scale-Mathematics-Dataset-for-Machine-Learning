@@ -15,10 +15,10 @@ class QAFormat():
     '''
 
     def __init__(self):
-        self.question = Question()#seed question with seed for variables/names
-        self.answer = Answer()#seed answer with seed for variable/names
+        #self.question = Question()#seed question with seed for variables/names
+        #self.answer = Answer()#seed answer with seed for variable/names
         self.faker = Faker()
-        self.random_gen = np.random.RandomState()
+        #self.random_gen = np.random.RandomState()
         self.author = None
         self.description = None
         self.keywords = []
@@ -26,23 +26,24 @@ class QAFormat():
         self.sympy_vars = []
 
         self.names = []
-        self.const_vars = None
-        self.vars = None
+        #self.const_vars = None
+        #self.vars = None
 
         self.correct_seed = None
 
-    #TODO: turn into wrapper that accepts as arguments generators to seed
-    def _seeding_wrapper(func):
-    '''Wrapper for automatically seeding generators when function is called'''
-        def seeding_func(self, seed, *args, **kwargs):
-            self.faker.seed(seed)
-            self.random_gen.seed(seed)
-            np.random.seed(seed)
-            return func(self, seed, *args, **kwargs)
-        return seeding_func
+    # #TODO: turn into wrapper that accepts as arguments generators to seed
+    # def _seeding_wrapper(func):
+    # '''Wrapper for automatically seeding generators when function is called'''
+    #     def seeding_func(self, seed, *args, **kwargs):
+    #         self.faker.seed(seed)
+    #         self.random_gen.seed(seed)
+    #         np.random.seed(seed)
+    #         return func(self, seed, *args, **kwargs)
+    #     return seeding_func
 
-    #TODO: test cases for get_symbols
-    def get_symbols(self, num, symbols_str=None):
+    #TODO: 1) test cases for get_symbols
+    # 2) uppercase, greek_letters
+    def get_symbols(self, num, symbols_str=None, uppercase=False, greek_letters=True):
     '''
     Gets n=num random symbols, either from given string of symbols separated by spaces (sympy format) or generates them randomly.
 
@@ -65,9 +66,9 @@ class QAFormat():
         self.sympy_vars += symbols
         return tuple(symbols)
 
-    def get_symbol(self):
-    '''Used for getting single symbol'''
-        return self.get_symbols(1)[0]
+    # def get_symbol(self):
+    # '''Used for getting single symbol'''
+    #     return self.get_symbols(1)[0]
 
     #TODO: Test cases for get_names
     def get_names(self, num, names=None):
@@ -92,12 +93,12 @@ class QAFormat():
             self.names += (names)
             return tuple(names)
 
-    def get_name(self):
-    '''used for getting single name'''
-        return self.get_names(1)[0]
+    # def get_name(self):
+    # '''used for getting single name'''
+    #     return self.get_names(1)[0]
 
-    def set_correct_seed(self, seed):
-        self.correct_seed = seed
+    # def set_correct_seed(self, seed):
+    #     self.correct_seed = seed
 
 
     def init_consistent(self, seed):
@@ -122,14 +123,13 @@ class QAFormat():
         '''
         raise NotImplementedError
 
-    def set_const_variable_creation(self, func):
-        '''Method for setting the function for creating consistent variables'''
-        self._create_const_variables = func
+    # def set_const_variable_creation(self, func):
+    #     '''Method for setting the function for creating consistent variables'''
+    #     self._create_const_variables = func
 
-    def set_variable_creation(self, func):
-        '''Method for setting function for creating inconsistent variables'''
-        self._create_variables = func
-
+    # def set_variable_creation(self, func):
+    #     '''Method for setting function for creating inconsistent variables'''
+    #     self._create_variables = func
 
     def generate_mc_q(self, seed):
         '''
@@ -137,8 +137,11 @@ class QAFormat():
         '''
         #TODO
         #q_format_seed would probably involve changing NL around questions
-        #do formatting with seed here? Unclear what formatting would be rn
+        #do formatting with seed here?
+        # Yes, its ok if the NL changes or the non consistent vars change.
+        #Unclear what formatting would be rn
         #maybe change it to NL format seed (consistent w/ answer) instead?
+        # I think my implementation takes care of this!
         self.init(self.correct_seed)
         correct_q = self.generate_q(self.correct_seed)
         return "Select the best answer to the following question: " + correct_q
@@ -187,14 +190,14 @@ class QA():
     def __init__(self):
         pass
 
-    def set_expression(self, func):
-        '''
-        Set function for outputting the pure mathematical expressions for the instance. Question creator defines func.
-        '''
-        self.create_expression = func
+    # def set_expression(self, func):
+    #     '''
+    #     Set function for outputting the pure mathematical expressions for the instance. Question creator defines func.
+    #     '''
+    #     self.create_expression = func
 
-    def create_expression(self):
-        raise NotImplementedError
+    # def create_expression(self):
+    #     raise NotImplementedError
 
 class Question(QA):
 

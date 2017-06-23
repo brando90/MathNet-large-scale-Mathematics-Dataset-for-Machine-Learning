@@ -2,16 +2,21 @@ from sympy import *
 import random
 import collections
 import string
-
 import pdb
 import unittest
+import inspect
 
-class QAFormat:
+from .qaops import *
+
+class QA:
+    '''
+    QA indicates the "format" a question should have.
+    '''
 
     def seed_all(self, seed):
         raise NotImplementedError
 
-    def init_consistent_qa_variables(self, seed):
+    def init_consistent_qa_variables(self, debug):
         raise NotImplementedError
 
     def init_qa_variables(self,*args,**kwargs):
@@ -23,7 +28,7 @@ class QAFormat:
     def A(self,*args,**kwargs):
         raise NotImplementedError
 
-class QAGen(QAFormat):
+class QAGen(QA,QAOps):
 
     def generate_MC(self,nb_answers,seed):
         self.seed_all(seed)
@@ -97,6 +102,8 @@ class QAGen(QAFormat):
             correct_a_str = self.A(*variables,*variables_consistent)
             qa_pair_list.append( (q_list,correct_a_str) )
         return qa_pair_list
+
+##
 
 class TestStringMethods(unittest.TestCase):
 
