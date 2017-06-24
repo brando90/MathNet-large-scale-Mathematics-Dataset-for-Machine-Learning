@@ -3,6 +3,7 @@ import sympy
 import inspect
 import string
 from faker import Factory
+import sympy
 
 import pdb
 
@@ -135,18 +136,19 @@ class QAOps:
         '''
         Gets n=num random symbols, either from given string of symbols separated by spaces (sympy format) or generates them randomly.
         '''
-        #if drawing from all 26 lowercase (no list given)
-        if symbols_str != None: # (no list given)
+        if symbols_str != None or symbols_list != None:
             if symbols_str == None:
-                symbols_list = sympy.symbols(symbols_str)
-            duplicates = [x for x in symbols if x in self.sympy_vars] #check if symbols already used in question
+                symbols = sympy.symbols(symbols_str)
+            else:
+                symbols = symbols_list
         else: #if given list of possible symbol choices
-            letters = list(string.ascii_letters)
+            if uppercase:
+                letters = list(string.ascii_letters)
+            else:
+                letters = list(string.ascii_lowercase)
             symbols = sympy.symbols(" ".join(letters))
-            symbols = symbols[0:26] #enforcing lowercase
-        symbols = [x for x in symbols if x not in self.sympy_vars]#constrain possible symbols to those not yet assigned
-        sample_index = random.randint(0, len(symbols), num)
-        symbols = [symbols[i] for i in sample_index]
+        new_symbol_choices = [x for x in symbols if x not in self.sympy_vars]#constrain possible symbols to those not yet assigned
+        symbols = random.sample(population, num) # Return a k length list of unique elements chosen from the population sequence.
         self.sympy_vars += symbols
         return tuple(symbols)
 
