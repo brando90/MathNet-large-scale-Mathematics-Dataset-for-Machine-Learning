@@ -3,78 +3,66 @@ import random
 import numpy as np
 
 from qagen import *
-#import qagen
-
-# Mary had x=10 lambs, y=9 goats, z=8 dogs and each was decreased by d=2 units
-# by the wolf named Gary. How many of each are there left?
-
-def get_symbols():
-    letters = get_list_sympy_variables()
-    x,y,z,d = symbols( random.sample(letters,4) )
-    return x,y,z,d
 
 class QA_constraint(QAGen):
 
     def __init__(self):
         super().__init__()
-        self.author = 'Brando Miranda'
-        self.description = ''' Mary had x=10, y=9, z=8, goats, lambs, dogs, and each was decreased by d=2 units
-        by the wolf named Gary. How many of each are there left?'''
+        self.author = 'Your username' #TODO
+        self.description = '''''' #TODO
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['basic algebra']
+        self.keywords = [''] #TODO
         self.use_latex = True
 
     def seed_all(self,seed):
         random.seed(seed)
         np.random.seed(seed)
         fake.random.seed(seed)
+        # TODO write more seeding libraries that you are using
 
     def init_consistent_qa_variables(self):
         if self.debug:
-            x,y,z,d = symbols('x y z d')
-            Mary, Gary = 'Mary', 'Gary'
-            goats,lambs,dogs = 'goats','lambs','dogs'
+            #TODO
         else:
-            x,y,z,d = self.get_symbols(4)
-            Mary, Gary = self.get_names(2)
-            farm_animals = utils.get_farm_animals()
-            goats,lambs,dogs = self.get_names(self,3, names=farm_animals)
+            #TODO
         return x,y,z,d,Mary,Gary,goats,lambs,dogs
 
     def init_qa_variables(self):
         if self.debug:
-            x_val,y_val,z_val = 2,3,4
-            d_val = 1
+            #TODO
         else:
-            x_val,y_val,z_val = np.random.randint(1,1000,[3])
-            d_val = np.random.randint(1,np.min([x_val,y_val,z_val]))
+            #TODO
         return x_val,y_val,z_val,d_val
 
     def Q(s, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary,goats,lambs,dogs):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        #
-        permutable_part = perg(seqg(Eq(x,x_val),','),seqg(Eq(y,y_val),','),seqg(Eq(z,z_val),','))
-        animal_list = seqg( goats+',', lambs+',', dogs)
-        question1 = seqg(Mary+' had ',
-        permutable_part, animal_list,' respectively. Each was decreased by',Eq(d,d_val),'by the wolf named '+Gary+'.')
-        q = s.choiceg(question1)
+        # TODO
+        #q_format1
+        #q_format2
+        #...
+        # choices
+        q = choiceg()
         return q
 
     def A(s, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary,goats,lambs,dogs):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
+        # TODO
+        #ans_sympy
+        #ans_numerical
+        #ans_vnl_vsympy1
+        #ans_vnl_vsympy2
         #
-        permutable_part = perg(seqg(Eq(x-d,x_val-d_val),','),seqg(Eq(y-d,y_val-d_val),','),seqg(Eq(z-d,z_val-d_val),','))
-        animal_list = seqg( goats+',', lambs+',', dogs)
-        ans_vnl_vsympy = seqg(Mary+' has ',permutable_part, animal_list, 'left and each was decreased by the wolf named '+Gary+'.')
-        ans_vnl_vsympy2 = seqg('The wolf named '+Gary+' decreased each of '+Mary+'\'s sheep and she now has ',permutable_part,' ',animal_list,' left.')
-        a = s.choiceg(ans_vnl_vsympy,ans_vnl_vsympy2)
+        a = choiceg()
         return a
 
     ##
 
     def get_qa(self,seed):
+        '''
+        Samples of how questions are formed in general
+        '''
         # set seed
         self.seed_all(seed)
         # get variables
@@ -82,12 +70,13 @@ class QA_constraint(QAGen):
         #print('variables_consistent = ',variables_consistent)
         variables = self.init_qa_variables()
         #print('variables = ',variables)
+        #check_for_duplicates(variables_consistent,variables)
         # get qa
         q_str = self.Q(*variables,*variables_consistent)
         a_str = self.A(*variables,*variables_consistent)
         return q_str, a_str
 
-##
+## Some helper functions to check the formats are coming out well
 
 def check_single_question(qagenerator):
     #qagenerator.debug = True
