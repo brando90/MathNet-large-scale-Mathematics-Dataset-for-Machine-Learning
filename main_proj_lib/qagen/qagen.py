@@ -4,9 +4,8 @@ import collections
 import string
 import pdb
 import unittest
-import inspect
 
-from .qaops import *
+from qaops import *
 
 class QA:
     '''

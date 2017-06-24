@@ -1,6 +1,7 @@
 import random
-from sympy import *
+import sympy
 import inspect
+import string
 
 import pdb
 
@@ -32,6 +33,7 @@ class QAOps:
         self.sympy_vars = []
         self.names = []
         self.use_latex = True
+        self.debug = False
 
     def seqg(self,*args):
         '''
@@ -130,7 +132,8 @@ class QAOps:
 
         Supports maximum of 26 symbols in question overall
         '''
-        if symbols_str != None: #if drawing from all 26 lowercase (no list given)
+        #if drawing from all 26 lowercase (no list given)
+        if symbols_str != None: # (no list given)
             symbols = sympy.symbols(symbols_str)
             duplicates = [x for x in symbols if x in self.sympy_vars] #check if symbols already used in question
             if len(duplicates) > 0:
@@ -142,7 +145,7 @@ class QAOps:
             symbols = sympy.symbols(" ".join(letters))
             symbols = symbols[0:26] #enforcing lowercase
         symbols = [x for x in symbols if x not in self.sympy_vars]#constrain possible symbols to those not yet assigned
-        sample_index = self.random_gen.randint(0, len(symbols), num)
+        sample_index = random.randint(0, len(symbols), num)
         symbols = [symbols[i] for i in sample_index]
         self.sympy_vars += symbols
         return tuple(symbols)
@@ -175,3 +178,21 @@ class QAOps:
             names = [names[i] for i in names_indices]
             self.names += (names)
             return tuple(names)
+
+    def check_for_duplicates(self,args1,arg2):
+        '''
+        Check for dulplicates between and within lists
+
+        [1,2,3],[] -> False
+        [1,1,1,2],[] -> True
+        [1,2,3],[1,2,3] -> True
+        '''
+        # if length of joint list decreases, then there is some duplicate (either btw the lists or within a list)
+        # TODO check hairuo, what do we do when both are empty?
+        length_all_elements_list = len(set(args1+args2))
+        length_all_elements_set = len(args1+args2)
+        return length_all_elements_set < length_all_elements_list
+
+    def make_strings_to_single_spaced(self):
+        # TODO
+        pass

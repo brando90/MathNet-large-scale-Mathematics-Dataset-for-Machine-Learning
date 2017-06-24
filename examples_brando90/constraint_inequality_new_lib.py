@@ -1,9 +1,6 @@
 from sympy import *
 import random
 import numpy as np
-from faker import Factory
-
-fake = Factory.create()
 
 from qagen import *
 #import qagen
@@ -57,9 +54,9 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         #
-        permutable_part = s.perg(seqg(Eq(x,x_val),','),Eq(y,y_val),Eq(z,z_val))
-        animal_list = s.seqg(goats, lambs, dogs)
-        question1 = s.seqg(Mary+' had ',
+        permutable_part = perg(seqg(Eq(x,x_val),','),seqg(Eq(y,y_val),','),seqg(Eq(z,z_val),','))
+        animal_list = seqg( goats+',', lambs+',', dogs)
+        question1 = seqg(Mary+' had ',
         permutable_part, animal_list,' respectively. Each was decreased by',Eq(d,d_val),'by the wolf named '+Gary+'.')
         q = s.choiceg(question1)
         return q
@@ -68,10 +65,10 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         #
-        permutable_part = s.perg(Eq(x-d,x_val-d_val),Eq(y-d,y_val-d_val),Eq(z-d,z_val-d_val))
-        animal_list = s.seqg( goats, lambs, dogs)
-        ans_vnl_vsympy = s.seqg(Mary+' has ',permutable_part, animal_list, 'left and each was decreased by the wolf named '+Gary+'.')
-        ans_vnl_vsympy2 = s.seqg('The wolf named '+Gary+' decreased each of '+Mary+'\'s sheep and she now has ',permutable_part,' sheep left.')
+        permutable_part = perg(seqg(Eq(x-d,x_val-d_val),','),seqg(Eq(y-d,y_val-d_val),','),seqg(Eq(z-d,z_val-d_val),','))
+        animal_list = seqg( goats+',', lambs+',', dogs)
+        ans_vnl_vsympy = seqg(Mary+' has ',permutable_part, animal_list, 'left and each was decreased by the wolf named '+Gary+'.')
+        ans_vnl_vsympy2 = seqg('The wolf named '+Gary+' decreased each of '+Mary+'\'s sheep and she now has ',permutable_part,' ',animal_list,' left.')
         a = s.choiceg(ans_vnl_vsympy,ans_vnl_vsympy2)
         return a
 
@@ -82,9 +79,9 @@ class QA_constraint(QAGen):
         self.seed_all(seed)
         # get variables
         variables_consistent = self.init_consistent_qa_variables()
-        print('variables_consistent = ',variables_consistent)
+        #print('variables_consistent = ',variables_consistent)
         variables = self.init_qa_variables()
-        print('variables = ',variables)
+        #print('variables = ',variables)
         # get qa
         q_str = self.Q(*variables,*variables_consistent)
         a_str = self.A(*variables,*variables_consistent)
@@ -93,7 +90,7 @@ class QA_constraint(QAGen):
 ##
 
 def check_single_question(qagenerator):
-    qagenerator.debug = True
+    #qagenerator.debug = True
     q,a = qagenerator.get_qa(1)
     print('qagenerator.debug = ', qagenerator.debug)
     print('q: ', q)
