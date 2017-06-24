@@ -121,10 +121,11 @@ class QA_constraint(QAGen):
         '''
         # set seed
         self.seed_all(seed)
-        # get variables
+        # get variables for qa and register them for the current q,a
         variables_consistent = self.init_consistent_qa_variables()
-        #print('variables_consistent = ',variables_consistent)
+        self.register_qa_variables(variables_consistent)
         variables = self.init_qa_variables()
+        self.register_qa_variables(variables)
         #print('variables = ',variables)
         # get qa
         q_str = self.Q(*variables,*variables_consistent)
@@ -142,7 +143,7 @@ def check_single_question(qagenerator):
 
 def check_mc(qagenerator):
     for seed in range(3):
-        q_str, ans_list = qagenerator.generate_MC(nb_answers=3,seed=seed)
+        q_str, ans_list = qagenerator.generate_single_MC(nb_answers_choices=3,seed=seed)
         print('seed: ',seed)
         print('q_str: ',q_str)
         print('ans_list: ',ans_list)

@@ -16,16 +16,21 @@ def get_farm_animals():
     ,'bulls','stallions','rams','cows','calfs','trukeys']
     return farm_animals
 
-def check_for_duplicates(args1,args2):
+def duplicates_present(args1,args2):
     '''
     Check for dulplicates between and within lists
 
+    [],[] -> True
     [1,2,3],[] -> False
     [1,1,1,2],[] -> True
     [1,2,3],[1,2,3] -> True
     '''
     # if length of joint list decreases, then there is some duplicate (either btw the lists or within a list)
-    # TODO check hairuo, what do we do when both are empty?
+    if len(args1+arg2) == 0:
+        # TODO check hairuo, what do we do when both are empty?
+        # said true cuz if there are duplicates other code will keep trying to
+        # generate variables until they aren't empty...could lead to infinite loop?
+        return True
     length_all_elements_list = len(args1+args2)
     length_all_elements_set = len(set(args1+args2))
     return length_all_elements_set < length_all_elements_list
