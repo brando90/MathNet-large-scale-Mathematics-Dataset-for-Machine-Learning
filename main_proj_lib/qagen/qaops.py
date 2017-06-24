@@ -144,46 +144,53 @@ class QAOps:
                 symbols = sympy.symbols(symbols_str)
             else:
                 symbols = symbols_list
+            if set(symbols).issubset(self.sympy_vars):
+                # if the error is user provided then we warn them
+                raise ValueError('Your list {} should not be a subset of the names already defined: {}'.format(symbols,self.sympy_vars))
+                # TODO if this is true then library starts using x_1,x_2,...etc to avoid issue
         else: #if given list of possible symbol choices
             if uppercase:
                 letters = list(string.ascii_letters)
             else:
                 letters = list(string.ascii_lowercase)
             symbols = sympy.symbols(" ".join(letters))
-        new_symbol_choices = [x for x in symbols if x not in self.sympy_vars]#constrain possible symbols to those not yet assigned
-        symbols = random.sample(population, num) # Return a k length list of unique elements chosen from the population sequence.
+        if set(symbols).issubset(self.sympy_vars):
+            # TODO if this is true then library starts using x_1,x_2,...etc to avoid issue, note at this point
+            # the user is relying on use so we can do whatever we want
+            pass
+        choices_for_symbols = [x for x in symbols if x not in self.sympy_vars]#constrain possible symbols to those not yet assigned
+        symbols = random.sample(choices_for_symbols, num) # Return a k length list of unique elements chosen from the population sequence.
         self.sympy_vars += symbols
         return tuple(symbols)
 
     #TODO: Test cases for get_names
-    def get_names(self, num, names=None):
+    def get_names(self, num, names_list=None, full_name=True):
         '''
         Get n=num names from list of given names, or draw them randomly using Faker
         '''
         # TODO have a better way to deal with errors
-        if names == None: #if no given list, generate using faker
+        lower_bound_name = 15;
+        if len(names_list) < lower_bound_name:
+            raise ValueError('You need to provide at least {} number of names'.format(lower_bound_name))
+        # if names_list is a subset of self.names
+        if set(names_list).issubset(self.names):
+            raise ValueError('Your list {} should not be a subset of the names already defined: {}'.format(names_list,self.names))
+        #
+        if names_list == None: #if no given list, generate using faker
             names = []
-            while len(names) < num:
-                name = self.faker.name()
-                name = name.split(" ")[0]
+            while len(names_list) < num:
+                full_name_str = self.faker.name()
+                name = full_name_str if full_name else full_name_str.split(" ")[0]
                 if name in self.names:
-                    # TODO: how do we avoid infinite loops?
                     # faker probably has enough long enough list no collisons?
                     continue
                 names.append(name)
-            return tuple(names)
         else:
-            duplicates = [x for x in names if x in self.names]
-            if len(duplicates) > 0: #if assigned duplicates, throw error
-                #TODO: isn't it better that it just keeps trying to generate
-                # until no collision. We should avoid this continuous trying to
-                # lead to an infinite loop
-                raise DuplicateAssignmentError(duplicates)
             # TODO: how does this guarantee no collisions? distinct objects
-            names_indices = self.random_gen.randint(0, len(names), num)
-            names = [names[i] for i in names_indices]
+            choices_for_names = [x for x in names_list if x not in self.names]#constrain possible symbols to those not yet assigned
+            names = random.sample(choices_for_names, num) # Return a k length list of unique elements chosen from the population sequence.
             self.names += (names)
-            return tuple(names)
+        return tuple(names)
 
     def register_qa_variables(variables):
         # add args to duplicate checker lists

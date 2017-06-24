@@ -39,7 +39,7 @@ class QAGen(QA,QAOps):
         # is the best way to implement this is to try as many times to decrease prob of duplicates?
         # while there are duplicats keep trying to generate different
         tries = 0
-        while tries < 25:
+        while tries < 30:
             variables_consistent = self.init_consistent_qa_variables()
             self.register_qa_variables(variables_consistent)
             variables = self.init_qa_variables()

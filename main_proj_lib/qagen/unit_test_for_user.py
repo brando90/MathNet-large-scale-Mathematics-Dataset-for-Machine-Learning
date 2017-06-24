@@ -29,5 +29,10 @@ class Test_user_QA(unittest.TestCase):
         #TODO
         pass
 
+    def test_total_number_variables_is_not_subset_than_user_options(self):
+        #TODO
+        pass
+
+
 if __name__ == '__main__':
     unittest.main()
