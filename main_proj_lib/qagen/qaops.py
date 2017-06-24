@@ -2,8 +2,11 @@ import random
 import sympy
 import inspect
 import string
+from faker import Factory
 
 import pdb
+
+import utils
 
 # def language_permuters(func):
 #     '''
@@ -34,6 +37,7 @@ class QAOps:
         self.names = []
         self.use_latex = True
         self.debug = False
+        self.fake = Factory.create()
 
     def seqg(self,*args):
         '''
@@ -92,6 +96,7 @@ class QAOps:
         substitute the original arg. Make sure to include arg in the alternatives
         if you want it to be considered
         '''
+        # TODO when is resolved being used?
         #print('->resolve arg: ', arg)
         #print('->resolve assignments: ', assignments)
         # choose a random alternative fto the arg if the key is in the assignments options
@@ -126,20 +131,15 @@ class QAOps:
 
     ##
 
-    def get_symbols(self, num, symbols_str=None, uppercase=False, greek_letters=True):
+    def get_symbols(self, num, symbols_str=None, symbols_list=None, uppercase=False, greek_letters=True):
         '''
         Gets n=num random symbols, either from given string of symbols separated by spaces (sympy format) or generates them randomly.
-
-        Supports maximum of 26 symbols in question overall
         '''
         #if drawing from all 26 lowercase (no list given)
         if symbols_str != None: # (no list given)
-            symbols = sympy.symbols(symbols_str)
+            if symbols_str == None:
+                symbols_list = sympy.symbols(symbols_str)
             duplicates = [x for x in symbols if x in self.sympy_vars] #check if symbols already used in question
-            if len(duplicates) > 0:
-                raise DuplicateAssignmentError(duplicates)
-        elif (len(self.sympy_vars) + num) > 26: #check to make sure less than 26 symbols
-            raise Exception('You have exceeded the maximum number of variables allowed')
         else: #if given list of possible symbol choices
             letters = list(string.ascii_letters)
             symbols = sympy.symbols(" ".join(letters))
@@ -179,20 +179,10 @@ class QAOps:
             self.names += (names)
             return tuple(names)
 
-    def check_for_duplicates(self,args1,arg2):
-        '''
-        Check for dulplicates between and within lists
-
-        [1,2,3],[] -> False
-        [1,1,1,2],[] -> True
-        [1,2,3],[1,2,3] -> True
-        '''
-        # if length of joint list decreases, then there is some duplicate (either btw the lists or within a list)
-        # TODO check hairuo, what do we do when both are empty?
-        length_all_elements_list = len(set(args1+args2))
-        length_all_elements_set = len(args1+args2)
-        return length_all_elements_set < length_all_elements_list
-
-    def make_strings_to_single_spaced(self):
-        # TODO
-        pass
+    def register_qa_variables(variables):
+        # add args to duplicate checker lists
+        for var in variables:
+            if isinstance(var, Expr): #if its of Sympy type
+                self.sympy_vars.append(var)
+            else:
+                self.name.append(var)

@@ -2,10 +2,12 @@ from sympy import *
 import random
 import collections
 import string
-import pdb
 import unittest
 
-from qaops import *
+import pdb
+
+from qagen.qaops import *
+import utils
 
 class QA:
     '''
@@ -29,17 +31,40 @@ class QA:
 
 class QAGen(QA,QAOps):
 
-    def generate_MC(self,nb_answers,seed):
+    def _create_all_variables(self):
+        '''
+        Create distinct variables for qa and register them for the current QA
+        '''
+        # TODO:
+        # is the best way to implement this is to try as many times to decrease prob of duplicates?
+        # while there are duplicats keep trying to generate different
+        tries = 0
+        while tries < 25:
+            variables_consistent = self.init_consistent_qa_variables()
+            self.register_qa_variables(variables_consistent)
+            variables = self.init_qa_variables()
+            self.register_qa_variables(variables)
+            # if no duplicates variable generation was successful
+            if not utils.duplicates_present(variables_consistent,variables):
+                break
+            tries +=1
+        return variables, variables_consistent
+
+    def generate_single_MC(self,nb_answers_choices,seed):
+        '''
+        Generates single MC (Multiple Choice) question with nb_answers_choices
+        number of choice answers.
+
+        '''
         self.seed_all(seed)
-        # get variables for qq
-        variables_consistent = self.init_consistent_qa_variables()
-        variables = self.init_qa_variables()
+        # get variables for qa and register them for the current q,a
+        variables, variables_consistent = self._create_all_variables()
         # set q and correct a
         q_str = self.Q(*variables,*variables_consistent)
         correct_a_str = self.A(*variables,*variables_consistent)
         # collect alternative answers
         ans_list = [correct_a_str]
-        for i in range(nb_answers-1):
+        for i in range(nb_answers_choices-1):
             #self.seed_all(seed)
             variables = self.init_qa_variables()
             a_str = self.A(*variables,*variables_consistent)

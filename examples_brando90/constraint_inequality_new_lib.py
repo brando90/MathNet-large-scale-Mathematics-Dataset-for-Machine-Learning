@@ -3,19 +3,16 @@ import random
 import numpy as np
 
 from qagen import *
-#import qagen
 
 # Mary had x=10 lambs, y=9 goats, z=8 dogs and each was decreased by d=2 units
 # by the wolf named Gary. How many of each are there left?
 
-def get_symbols():
-    letters = get_list_sympy_variables()
-    x,y,z,d = symbols( random.sample(letters,4) )
-    return x,y,z,d
-
 class QA_constraint(QAGen):
 
     def __init__(self):
+        '''
+        Initializer for your QA question.
+        '''
         super().__init__()
         self.author = 'Brando Miranda'
         self.description = ''' Mary had x=10, y=9, z=8, goats, lambs, dogs, and each was decreased by d=2 units
@@ -25,11 +22,29 @@ class QA_constraint(QAGen):
         self.use_latex = True
 
     def seed_all(self,seed):
+        '''
+        Write the seeding functions of the libraries that you are using.
+        Its important to seed all the libraries you are using because the
+        framework will assume it can seed stuff for you. It needs this for
+        the library to work.
+        '''
         random.seed(seed)
         np.random.seed(seed)
-        fake.random.seed(seed)
+        self.fake.random.seed(seed)
 
     def init_consistent_qa_variables(self):
+        """
+        Defines and returns all the variables that need to be consistent
+        between a question and an answer. Usually only names and variable/symbol
+        names.
+
+        Example: when generating MC questions the non consistent variables will
+        be used to generate other options. However, the names, symbols, etc
+        should remain consistent otherwise some answers will be obviously fake.
+
+        Note: debug flag can be used to deterministically output a QA that has
+        simple numbers to check the correctness of your QA.
+        """
         if self.debug:
             x,y,z,d = symbols('x y z d')
             Mary, Gary = 'Mary', 'Gary'
@@ -42,6 +57,20 @@ class QA_constraint(QAGen):
         return x,y,z,d,Mary,Gary,goats,lambs,dogs
 
     def init_qa_variables(self):
+        '''
+        Defines and returns all the variables that can vary between a
+        question and an answer. Good examples are numerical values that might
+        make the answers not obviously wrong.
+
+        Example: when generating MC questions the non consistent variables will
+        be used to generate other options. However, the names, symbols, etc
+        should remain consistent otherwise some answers will be obviously fake.
+        Numerical values that have been fully evaluated are a good example of
+        how multiple choice answers can be generated.
+
+        Note: debug flag can be used to deterministically output a QA that has
+        simple numbers to check the correctness of your QA.
+        '''
         if self.debug:
             x_val,y_val,z_val = 2,3,4
             d_val = 1
@@ -51,6 +80,12 @@ class QA_constraint(QAGen):
         return x_val,y_val,z_val,d_val
 
     def Q(s, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary,goats,lambs,dogs):
+        '''
+        Small question description.
+
+        Important Note: first variables are the not consistent variables followed
+        by the consistent ones. See sample QA example if you need too.
+        '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         #
@@ -62,6 +97,12 @@ class QA_constraint(QAGen):
         return q
 
     def A(s, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary,goats,lambs,dogs):
+        '''
+        Small answer description.
+
+        Important Note: first variables are the not consistent variables followed
+        by the consistent ones. See sample QA example if you need too.
+        '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         #
@@ -75,12 +116,16 @@ class QA_constraint(QAGen):
     ##
 
     def get_qa(self,seed):
+        '''
+        Example of how Q,A are formed in general.
+        '''
         # set seed
         self.seed_all(seed)
-        # get variables
+        # get variables for qa and register them for the current q,a
         variables_consistent = self.init_consistent_qa_variables()
-        #print('variables_consistent = ',variables_consistent)
+        self.register_qa_variables(variables_consistent)
         variables = self.init_qa_variables()
+        self.register_qa_variables(variables)
         #print('variables = ',variables)
         # get qa
         q_str = self.Q(*variables,*variables_consistent)
@@ -98,7 +143,7 @@ def check_single_question(qagenerator):
 
 def check_mc(qagenerator):
     for seed in range(3):
-        q_str, ans_list = qagenerator.generate_MC(nb_answers=3,seed=seed)
+        q_str, ans_list = qagenerator.generate_single_MC(nb_answers_choices=3,seed=seed)
         print('seed: ',seed)
         print('q_str: ',q_str)
         print('ans_list: ',ans_list)
@@ -131,6 +176,7 @@ def check_many_to_one_consistent_format(qagenerator):
 if __name__ == '__main__':
     qagenerator = QA_constraint()
     check_single_question(qagenerator)
+    ## uncomment the following to check formats:
     #check_mc(qagenerator)
     #check_many_to_one(qagenerator)
     #check_one_to_many(qagenerator)
