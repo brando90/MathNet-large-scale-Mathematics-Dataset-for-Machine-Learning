@@ -55,7 +55,8 @@ class QAOps:
 
         Essentially concatenates all the arguments into a string but randomly permutes things.
         '''
-        args = random.sample( args, len(args) ) # Return a len(args) length list of unique elements chosen from args
+        if not self.debug:
+            args = random.sample( args, len(args) ) # Return a len(args) length list of unique elements chosen from args
         args = self.convert_to_list_of_string(args)
         return ' '.join(args)
 
@@ -63,8 +64,11 @@ class QAOps:
         '''
         Given a list of choices in the arguments, chooses one.
         '''
-        args = random.sample( args, 1 ) # samples a single element randomly from args
-        return args[0]
+        if not self.debug:
+            args = random.sample( args, 1 ) # samples a single element randomly from args
+            return args[0]
+        else:
+            return args[0]
 
     def convert_to_list_of_string(self,args):
         '''

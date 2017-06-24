@@ -127,6 +127,18 @@ class QAGen(QA,QAOps):
             qa_pair_list.append( (q_list,correct_a_str) )
         return qa_pair_list
 
+    def get_single_qa(self,seed):
+        '''
+        Example of how Q,A are formed in general.
+        '''
+        # set seed
+        self.seed_all(seed)
+        # get variables for qa and register them for the current q,a
+        variables, variables_consistent = self._create_all_variables()
+        # get concrete qa strings
+        q_str = self.Q(*variables,*variables_consistent)
+        a_str = self.A(*variables,*variables_consistent)
+        return q_str, a_str
 ##
 
 class TestStringMethods(unittest.TestCase):

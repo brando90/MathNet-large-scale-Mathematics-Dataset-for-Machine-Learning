@@ -17,8 +17,7 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'Brando Miranda'
-        self.description = ''' Mary had x=10, y=9, z=8, goats, lambs, dogs, and each was decreased by d=2 units
-        by the wolf named Gary. How many of each are there left?'''
+        self.description = '''Mary had  x = 2 , y = 3 , z = 4 , goats, lambs, dogs  respectively. Each was decreased by d = 1 by the wolf named Gary.'''
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['basic algebra']
         self.use_latex = True
@@ -111,7 +110,7 @@ class QA_constraint(QAGen):
         permutable_part = perg(seqg(Eq(x-d,x_val-d_val),','),seqg(Eq(y-d,y_val-d_val),','),seqg(Eq(z-d,z_val-d_val),','))
         animal_list = seqg( goats+',', lambs+',', dogs)
         ans_vnl_vsympy = seqg(Mary+' has ',permutable_part, animal_list, 'left and each was decreased by the wolf named '+Gary+'.')
-        ans_vnl_vsympy2 = seqg('The wolf named '+Gary+' decreased each of '+Mary+'\'s sheep and she now has ',permutable_part,' ',animal_list,' left.')
+        ans_vnl_vsympy2 = seqg('The wolf named '+Gary+' decreased each of '+Mary+'\'s '+animal_list+' and she now has ',permutable_part,' ',animal_list,' left.')
         a = s.choiceg(ans_vnl_vsympy,ans_vnl_vsympy2)
         return a
 
@@ -140,12 +139,18 @@ def check_single_question(qagenerator):
     print('a: ', a)
 
 def check_mc(qagenerator):
+    '''
+    Checks by printing
+    '''
+    nb_answers_choices = 5
     for seed in range(3):
-        q_str, ans_list = qagenerator.generate_single_MC(nb_answers_choices=3,seed=seed)
+        #seed = random.randint(0,100)
+        q_str, ans_list = qagenerator.generate_single_MC(nb_answers_choices=nb_answers_choices,seed=seed)
+        print()
         print('seed: ',seed)
         print('q_str: ',q_str)
-        print('ans_list: ',ans_list)
-        print(len(ans_list))
+        print('--answers--')
+        print("\n".join(ans_list))
 
 def check_one_to_many(qagenerator):
     for seed in range(3):
@@ -171,13 +176,15 @@ def check_many_to_one_consistent_format(qagenerator):
         print("\n".join(q_list))
         print('a: ', a_consistent_format)
 
+
+
 if __name__ == '__main__':
     qagenerator = QA_constraint()
-    check_single_question(qagenerator)
+    #check_single_question(qagenerator)
     ## uncomment the following to check formats:
     #check_mc(qagenerator)
     #check_many_to_one(qagenerator)
     #check_one_to_many(qagenerator)
     #check_many_to_one_consistent_format(qagenerator)
     ## run unit test given by framework
-    user_test.run_unit_test_for_user()
+    user_test.run_unit_test_for_user(QA_constraint)
