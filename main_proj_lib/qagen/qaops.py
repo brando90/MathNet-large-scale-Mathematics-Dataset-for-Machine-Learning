@@ -2,6 +2,7 @@ import random
 import sympy
 import inspect
 import string
+from faker import Factory
 
 import pdb
 
@@ -34,6 +35,7 @@ class QAOps:
         self.names = []
         self.use_latex = True
         self.debug = False
+        self.fake = Factory.create()
 
     def seqg(self,*args):
         '''
@@ -179,20 +181,7 @@ class QAOps:
             self.names += (names)
             return tuple(names)
 
-    def check_for_duplicates(self,args1,arg2):
-        '''
-        Check for dulplicates between and within lists
-
-        [1,2,3],[] -> False
-        [1,1,1,2],[] -> True
-        [1,2,3],[1,2,3] -> True
-        '''
-        # if length of joint list decreases, then there is some duplicate (either btw the lists or within a list)
-        # TODO check hairuo, what do we do when both are empty?
-        length_all_elements_list = len(set(args1+args2))
-        length_all_elements_set = len(args1+args2)
-        return length_all_elements_set < length_all_elements_list
-
-    def make_strings_to_single_spaced(self):
+    def make_strings_to_single_spaced(self,string):
         # TODO
-        pass
+
+        return

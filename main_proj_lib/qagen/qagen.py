@@ -5,7 +5,7 @@ import string
 import pdb
 import unittest
 
-from qaops import *
+from qagen.qaops import *
 
 class QA:
     '''
