@@ -1,7 +1,8 @@
 from sympy import *
 import unittest
 
-import utils
+def run_unit_test_for_user():
+    unittest.main()
 
 class Test_user_QA(unittest.TestCase):
     def __init__(self):
@@ -10,20 +11,11 @@ class Test_user_QA(unittest.TestCase):
         #self.QAFormat = QAFormat_instance
         pass
 
-    def test_author(self):
-        #TODO hairuo
-        #self.assertTrue(self.QAFormat.author != None)
-        pass
-
-    def test_description(self):
-        #TODO hairuo
-        #self.assertTrue(self.QAFormat.description != None)
-        pass
-
-    def test_keywords(self):
-        #TODO
-        #self.assertTrue(len(self.QAFormat.keywords) > 0)
-        pass
+    def test_author_and_description_and_keywords(self):
+        qagenerator = QA_constraint()
+        self.assertTrue(qagenerator.author != None)
+        self.assertTrue(qagenerator.description != None)
+        self.assertTrue(qagenerator.keywords != None)
 
     def test_total_number_variables_is_larger_than_user_options(self):
         #TODO

@@ -4,6 +4,7 @@ import numpy as np
 
 from qagen import *
 from qagen import utils
+from qagen import unit_test_for_user as user_test
 
 # Mary had x=10 lambs, y=9 goats, z=8 dogs and each was decreased by d=2 units
 # by the wolf named Gary. How many of each are there left?
@@ -178,3 +179,5 @@ if __name__ == '__main__':
     #check_many_to_one(qagenerator)
     #check_one_to_many(qagenerator)
     #check_many_to_one_consistent_format(qagenerator)
+    ## run unit test given by framework
+    user_test.run_unit_test_for_user()
