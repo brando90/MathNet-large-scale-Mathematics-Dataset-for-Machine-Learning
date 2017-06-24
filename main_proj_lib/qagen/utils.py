@@ -26,7 +26,7 @@ def duplicates_present(args1,args2):
     [1,2,3],[1,2,3] -> True
     '''
     # if length of joint list decreases, then there is some duplicate (either btw the lists or within a list)
-    if len(args1+arg2) == 0:
+    if len(args1+args2) == 0:
         # TODO check hairuo, what do we do when both are empty?
         # said true cuz if there are duplicates other code will keep trying to
         # generate variables until they aren't empty...could lead to infinite loop?

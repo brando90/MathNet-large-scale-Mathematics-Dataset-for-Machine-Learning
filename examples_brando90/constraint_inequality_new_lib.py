@@ -3,6 +3,7 @@ import random
 import numpy as np
 
 from qagen import *
+from qagen import utils
 
 # Mary had x=10 lambs, y=9 goats, z=8 dogs and each was decreased by d=2 units
 # by the wolf named Gary. How many of each are there left?
@@ -53,7 +54,7 @@ class QA_constraint(QAGen):
             x,y,z,d = self.get_symbols(4)
             Mary, Gary = self.get_names(2)
             farm_animals = utils.get_farm_animals()
-            goats,lambs,dogs = self.get_names(self,3, names=farm_animals)
+            goats,lambs,dogs = self.get_names(3,names_list=farm_animals)
         return x,y,z,d,Mary,Gary,goats,lambs,dogs
 
     def init_qa_variables(self):

@@ -7,7 +7,7 @@ import sympy
 
 import pdb
 
-import utils
+#import qagen.utils
 
 # def language_permuters(func):
 #     '''
@@ -80,7 +80,7 @@ class QAOps:
         '''
         args_out = []
         for arg in args:
-            if isinstance(arg, Expr):
+            if isinstance(arg, sympy.Expr):
                 args_out.append( self.sympy2text(arg) )
             else:
                 args_out.append( str(arg) )
@@ -124,7 +124,7 @@ class QAOps:
         '''
         # TODO: improve this!
         if self.use_latex:
-            str_symp_var = latex(sympy_var)
+            str_symp_var = sympy.latex(sympy_var)
         else:
             #str_symp_var = srepr(sympy_var) #TODO why do we have this? it seems to make things be displayed weirdly
             str_symp_var = str(sympy_var)
@@ -168,34 +168,31 @@ class QAOps:
         '''
         Get n=num names from list of given names, or draw them randomly using Faker
         '''
-        # TODO have a better way to deal with errors
-        lower_bound_name = 15;
-        if len(names_list) < lower_bound_name:
-            raise ValueError('You need to provide at least {} number of names'.format(lower_bound_name))
-        # if names_list is a subset of self.names
-        if set(names_list).issubset(self.names):
-            raise ValueError('Your list {} should not be a subset of the names already defined: {}'.format(names_list,self.names))
         #
         if names_list == None: #if no given list, generate using faker
             names = []
-            while len(names_list) < num:
-                full_name_str = self.faker.name()
+            while len(names) < num:
+                full_name_str = self.fake.name()
                 name = full_name_str if full_name else full_name_str.split(" ")[0]
                 if name in self.names:
                     # faker probably has enough long enough list no collisons?
                     continue
                 names.append(name)
         else:
+            # if names_list is a subset of self.names
+            if set(names_list).issubset(self.names):
+                # TODO check this
+                raise ValueError('Your list {} should not be a subset of the names already defined: {}'.format(names_list,self.names))
             # TODO: how does this guarantee no collisions? distinct objects
             choices_for_names = [x for x in names_list if x not in self.names]#constrain possible symbols to those not yet assigned
             names = random.sample(choices_for_names, num) # Return a k length list of unique elements chosen from the population sequence.
             self.names += (names)
         return tuple(names)
 
-    def register_qa_variables(variables):
+    def register_qa_variables(self,variables):
         # add args to duplicate checker lists
         for var in variables:
-            if isinstance(var, Expr): #if its of Sympy type
+            if isinstance(var, sympy.Expr): #if its of Sympy type
                 self.sympy_vars.append(var)
             else:
-                self.name.append(var)
+                self.names.append(var)

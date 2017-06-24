@@ -7,7 +7,7 @@ import unittest
 import pdb
 
 from qagen.qaops import *
-import utils
+from qagen import utils
 
 class QA:
     '''
