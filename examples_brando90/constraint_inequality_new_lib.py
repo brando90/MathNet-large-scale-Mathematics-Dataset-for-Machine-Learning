@@ -122,12 +122,8 @@ class QA_constraint(QAGen):
         # set seed
         self.seed_all(seed)
         # get variables for qa and register them for the current q,a
-        variables_consistent = self.init_consistent_qa_variables()
-        self.register_qa_variables(variables_consistent)
-        variables = self.init_qa_variables()
-        self.register_qa_variables(variables)
-        #print('variables = ',variables)
-        # get qa
+        variables, variables_consistent = self._create_all_variables()
+        # get concrete qa strings
         q_str = self.Q(*variables,*variables_consistent)
         a_str = self.A(*variables,*variables_consistent)
         return q_str, a_str

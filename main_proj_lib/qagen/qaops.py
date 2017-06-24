@@ -132,10 +132,13 @@ class QAOps:
 
     ##
 
+    #TODO: Test cases for get_symbols
     def get_symbols(self, num, symbols_str=None, symbols_list=None, uppercase=False, greek_letters=True):
         '''
         Gets n=num random symbols, either from given string of symbols separated by spaces (sympy format) or generates them randomly.
         '''
+        # TODO: greek_letters
+        # TODO: we could eventually extend it to also have like x_1 x_2 x_3
         if symbols_str != None or symbols_list != None:
             if symbols_str == None:
                 symbols = sympy.symbols(symbols_str)
@@ -157,6 +160,7 @@ class QAOps:
         '''
         Get n=num names from list of given names, or draw them randomly using Faker
         '''
+        # TODO have a better way to deal with errors
         if names == None: #if no given list, generate using faker
             names = []
             while len(names) < num:
