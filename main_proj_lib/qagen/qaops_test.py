@@ -11,6 +11,7 @@ class Test_QAOps(unittest.TestCase):
 
     def test_seeding_method(self):
         # TODO
+        # check that seed_all(self,seed) works
         pass
 
 if __name__ == '__main__':

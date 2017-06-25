@@ -145,6 +145,7 @@ class QAGen(QA,QAOps):
         '''
         qa_pair_list = []
         for seed_qa in range(nb_qa_pairs):
+            self.debug = False # Note this is a temporary hack to turn of randomness of choiceg,permg
             self.reset_variables_states()
             q_list = []
             self.seed_all(seed_qa)
@@ -155,6 +156,7 @@ class QAGen(QA,QAOps):
                 q_str = self.Q(*variables,*variables_consistent)
                 q_list.append(q_str)
             #self.seed_all(seed_output_format) # TODO why doesn't it work with this?
+            self.debug = True # Note this is a temporary hack to turn of randomness of choiceg,permg
             correct_a_str = self.A(*variables,*variables_consistent)
             qa_pair_list.append( (q_list,correct_a_str) )
         return qa_pair_list
