@@ -7,7 +7,7 @@ import sympy
 
 import pdb
 
-import qagen.utils as utils
+import qagen.utils
 
 # def language_permuters(func):
 #     '''
@@ -55,7 +55,8 @@ class QAOps:
 
         Essentially concatenates all the arguments into a string but randomly permutes things.
         '''
-        args = random.sample( args, len(args) ) # Return a len(args) length list of unique elements chosen from args
+        if not self.debug:
+            args = random.sample( args, len(args) ) # Return a len(args) length list of unique elements chosen from args            
         args = self.convert_to_list_of_string(args)
         return ' '.join(args)
 
@@ -63,8 +64,11 @@ class QAOps:
         '''
         Given a list of choices in the arguments, chooses one.
         '''
-        args = random.sample( args, 1 ) # samples a single element randomly from args
-        return args[0]
+        if not self.debug:
+            args = random.sample( args, 1 ) # samples a single element randomly from args
+            return args[0]
+        else:
+            return args[0]
 
     def convert_to_list_of_string(self,args):
         '''
@@ -124,31 +128,41 @@ class QAOps:
         '''
         # TODO: improve this!
         if self.use_latex:
-            str_symp_var = latex(sympy_var)
+            str_symp_var = sympy.latex(sympy_var)
         else:
             #str_symp_var = srepr(sympy_var) #TODO why do we have this? it seems to make things be displayed weirdly
             str_symp_var = str(sympy_var)
         return str_symp_var
 
     ##
-    #TODO: case where user draws from default symbols, then provides own list of default symbols - possible collision without any way to check statically
+    #TODO: Test cases for get_symbols
     def get_symbols(self, num, symbols_str=None, symbols_list=None, uppercase=False, greek_letters=True):
         '''
         Gets n=num random symbols, either from given string of symbols separated by spaces (sympy format) or generates them randomly.
         '''
+        # TODO: greek_letters
+        # TODO: we could eventually extend it to also have like x_1 x_2 x_3
         if symbols_str != None or symbols_list != None:
             if symbols_str == None:
                 symbols = sympy.symbols(symbols_str)
             else:
                 symbols = symbols_list
+            if set(symbols).issubset(self.sympy_vars):
+                # if the error is user provided then we warn them
+                raise ValueError('Your list {} should not be a subset of the names already defined: {}'.format(symbols,self.sympy_vars))
+                # TODO if this is true then library starts using x_1,x_2,...etc to avoid issue
         else: #if given list of possible symbol choices
             if uppercase:
                 letters = list(string.ascii_letters)
             else:
                 letters = list(string.ascii_lowercase)
             symbols = sympy.symbols(" ".join(letters))
-        new_symbol_choices = [x for x in symbols if x not in self.sympy_vars]#constrain possible symbols to those not yet assigned
-        symbols = random.sample(population, num) # Return a k length list of unique elements chosen from the population sequence.
+        if set(symbols).issubset(self.sympy_vars):
+            # TODO if this is true then library starts using x_1,x_2,...etc to avoid issue, note at this point
+            # the user is relying on use so we can do whatever we want
+            pass
+        choices_for_symbols = [x for x in symbols if x not in self.sympy_vars]#constrain possible symbols to those not yet assigned
+        symbols = random.sample(choices_for_symbols, num) # Return a k length list of unique elements chosen from the population sequence.
         self.sympy_vars += symbols
         return tuple(symbols)
     
@@ -156,41 +170,38 @@ class QAOps:
         return self.get_symbols(1)
         
     #TODO: Test cases for get_names
-    def get_names(self, num, names=None):
+    def get_names(self, num, names_list=None, full_name=True):
         '''
         Get n=num names from list of given names, or draw them randomly using Faker
         '''
-        if names == None: #if no given list, generate using faker
+        #
+        if names_list == None: #if no given list, generate using faker
             names = []
             while len(names) < num:
-                name = self.fake.name()
-                name = name.split(" ")[0]
+                full_name_str = self.fake.name()
+                name = full_name_str if full_name else full_name_str.split(" ")[0]
                 if name in self.names:
-                    # TODO: how do we avoid infinite loops?
                     # faker probably has enough long enough list no collisons?
                     continue
                 names.append(name)
-            return tuple(names)
         else:
-            duplicates = [x for x in names if x in self.names]
-            if len(duplicates) > 0: #if assigned duplicates, throw error
-                #TODO: isn't it better that it just keeps trying to generate
-                # until no collision. We should avoid this continuous trying to
-                # lead to an infinite loop
-                raise DuplicateAssignmentError(duplicates)
+            # if names_list is a subset of self.names
+            if set(names_list).issubset(self.names):
+                # TODO check this
+                raise ValueError('Your list {} should not be a subset of the names already defined: {}'.format(names_list,self.names))
             # TODO: how does this guarantee no collisions? distinct objects
-            names_indices = self.random_gen.randint(0, len(names), num)
-            names = [names[i] for i in names_indices]
+            choices_for_names = [x for x in names_list if x not in self.names]#constrain possible symbols to those not yet assigned
+            names = random.sample(choices_for_names, num) # Return a k length list of unique elements chosen from the population sequence.
             self.names += (names)
-            return tuple(names)
+        return tuple(names)
 
     def get_name(self):
         return self.get_names(1)[0]
 
-    def register_qa_variables(variables):
+    def register_qa_variables(self, variables):
         # add args to duplicate checker lists
         for var in variables:
-            if isinstance(var, Expr): #if its of Sympy type
+            if isinstance(var, sympy.Expr): #if its of Sympy type
                 self.sympy_vars.append(var)
             else:
-                self.name.append(var)
+                self.names.append(var)
