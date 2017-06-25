@@ -91,7 +91,7 @@ class QA_constraint(QAGen):
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         #
         permutable_part = perg(seqg(Eq(x,x_val),','),seqg(Eq(y,y_val),','),seqg(Eq(z,z_val),','))
-        animal_list = seqg( goats+',', lambs+',', dogs)
+        animal_list = perg( goats+',', lambs+',', dogs)
         question1 = seqg(Mary+' had ',
         permutable_part, animal_list,' respectively. Each was decreased by',Eq(d,d_val),'by the wolf named '+Gary+'.')
         q = choiceg(question1)
@@ -108,7 +108,7 @@ class QA_constraint(QAGen):
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         #
         permutable_part = perg(seqg(Eq(x-d,x_val-d_val),','),seqg(Eq(y-d,y_val-d_val),','),seqg(Eq(z-d,z_val-d_val),','))
-        animal_list = seqg( goats+',', lambs+',', dogs)
+        animal_list = perg( goats+',', lambs+',', dogs)
         ans_vnl_vsympy = seqg(Mary+' has ',permutable_part, animal_list, 'left and each was decreased by the wolf named '+Gary+'.')
         ans_vnl_vsympy2 = seqg('The wolf named '+Gary+' decreased each of '+Mary+'\'s '+animal_list+' and she now has ',permutable_part,' ',animal_list,' left.')
         a = choiceg(ans_vnl_vsympy,ans_vnl_vsympy2)
