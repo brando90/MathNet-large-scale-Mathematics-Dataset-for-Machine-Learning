@@ -7,7 +7,7 @@ import sympy
 
 import pdb
 
-import utils
+import qagen.utils as utils
 
 # def language_permuters(func):
 #     '''
@@ -80,7 +80,7 @@ class QAOps:
         '''
         args_out = []
         for arg in args:
-            if isinstance(arg, Expr):
+            if isinstance(arg, sympy.Expr):
                 args_out.append( self.sympy2text(arg) )
             else:
                 args_out.append( str(arg) )
@@ -131,7 +131,7 @@ class QAOps:
         return str_symp_var
 
     ##
-
+    #TODO: case where user draws from default symbols, then provides own list of default symbols - possible collision without any way to check statically
     def get_symbols(self, num, symbols_str=None, symbols_list=None, uppercase=False, greek_letters=True):
         '''
         Gets n=num random symbols, either from given string of symbols separated by spaces (sympy format) or generates them randomly.
@@ -151,7 +151,10 @@ class QAOps:
         symbols = random.sample(population, num) # Return a k length list of unique elements chosen from the population sequence.
         self.sympy_vars += symbols
         return tuple(symbols)
-
+    
+    def get_symbol(self):
+        return self.get_symbols(1)
+        
     #TODO: Test cases for get_names
     def get_names(self, num, names=None):
         '''
@@ -160,7 +163,7 @@ class QAOps:
         if names == None: #if no given list, generate using faker
             names = []
             while len(names) < num:
-                name = self.faker.name()
+                name = self.fake.name()
                 name = name.split(" ")[0]
                 if name in self.names:
                     # TODO: how do we avoid infinite loops?
@@ -180,6 +183,9 @@ class QAOps:
             names = [names[i] for i in names_indices]
             self.names += (names)
             return tuple(names)
+
+    def get_name(self):
+        return self.get_names(1)[0]
 
     def register_qa_variables(variables):
         # add args to duplicate checker lists
