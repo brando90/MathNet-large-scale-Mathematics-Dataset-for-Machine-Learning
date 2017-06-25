@@ -2,6 +2,11 @@ from sympy import *
 import unittest
 
 def run_unit_test_for_user(qa_constructor,*args,**kwargs):
+    '''
+    Runs some tests to help the user have a reliable question answer class.
+
+    qa_constructor = the users class name
+    '''
     runner = unittest.TextTestRunner()
     #
     test_suite = unittest.TestSuite()
@@ -46,6 +51,42 @@ class Test_basic_user_test(unittest.TestCase):
         q,a = qagenerator.get_single_qa(seed=1)
         print(q)
         self.assertTrue(qagenerator.description == q)
+
+class Test_MC(unittest.TestCase):
+
+    def __init__(self,qa_constructor,args,kwargs):
+        super().__init__()
+        self.qa_constructor = qa_constructor
+        self.args = args
+        self.kwargs = kwargs
+
+    def runTest (self):
+        # TODO
+
+class Test_one_to_many_constant_format(unittest.TestCase):
+
+    def __init__(self,qa_constructor,args,kwargs):
+        super().__init__()
+        self.qa_constructor = qa_constructor
+        self.args = args
+        self.kwargs = kwargs
+
+    def runTest (self):
+        # TODO
+
+class Test_many_to_many(unittest.TestCase):
+
+    def __init__(self,qa_constructor,args,kwargs):
+        super().__init__()
+        self.qa_constructor = qa_constructor
+        self.args = args
+        self.kwargs = kwargs
+
+    def runTest (self):
+        # TODO
+
+    # it would be nice to add some tests where we create a lot of questions
+    # and see if the users code breaks
     #
     #
     # def test_total_number_variables_is_larger_than_user_options(self):
