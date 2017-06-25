@@ -9,5 +9,9 @@ class Test_QAOps(unittest.TestCase):
         # TODO
         pass
 
+    def test_seeding_method(self):
+        # TODO
+        pass
+
 if __name__ == '__main__':
     unittest.main()

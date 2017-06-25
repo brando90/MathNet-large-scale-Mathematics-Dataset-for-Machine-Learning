@@ -94,7 +94,7 @@ class QA_constraint(QAGen):
         animal_list = seqg( goats+',', lambs+',', dogs)
         question1 = seqg(Mary+' had ',
         permutable_part, animal_list,' respectively. Each was decreased by',Eq(d,d_val),'by the wolf named '+Gary+'.')
-        q = s.choiceg(question1)
+        q = choiceg(question1)
         return q
 
     def A(s, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary,goats,lambs,dogs):
@@ -111,7 +111,7 @@ class QA_constraint(QAGen):
         animal_list = seqg( goats+',', lambs+',', dogs)
         ans_vnl_vsympy = seqg(Mary+' has ',permutable_part, animal_list, 'left and each was decreased by the wolf named '+Gary+'.')
         ans_vnl_vsympy2 = seqg('The wolf named '+Gary+' decreased each of '+Mary+'\'s '+animal_list+' and she now has ',permutable_part,' ',animal_list,' left.')
-        a = s.choiceg(ans_vnl_vsympy,ans_vnl_vsympy2)
+        a = choiceg(ans_vnl_vsympy,ans_vnl_vsympy2)
         return a
 
     ##
@@ -131,31 +131,44 @@ class QA_constraint(QAGen):
 
 ##
 
+def check_single_question_debug(qagenerator):
+    '''
+    Checks by printing a single quesiton on debug mode
+    '''
+    qagenerator.debug = True
+    q,a = qagenerator.get_qa(seed=1)
+    print('qagenerator.debug = ', qagenerator.debug)
+    print('q: ', q)
+    print('a: ', a)
+
 def check_single_question(qagenerator):
-    #qagenerator.debug = True
-    q,a = qagenerator.get_qa(1)
+    '''
+    Checks by printing a single quesiton on debug mode
+    '''
+    q,a = qagenerator.get_qa(seed=random.randint(0,1000))
     print('qagenerator.debug = ', qagenerator.debug)
     print('q: ', q)
     print('a: ', a)
 
 def check_mc(qagenerator):
     '''
-    Checks by printing
+    Checks by printing the MC(Multiple Choice) option
     '''
-    nb_answers_choices = 5
+    nb_answers_choices = 3
     for seed in range(3):
         #seed = random.randint(0,100)
-        q_str, ans_list = qagenerator.generate_single_MC(nb_answers_choices=nb_answers_choices,seed=seed)
-        print()
-        print('seed: ',seed)
-        print('q_str: ',q_str)
-        print('--answers--')
+        q_str, ans_list = qagenerator.generate_single_qa_MC(nb_answers_choices=nb_answers_choices,seed=seed)
+        print('\n-------seed-------: ',seed)
+        print('q_str:\n',q_str)
+        print('-answers:')
         print("\n".join(ans_list))
 
-def check_one_to_many(qagenerator):
+def check_many_to_many(qagenerator):
     for seed in range(3):
-        q,a = qagenerator.generate_one_to_many(nb_answers=3,seed=seed)
-        print('q: ', q)
+        q,a = qagenerator.generate_many_to_many(nb_questions=4,nb_answers=3,seed=seed)
+        print('-questions:')
+        print("\n".join(q))
+        print('-answers:')
         print("\n".join(a))
 
 def check_many_to_one_consis(qagenerator):
@@ -167,24 +180,19 @@ def check_many_to_one_consis(qagenerator):
         #print("\n".join(a))
 
 def check_many_to_one_consistent_format(qagenerator):
-    nb_different_qa = 3
-    seed_output_format = 0
-    nb_different_q = 2
-    qa_pair_list = qagenerator.generate_many_to_one_consistent_format(nb_different_qa,seed_output_format,nb_different_q=nb_different_q)
+    nb_qa_pairs,nb_questions = 10,3
+    qa_pair_list = qagenerator.generate_many_to_one_consistent_format(nb_qa_pairs,nb_questions)
     for q_list,a_consistent_format in qa_pair_list:
         print()
         print("\n".join(q_list))
         print('a: ', a_consistent_format)
-
-
 
 if __name__ == '__main__':
     qagenerator = QA_constraint()
     #check_single_question(qagenerator)
     ## uncomment the following to check formats:
     #check_mc(qagenerator)
-    #check_many_to_one(qagenerator)
-    #check_one_to_many(qagenerator)
-    #check_many_to_one_consistent_format(qagenerator)
+    #check_many_to_many(qagenerator)
+    check_many_to_one_consistent_format(qagenerator)
     ## run unit test given by framework
     user_test.run_unit_test_for_user(QA_constraint)

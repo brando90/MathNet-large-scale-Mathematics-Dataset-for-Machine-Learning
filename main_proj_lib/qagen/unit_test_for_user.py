@@ -1,12 +1,13 @@
 from sympy import *
 import unittest
 
-def run_unit_test_for_user(qa_constructor,*args,**kwargs):
+def run_unit_test_for_user(qa_constructor,*args,user_defined_unit_test=None,**kwargs):
     '''
     Runs some tests to help the user have a reliable question answer class.
 
     qa_constructor = the users class name
     '''
+    #TODO add feature user defined unit tests
     runner = unittest.TextTestRunner()
     #
     test_suite = unittest.TestSuite()
@@ -62,6 +63,7 @@ class Test_MC(unittest.TestCase):
 
     def runTest (self):
         # TODO
+        pass
 
 class Test_one_to_many_constant_format(unittest.TestCase):
 
@@ -73,6 +75,7 @@ class Test_one_to_many_constant_format(unittest.TestCase):
 
     def runTest (self):
         # TODO
+        pass
 
 class Test_many_to_many(unittest.TestCase):
 
@@ -84,6 +87,7 @@ class Test_many_to_many(unittest.TestCase):
 
     def runTest (self):
         # TODO
+        pass
 
     # it would be nice to add some tests where we create a lot of questions
     # and see if the users code breaks
