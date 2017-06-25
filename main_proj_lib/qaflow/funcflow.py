@@ -5,11 +5,13 @@ import collections
 import pdb
 
 class DelayedExecution:
+
     '''
     Given a function and all its arguments, builds an object that stores the
     function and its all its arguments to be called later. Essentially stores
     the execution of a function and its arguments for some future call.
     '''
+
     def __init__(self, func, *args, **kwargs):
         '''
         Builds a delayed execution functio. i.e. it makes func

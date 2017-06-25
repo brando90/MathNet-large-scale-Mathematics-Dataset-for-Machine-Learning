@@ -100,15 +100,14 @@ class QAFormat():
     # def set_correct_seed(self, seed):
     #     self.correct_seed = seed
 
-    # @_seeding_wrapper
-    # def init_consistent(self, seed):
-    #     '''Initializes variables consistent across question, answer'''
-    #     self.const_vars = self.create_const_variables()
-    #
-    # @_seeding_wrapper
-    # def init(self, seed):
-    #     '''Initializes variables that change between question, answer'''
-    #     self.vars = self.create_variables()
+
+    def init_consistent(self, seed):
+        '''Initializes variables consistent across question, answer'''
+        self.const_vars = self.create_const_variables()
+    
+    def init(self, seed):
+        '''Initializes variables that change between question, answer'''
+        self.vars = self.create_variables()
 
     def create_const_variables(self):
         '''

@@ -7,7 +7,7 @@ import sympy
 
 import pdb
 
-#import qagen.utils
+import qagen.utils
 
 # def language_permuters(func):
 #     '''
@@ -135,7 +135,6 @@ class QAOps:
         return str_symp_var
 
     ##
-
     #TODO: Test cases for get_symbols
     def get_symbols(self, num, symbols_str=None, symbols_list=None, uppercase=False, greek_letters=True):
         '''
@@ -166,7 +165,10 @@ class QAOps:
         symbols = random.sample(choices_for_symbols, num) # Return a k length list of unique elements chosen from the population sequence.
         self.sympy_vars += symbols
         return tuple(symbols)
-
+    
+    def get_symbol(self):
+        return self.get_symbols(1)
+        
     #TODO: Test cases for get_names
     def get_names(self, num, names_list=None, full_name=True):
         '''
@@ -193,7 +195,10 @@ class QAOps:
             self.names += (names)
         return tuple(names)
 
-    def register_qa_variables(self,variables):
+    def get_name(self):
+        return self.get_names(1)[0]
+
+    def register_qa_variables(self, variables):
         # add args to duplicate checker lists
         for var in variables:
             if isinstance(var, sympy.Expr): #if its of Sympy type
