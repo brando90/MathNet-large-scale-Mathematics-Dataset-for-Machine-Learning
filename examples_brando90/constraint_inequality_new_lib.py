@@ -154,7 +154,7 @@ def check_mc(qagenerator):
     '''
     Checks by printing the MC(Multiple Choice) option
     '''
-    nb_answers_choices = 3
+    nb_answers_choices = 10
     for seed in range(3):
         #seed = random.randint(0,100)
         q_str, ans_list = qagenerator.generate_single_qa_MC(nb_answers_choices=nb_answers_choices,seed=seed)
@@ -191,8 +191,8 @@ if __name__ == '__main__':
     qagenerator = QA_constraint()
     #check_single_question(qagenerator)
     ## uncomment the following to check formats:
-    #check_mc(qagenerator)
+    check_mc(qagenerator)
     #check_many_to_many(qagenerator)
-    check_many_to_one_consistent_format(qagenerator)
+    #check_many_to_one_consistent_format(qagenerator)
     ## run unit test given by framework
     user_test.run_unit_test_for_user(QA_constraint)
