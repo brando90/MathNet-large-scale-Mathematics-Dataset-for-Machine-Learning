@@ -6,6 +6,7 @@ import unittest
 
 import pdb
 
+from qagen.delayed_execution import *
 from qagen.qaops import *
 from qagen import utils
 

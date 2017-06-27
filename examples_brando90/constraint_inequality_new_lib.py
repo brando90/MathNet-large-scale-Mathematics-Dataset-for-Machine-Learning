@@ -1,6 +1,7 @@
 from sympy import *
 import random
 import numpy as np
+import pdb
 
 from qagen import *
 from qagen import utils
@@ -90,7 +91,10 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         #
+        s.use_latex = True
         permutable_part = perg(seqg(Eq(x,x_val),','),seqg(Eq(y,y_val),','),seqg(Eq(z,z_val),','))
+        #print(permutable_part)
+        #pdb.set_trace()
         animal_list = perg( goats+',', lambs+',', dogs)
         question1 = seqg(Mary+' had ',
         permutable_part, animal_list,' respectively. Each was decreased by',Eq(d,d_val),'by the wolf named '+Gary+'.')
@@ -110,7 +114,7 @@ class QA_constraint(QAGen):
         permutable_part = perg(seqg(Eq(x-d,x_val-d_val),','),seqg(Eq(y-d,y_val-d_val),','),seqg(Eq(z-d,z_val-d_val),','))
         animal_list = perg( goats+',', lambs+',', dogs)
         ans_vnl_vsympy = seqg(Mary+' has ',permutable_part, animal_list, 'left and each was decreased by the wolf named '+Gary+'.')
-        ans_vnl_vsympy2 = seqg('The wolf named '+Gary+' decreased each of '+Mary+'\'s '+animal_list+' and she now has ',permutable_part,' ',animal_list,' left.')
+        ans_vnl_vsympy2 = seqg('The wolf named '+Gary+' decreased each of '+Mary+'\'s ',animal_list,' and she now has ',permutable_part,' ',animal_list,' left.')
         a = choiceg(ans_vnl_vsympy,ans_vnl_vsympy2)
         return a
 
@@ -191,7 +195,7 @@ if __name__ == '__main__':
     qagenerator = QA_constraint()
     #check_single_question(qagenerator)
     ## uncomment the following to check formats:
-    check_mc(qagenerator)
+    #check_mc(qagenerator)
     #check_many_to_many(qagenerator)
     #check_many_to_one_consistent_format(qagenerator)
     ## run unit test given by framework
