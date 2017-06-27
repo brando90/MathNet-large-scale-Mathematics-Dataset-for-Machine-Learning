@@ -49,6 +49,7 @@ class QAGen(QA,QAOps):
             if not utils.duplicates_present(variables_consistent,variables):
                 break
             tries +=1
+        self.reset_variables_states()
         return variables, variables_consistent
 
     def generate_single_qa_MC(self,nb_answers_choices,seed):

@@ -1,7 +1,8 @@
 from sympy import *
 import unittest
 
-from qagen.delayed_execution import *
+#from qagen.delayed_execution import *
+from . import qagen
 
 def run_unit_test_for_user(qa_constructor,*args,user_defined_unit_test=None,**kwargs):
     '''
@@ -18,6 +19,8 @@ def run_unit_test_for_user(qa_constructor,*args,user_defined_unit_test=None,**kw
     test_suite.addTest( Test_author_and_description_and_keywords(qa_constructor,arg,kwargs) )
     test_suite.addTest( Test_basic_user_test(qa_constructor,arg,kwargs) )
     test_suite.addTest( Test_basic_uses_generators(qa_constructor,arg,kwargs) )
+    test_suite.addTest( Test_seed_all_provides_variation(qa_constructor,arg,kwargs) )
+    test_suite.addTest( Test_all_funcs_with_seed_are_deterministic(qa_constructor,arg,kwargs) )
     runner.run(test_suite)
 
 class Test_author_and_description_and_keywords(unittest.TestCase):
@@ -90,6 +93,72 @@ class Test_basic_uses_generators(unittest.TestCase):
         q,a = qagenerator.get_single_qa(seed=1)
         qs = q()
         self.assertEqual(qs,qagenerator.description)
+
+
+class Test_seed_all_provides_variation(unittest.TestCase):
+    def __init__(self,qa_constructor,args,kwargs):
+        super().__init__()
+        self.qa_constructor = qa_constructor
+        self.args = args
+        self.kwargs = kwargs
+
+    def runTest (self):
+        # TODO how do I stop hardcoding the tests here, just go over your
+        qagenerator = self.qa_constructor()
+        seed = 0 # random.randint()
+        q_original,a_original = qagenerator.get_single_qa(seed=seed)
+        for i in range(1,501):
+            qagenerator.seed_all(seed)
+            q,a = qagenerator.get_single_qa(seed=seed)
+            self.assertNotEqual( q,q_original )
+            self.assertNotEqual( a,a_original )
+
+class Test_all_funcs_with_seed_are_deterministic(unittest.TestCase):
+
+    def __init__(self,qa_constructor,args,kwargs):
+        super().__init__()
+        self.qa_constructor = qa_constructor
+        self.args = args
+        self.kwargs = kwargs
+
+    def runTest (self):
+        # TODO how do I stop hardcoding the tests here, just go over your
+        print()
+        qag = self.qa_constructor()
+        seed = 0 # random.randint(0,500)
+        #q_original,a_original = qag.get_single_qa(seed=seed)
+        a,b = qag.get_symbols(2)
+        qag.seed_all(seed)
+        print('a,b: ', a,b)
+        #
+        qag = self.qa_constructor()
+        seed = 0 # random.randint(0,500)
+        qag.seed_all(seed)
+        #q_original,a_original = qag.get_single_qa(seed=seed)
+        a,b = qag.get_symbols(2)
+        print('a,b: ', a,b)
+
+
+    # def runTest (self):
+    #     # TODO how do I stop hardcoding the tests here, just go over your
+    #     qagenerator = self.qa_constructor()
+    #     seed = 0 # random.randint(0,500)
+    #     q_original,a_original = qagenerator.get_single_qa(seed=seed)
+    #     for i in range(500):
+    #         # set seed
+    #         qagenerator.seed_all(seed)
+    #         # get variables for qa and register them for the current q,a
+    #         variables, variables_consistent = qagenerator._create_all_variables()
+    #         # get concrete qa strings
+    #         q = qagenerator.Q(*variables,*variables_consistent)
+    #         a = qagenerator.A(*variables,*variables_consistent)
+    #         #
+    #         print()
+    #         print('q_original: ',q_original)
+    #         print('q: ',q)
+    #         #
+    #         self.assertEqual( q,q_original )
+    #         self.assertEqual( a,a_original )
 
 ###
 

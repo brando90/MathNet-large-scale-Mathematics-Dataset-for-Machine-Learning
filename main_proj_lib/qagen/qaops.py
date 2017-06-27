@@ -10,7 +10,7 @@ import pdb
 import qagen.utils
 from qagen.delayed_execution import *
 
-ans = 'Mary had  x = 2 , y = 3 , z = 4 , goats, lambs, dogs  respectively. Each was decreased by d = 1 by the wolf named Gary.'
+#ans = 'Mary had  x = 2 , y = 3 , z = 4 , goats, lambs, dogs  respectively. Each was decreased by d = 1 by the wolf named Gary.'
 
 class QAOps:
     '''

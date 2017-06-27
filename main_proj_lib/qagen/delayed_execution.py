@@ -30,9 +30,19 @@ class DelayedExecution:
         return str((self.func, self.args, self.kwargs))
 
     def __call__(self):
+        '''
+        Calls the delayed execution that was stored. This new verison is meant
+        to be run on one of the generators, seqg, perg, choiceg.
+
+        '''
+        # store the original state of the opgen clas
         original_state = self.gen_instance.generator_unit_test
+        # needs to set it to false so that seq,perg,choiceg actually execute the generators since otherwise
+        # they will keep return delayed execution
         self.gen_instance.generator_unit_test = False # otherwise it keeps returning DE instead of executing the function
+        # actuall execute
         str_ans = self.func(*self.args,**self.kwargs)
+        # return to original state
         self.gen_instance.generator_unit_test = original_state
         return str_ans
 
