@@ -1,8 +1,8 @@
 from sympy import *
 import unittest
 
-#from qagen.delayed_execution import *
-from . import qagen
+from qagen.delayed_execution import *
+#from . import qagen
 
 def run_unit_test_for_user(qa_constructor,*args,user_defined_unit_test=None,**kwargs):
     '''
@@ -42,6 +42,7 @@ class Test_author_and_description_and_keywords(unittest.TestCase):
         self.assertNotEqual(qagenerator.author, None)
         self.assertNotEqual(qagenerator.description, None)
         self.assertNotEqual(qagenerator.keywords, None)
+        self.assertTrue(len(qagenerator.keywords) > 0)
 
 class Test_basic_user_test(unittest.TestCase):
 
@@ -159,6 +160,11 @@ class Test_all_funcs_with_seed_are_deterministic(unittest.TestCase):
     #         #
     #         self.assertEqual( q,q_original )
     #         self.assertEqual( a,a_original )
+
+    #
+    # def test_keywords(self):
+    # TODO
+    #     self.assertTrue(len(self.QAFormat.keywords) > 0)
 
 ###
 
