@@ -6,8 +6,8 @@ import unittest
 
 import pdb
 
-from qagen.qaops import *
-from qagen import utils
+from qaops import *
+import utils
 
 class QA:
     '''
@@ -155,11 +155,30 @@ class QAGen(QA,QAOps):
             for seed_q in range(nb_questions):
                 q_str = self.Q(*variables,*variables_consistent)
                 q_list.append(q_str)
-            #self.seed_all(seed_output_format) # TODO why doesn't it work with this?
-            self.debug = True # Note this is a temporary hack to turn of randomness of choiceg,permg
+            self.seed_all(seed_output_format) # TODO why doesn't it work with this?
+            #self.debug = True # Note this is a temporary hack to turn of randomness of choiceg,permg
             correct_a_str = self.A(*variables,*variables_consistent)
             qa_pair_list.append( (q_list,correct_a_str) )
         return qa_pair_list
+
+    def generate_many_to_one(self,nb_questions,seed_output_format=1):
+        '''
+        Generates a deterministic output answer based on the formatting seed
+        '''
+        self.debug = False # Note this is a temporary hack to turn of randomness of choiceg,permg
+        self.reset_variables_states()
+        q_list = []
+        self.seed_all(seed_output_format)
+        # get variables for qa and register them for the current q,a
+        variables, variables_consistent = self._create_all_variables()
+        # now give NL variety to the qustions
+        for seed_q in range(nb_questions):
+            q_str = self.Q(*variables,*variables_consistent)
+            q_list.append(q_str)
+        self.seed_all(seed_output_format) # TODO why doesn't it work with this?
+        #self.debug = True # Note this is a temporary hack to turn of randomness of choiceg,permg
+        correct_a_str = self.A(*variables,*variables_consistent)
+        return q_list, correct_a_str
 
     def reset_variables_states(self):
         '''

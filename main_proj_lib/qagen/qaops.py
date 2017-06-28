@@ -7,7 +7,7 @@ import sympy
 
 import pdb
 
-import qagen.utils
+#from qagen import utils
 
 # def language_permuters(func):
 #     '''
@@ -39,6 +39,12 @@ class QAOps:
         self.use_latex = True
         self.debug = False
         self.fake = Factory.create()
+    
+    #register library, provide seeding func for library, provide state_getting for library
+
+    #how to enforce usage only of libraries that are registered?
+    
+    #seedall seeds all
 
     def seqg(self,*args):
         '''
@@ -65,6 +71,7 @@ class QAOps:
         Given a list of choices in the arguments, chooses one.
         '''
         if not self.debug:
+            #random.seed(1)
             args = random.sample( args, 1 ) # samples a single element randomly from args
             return args[0]
         else:

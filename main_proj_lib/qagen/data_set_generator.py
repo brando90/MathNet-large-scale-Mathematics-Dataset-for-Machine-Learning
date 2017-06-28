@@ -1,8 +1,10 @@
 import os
 import sys
+import inspect
 import glob
+from qagen import *
 from qaflow.question_answer import *
-
+import importlib.util
 
 def make_qa_to_data_set(path_to_qa, number_examples,qa_format_type, nb_questions=1, nb_answers=5):
     '''
@@ -16,20 +18,22 @@ def make_qa_to_data_set(path_to_qa, number_examples,qa_format_type, nb_questions
     # also there should not be a infinit loop if it keeps trying to generate
     # unique examples CHECK THIS.
     taxonomy_base = os.path.abspath('../../math_taxonomy/')
-    classes = get_classes(taxonomy_base + path_to_qa)
+    classes = get_classes(os.path.join(taxonomy_base, path_to_qa))
     qa = classes[0]
+    qa = qa()
     dataset = []
     for n in range(number_examples):
-        try:
+        #try:
             #generate qa based on format
-            if qa_format_type == 'many_to_many':
-                q, a = qa.generate_many_to_many(nb_questions=nb_questions, nb_answers=nb_answers, seed=seed)
-            elif qa_format_type == 'many_to_one':
-                q, a = qa.generate_many_to_one(nb_questions=nb_questions, seed=seed)
-        except:
-            print(str(qa) + 'skipped due to error')
+        if qa_format_type == 'many_to_many':
+            q, a = qa.generate_many_to_many(nb_questions=nb_questions, nb_answers=nb_answers, seed=n)
+        elif qa_format_type == 'many_to_one':
+            q, a = qa.generate_many_to_one(nb_questions=nb_questions, seed_output_format=n)
+        #except:
+            #print(str(qa) + 'skipped due to error')
         dataset.append((q, a)) 
-    #TODO: check for repeats 
+    #TODO: check for repeats
+    print(dataset) 
     return dataset 
     
 
@@ -47,7 +51,7 @@ def make_subject_to_data_set(path_to_folder,number_examples,qa_format_type, recu
     # also there should not be a infinit loop if it keeps trying to generate
     # unique examples CHECK THIS.
     taxonomy_base = os.path.abspath('../../math_taxonomy/')
-    folder_path = taxonomy_base += path_to_folder
+    folder_path = os.path.join(taxonomy_base, path_to_qa)
     filenames = glob.iglob(folder_path+'*.py', recursive)
     dataset = []
     for filename in filenames:
@@ -108,6 +112,14 @@ def make_and_check_dir(path):
 #             question_file.write(q)
 #             answer_file.write(str(a))
 def get_classes(question):
-    file_module = __import__(question)
-    classes = [x for x in dir(file_module) if isinstance(getattr(file_module, x), QAGen)]
+    file_spec = importlib.util.spec_from_file_location(question, question)
+    file_module = importlib.util.module_from_spec(file_spec)
+    file_spec.loader.exec_module(file_module)
+    classes = [x[1] for x in inspect.getmembers(file_module, inspect.isclass)]
+    classes = [x for x in classes if (issubclass(x, QAGen) and x().__class__.__name__ != 'QAGen')]
+    
     return classes
+
+if __name__ == "__main__":
+    #example of usage
+    make_qa_to_data_set('mathematics/algebra/money_question.py', 1, 'many_to_one')    
