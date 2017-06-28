@@ -204,6 +204,35 @@ class Test_many_to_many(unittest.TestCase):
         # TODO
         pass
 
+class Test_random_modules_registered(unittest.TestCase):
+    def __init__(self, qa_constructor, args, kwargs):
+        super().__init__()
+        self.qa_constructor = qa_constructor
+        self.args = args
+        self.kwargs = kwargs
+
+    def runTest(self):
+        
+
+class Test_seeding_func(unittest.TestCase):
+    def __init__(self, qa_constructor, args, kwargs):
+        super().__init__()
+        self.qa_constructor = qa_constructor
+        self.args = args
+        self.kwargs = kwargs
+
+    def runTest(self):
+
+class Test_generate_many_to_one_consistent_format(unittest.TestCase):
+    def __init__(self, qa_constructor, args, kwargs):
+        super().__init__()
+        self.qa_constructor = qa_constructor
+        self.args = args
+        self.kwargs = kwargs
+    
+    def runTest(self):
+
+
     # it would be nice to add some tests where we create a lot of questions
     # and see if the users code breaks
     #

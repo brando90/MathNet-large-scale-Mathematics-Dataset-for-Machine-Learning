@@ -5,7 +5,7 @@ import pdb
 
 from qagen import *
 from qagen import utils
-from qagen import unit_test_for_user as user_test
+#from qagen import unit_test_for_user as user_test
 
 # Mary had x=10 lambs, y=9 goats, z=8 dogs and each was decreased by d=2 units
 # by the wolf named Gary. How many of each are there left?
@@ -64,7 +64,7 @@ class QA_constraint(QAGen):
         question and an answer. Good examples are numerical values that might
         make the answers not obviously wrong.
 
-        Example: when generating MC questions the non consistent variables will
+       Example: when generating MC questions the non consistent variables will
         be used to generate other options. However, the names, symbols, etc
         should remain consistent otherwise some answers will be obviously fake.
         Numerical values that have been fully evaluated are a good example of
@@ -191,6 +191,16 @@ def check_many_to_one_consistent_format(qagenerator):
         print("\n".join(q_list))
         print('a: ', a_consistent_format)
 
+def check_get_symbol(qagenerator):
+    seed = 1
+    seed = 2
+    qagenerator.seed_all(1)
+    symbol1 = qagenerator.get_symbol()
+    qagenerator.seed_all(1)
+    symbol2 = qagenerator.get_symbol()
+    print(symbol1)
+    print(symbol2)
+
 if __name__ == '__main__':
     qagenerator = QA_constraint()
     #check_single_question(qagenerator)
@@ -199,4 +209,5 @@ if __name__ == '__main__':
     #check_many_to_many(qagenerator)
     #check_many_to_one_consistent_format(qagenerator)
     ## run unit test given by framework
-    user_test.run_unit_test_for_user(QA_constraint)
+    #user_test.run_unit_test_for_user(QA_constraint)
+    check_get_symbol(qagenerator)
