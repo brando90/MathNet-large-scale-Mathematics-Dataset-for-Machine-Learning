@@ -7,26 +7,10 @@ import sympy
 
 import pdb
 
-#from qagen import utils
+import qagen.utils
+from qagen.delayed_execution import *
 
-# def language_permuters(func):
-#     '''
-#     Im a decorator
-#     '''
-#     #TODO have a way for users to avoid having to do self.seqg etc
-#     print('here \n')
-#     # the following is the wrapper function
-#     def wrapper(*args,**kwargs):
-#         self = args[0]
-#         seqg, perg, choiceg = self.seqg, self.perg, self.choiceg
-#         # TODO: have maybe inspect set the names seqg, etc
-#         print( func )
-#         print( inspect.ismethod(func) )
-#         func.seqg = seqg
-#         print( dir(func) )
-#         print(  )
-#         return func(*args,**kwargs)
-#     return wrapper
+#ans = 'Mary had  x = 2 , y = 3 , z = 4 , goats, lambs, dogs  respectively. Each was decreased by d = 1 by the wolf named Gary.'
 
 class QAOps:
     '''
@@ -38,6 +22,7 @@ class QAOps:
         self.names = []
         self.use_latex = True
         self.debug = False
+        self.generator_unit_test = False
         self.fake = Factory.create()
     
     #register library, provide seeding func for library, provide state_getting for library
@@ -52,8 +37,15 @@ class QAOps:
 
         Essentially concatenates all the arguments into a string.
         '''
+        #print(self.generator_unit_test)
+        # a unit test to help the user make sure they are using seqg
+        if self.generator_unit_test:
+            return DelayedExecution(self,self.seqg,*args)
+        # do seqg
+        args = self._preprocess_args(args)
         args = self.convert_to_list_of_string(args)
-        return ' '.join(args) # concatenates the
+        out = ' '.join(args)
+        return out
 
     def perg(self,*args):
         '''
@@ -61,8 +53,14 @@ class QAOps:
 
         Essentially concatenates all the arguments into a string but randomly permutes things.
         '''
+        #print(self.generator_unit_test)
+        # a unit test to help the user make sure they are using perg
+        if self.generator_unit_test:
+            return DelayedExecution(self,self.perg,*args)
+        # perg
+        args = self._preprocess_args(args)
         if not self.debug:
-            args = random.sample( args, len(args) ) # Return a len(args) length list of unique elements chosen from args            
+            args = random.sample( args, len(args) ) # Return a len(args) length list of unique elements chosen from args
         args = self.convert_to_list_of_string(args)
         return ' '.join(args)
 
@@ -70,12 +68,47 @@ class QAOps:
         '''
         Given a list of choices in the arguments, chooses one.
         '''
+        #print(self.generator_unit_test)
+        # a unit test to help the user make sure they are using choiceg
+        if self.generator_unit_test:
+            return DelayedExecution(self,self.choiceg,*args)
+        # choiceg
+        args = self._preprocess_args(args)
         if not self.debug:
-            #random.seed(1)
-            args = random.sample( args, 1 ) # samples a single element randomly from args
+            args = random.sample(args,1) # samples a single element randomly from args
             return args[0]
         else:
             return args[0]
+
+    def _preprocess_args(self,args):
+        # step 1: resolve inputs
+        args = [self._preprocess_arg(arg) for arg in args]
+        #kwargs = {k: self._preprocess_arg(v) for k, v in kwargs.items()}
+        return tuple(args)
+
+    def _preprocess_kargs(self,**kwargs):
+        # step 1: resolve inputs
+        #args = [self._preprocess_arg(arg) for arg in args]
+        kwargs = {k: self._preprocess_arg(v) for k, v in kwargs.items()}
+        return kwargs
+
+    def _preprocess_arg(self, arg):
+        '''
+        Preprocesses the the current argument arg.
+
+        arg - the arg to resolve
+        '''
+        if isinstance(arg, sympy.Expr):
+            # go through all the possible assignments and try to substitute them with the current expression
+            # TODO extend functionality, the aim will be to help give more variaty by applying some sympy functions
+            return arg
+        elif isinstance(arg, DelayedExecution):
+            executed_de = arg()
+            #print('-------> DE:{}|'.format(executed_de))
+            #ans = 'Mary had  x = 2 , y = 3 , z = 4 , goats, lambs, dogs  respectively. Each was decreased by d = 1 by the wolf named Gary.'
+            return executed_de
+        else:
+            return arg
 
     def convert_to_list_of_string(self,args):
         '''
@@ -96,38 +129,6 @@ class QAOps:
             else:
                 args_out.append( str(arg) )
         return args_out
-
-    def _resolve(self, arg, assignments={}):
-        '''
-        arg - the arg to resolve
-        assignments - a dictionary mapping arg name (key) to its list of possible
-        alternative options (values).
-
-        Resolves the current argument arg. If assignments has an a key arg mapping
-        to a list of valid alternative values, then one is chosen randomly to
-        substitute the original arg. Make sure to include arg in the alternatives
-        if you want it to be considered
-        '''
-        # TODO when is resolved being used?
-        #print('->resolve arg: ', arg)
-        #print('->resolve assignments: ', assignments)
-        # choose a random alternative fto the arg if the key is in the assignments options
-        if isinstance(arg, collections.Hashable) and arg in assignments:
-        #if hash(str(arg)) in assignments:
-            arg = random.sample(assignments[arg],1)[0]
-        # resolve the arg after an alternative was chose
-        if isinstance(arg, DelayedExecution):
-            return arg.execute(assignments) # recursively execute arg
-        # elif callable(arg): # doesn't wite work
-        #     return DelayedExecution(arg, assignments)
-        elif isinstance(arg, Expr):
-            # go through all the possible assignments and try to substitute them with the current expression
-            for key, substitution_options in assignments.items():
-                substitution = random.sample(substitution_options,1)[0]
-                arg = arg.subs(key,substitution) # note if key is not aprt of expr, the expr remains unchanged (note arg is an expression ath this point)
-            return arg
-        else:
-            return arg
 
     def sympy2text(self,sympy_var):
         '''
@@ -172,10 +173,7 @@ class QAOps:
         symbols = random.sample(choices_for_symbols, num) # Return a k length list of unique elements chosen from the population sequence.
         self.sympy_vars += symbols
         return tuple(symbols)
-    
-    def get_symbol(self):
-        return self.get_symbols(1)
-        
+
     #TODO: Test cases for get_names
     def get_names(self, num, names_list=None, full_name=True):
         '''
@@ -201,9 +199,9 @@ class QAOps:
             names = random.sample(choices_for_names, num) # Return a k length list of unique elements chosen from the population sequence.
             self.names += (names)
         return tuple(names)
-
+    
     def get_name(self):
-        return self.get_names(1)[0]
+        return self.get_names(1) 
 
     def register_qa_variables(self, variables):
         # add args to duplicate checker lists

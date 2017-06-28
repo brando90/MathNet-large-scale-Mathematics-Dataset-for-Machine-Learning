@@ -3,6 +3,8 @@ import random
 import numpy as np
 
 from qagen import *
+from qagen import utils
+from qagen import unit_test_for_user as user_test
 
 # TODO: You can also put your quesiton example here
 
@@ -112,44 +114,61 @@ class QA_constraint(QAGen):
 
     ##
 
-    def get_qa_pair(self,seed):
+    def get_qa(self,seed):
         '''
         Example of how Q,A are formed in general.
         '''
         # set seed
         self.seed_all(seed)
-        # get variables
-        variables_consistent = self.init_consistent_qa_variables()
-        #print('variables_consistent = ',variables_consistent)
-        variables = self.init_qa_variables()
-        #print('variables = ',variables)
-        #check_for_duplicates(variables_consistent,variables)
-        # get qa
+        # get variables for qa and register them for the current q,a
+        variables, variables_consistent = self._create_all_variables()
+        # get concrete qa strings
         q_str = self.Q(*variables,*variables_consistent)
         a_str = self.A(*variables,*variables_consistent)
         return q_str, a_str
 
 ## Some helper functions to check the formats are coming out correctly
 
+##
+
+def check_single_question_debug(qagenerator):
+    '''
+    Checks by printing a single quesiton on debug mode
+    '''
+    qagenerator.debug = True
+    q,a = qagenerator.get_qa(seed=1)
+    print('qagenerator.debug = ', qagenerator.debug)
+    print('q: ', q)
+    print('a: ', a)
+
 def check_single_question(qagenerator):
-    #qagenerator.debug = True
-    q,a = qagenerator.get_qa(1)
+    '''
+    Checks by printing a single quesiton on debug mode
+    '''
+    q,a = qagenerator.get_qa(seed=random.randint(0,1000))
     print('qagenerator.debug = ', qagenerator.debug)
     print('q: ', q)
     print('a: ', a)
 
 def check_mc(qagenerator):
+    '''
+    Checks by printing the MC(Multiple Choice) option
+    '''
+    nb_answers_choices = 10
     for seed in range(3):
-        q_str, ans_list = qagenerator.generate_MC(nb_answers=3,seed=seed)
-        print('seed: ',seed)
-        print('q_str: ',q_str)
-        print('ans_list: ',ans_list)
-        print(len(ans_list))
+        #seed = random.randint(0,100)
+        q_str, ans_list = qagenerator.generate_single_qa_MC(nb_answers_choices=nb_answers_choices,seed=seed)
+        print('\n-------seed-------: ',seed)
+        print('q_str:\n',q_str)
+        print('-answers:')
+        print("\n".join(ans_list))
 
-def check_one_to_many(qagenerator):
+def check_many_to_many(qagenerator):
     for seed in range(3):
-        q,a = qagenerator.generate_one_to_many(nb_answers=3,seed=seed)
-        print('q: ', q)
+        q,a = qagenerator.generate_many_to_many(nb_questions=4,nb_answers=3,seed=seed)
+        print('-questions:')
+        print("\n".join(q))
+        print('-answers:')
         print("\n".join(a))
 
 def check_many_to_one_consis(qagenerator):
@@ -158,12 +177,11 @@ def check_many_to_one_consis(qagenerator):
         q,a = qagenerator.generate_many_to_one(nb_questions=5,seed=seed)
         print("\n".join(q))
         print('a: ', a)
+        #print("\n".join(a))
 
 def check_many_to_one_consistent_format(qagenerator):
-    nb_different_qa = 3
-    seed_output_format = 0
-    nb_different_q = 2
-    qa_pair_list = qagenerator.generate_many_to_one_consistent_format(nb_different_qa,seed_output_format,nb_different_q=nb_different_q)
+    nb_qa_pairs,nb_questions = 10,3
+    qa_pair_list = qagenerator.generate_many_to_one_consistent_format(nb_qa_pairs,nb_questions)
     for q_list,a_consistent_format in qa_pair_list:
         print()
         print("\n".join(q_list))
@@ -177,3 +195,5 @@ if __name__ == '__main__':
     #check_many_to_one(qagenerator)
     #check_one_to_many(qagenerator)
     #check_many_to_one_consistent_format(qagenerator)
+    ## run unit test given by framework
+    user_test.run_unit_test_for_user(QA_constraint)
