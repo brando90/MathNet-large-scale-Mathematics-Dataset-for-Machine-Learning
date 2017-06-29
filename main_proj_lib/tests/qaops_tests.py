@@ -15,7 +15,6 @@ class Test_QAOps(unittest.TestCase):
     #     super().__init__()
 
     def test_names_are_deterministic_with_seed(self):
-        # TODO
         # check that seed_all(self,seed) works
         seed = 0 # random.randint(0,500)
         qag = QA_unit_tester_example()
@@ -150,15 +149,58 @@ class Test_QAOps(unittest.TestCase):
         qag = utg.QA_unit_tester_example()
         symbols_str = 'x y z X Y Z'
         symbols_list = [symbols(n) for n in ['x', 'y', 'z', 'X', 'Y', 'Z']]
+        test1a, test1b = qag.get_symbols(2, symbols_str=symbols_str)
+        test2a, test2b = qag.get_symbols(2, symbols_list=symbols_list)
+        test3a, test3b = qag.get_symbols(2)
+        test4a, test4b = qag.get_symbols(2, uppercase=True)
+        self.assertNotEqual(str(test1a), str(test1b))
+        self.assertTrue((test1a in symbols_list and test1b in symbols_list))
+        self.assertNotEqual(str(test2a), str(test2b))
+        self.assertTrue((test2a in symbols_list and test2b in symbols_list))
+        self.assertNotEqual(str(test3a), str(test3b))
+        self.assertTrue((str(test3a) in list(string.ascii_lowercase) and str(test3b) in list(string.ascii_lowercase))
+        self.assertNotEqual(str(test4a), str(test4b))
+        self.assertTrue((str(test4a) in list(string.ascii_letters) and str(test4b) in list(string.ascii_letters)))
+        prev_choices = [] 
+        qag = utg.QA_unit_tester_example()
+        for n in range(10):
+            sym = qag.get_symbols(1)
+            self.assertTrue(sym not in prev_choices) 
+            prev_choices.append(sym)
          
 
     def test_get_names(self):
         seed = 0
         qag = utg.QA_unit_tester_example()
+        test1a, test1b = qag.get_names(2)
+        test2a, test2b = qag.get_names(2, full_name=False)
+        names_list = ['Harry', 'Dick', 'Bob']
+        test3 = qag.get_names(1, names_list=names_list)
+        self.assertNotEqual(test1a, test1b)
+        self.assertTrue((' ' in test1a and ' ' in test1b))
+        self.assertNotEqual(test2a, test2b)
+        self.assertTrue((' ' not in test2a and ' ' not in test2b))
+        self.assertTrue(test3 in names_list) 
+        qag = utg.QA_unit_tester_example()
+        prev_names = []
+        for n in range(20):
+            name = qag.get_names(1)
+            self.assertTrue(name not in prev_names)
+            prev_names.append(name)
 
     def test_register_qa_variables(self):
         seed = 0
         qag = utg.QA_unit_tester_example()
+        x, y, z = symbols('xray yankee zulu')
+        expr1 = Eq(x, y)
+        variables = []
+        variables.append(expr1)
+        variables.append(x)
+        variables.append('Harry')
+        qag.register_qa_variables(variables)
+        self.assertTrue('Harry' in qag.names)
+        self.assertTrue(expr1 in qag.sympy_vars)
+        self.assertTrue(x in qag.sympy_vars)
 
 if __name__ == '__main__':
     unittest.main()
