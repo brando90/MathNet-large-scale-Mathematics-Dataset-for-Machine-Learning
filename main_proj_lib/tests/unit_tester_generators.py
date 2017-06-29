@@ -39,12 +39,13 @@ class QA_unit_tester_example(QAGen):
         return x_val,y_val,z_val,d_val
 
     def Q(s, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary,goats,lambs,dogs):
+        Q.args = locals() #so that we can access passed arguments for testing
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        #
         return
 
     def A(s, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary,goats,lambs,dogs):
+        A.args = locals() #so that we can access passed arguments for testing 
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         #

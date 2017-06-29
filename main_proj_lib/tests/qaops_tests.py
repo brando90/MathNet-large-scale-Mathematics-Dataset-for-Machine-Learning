@@ -17,7 +17,7 @@ class Test_QAOps(unittest.TestCase):
     def test_names_are_deterministic_with_seed(self):
         # check that seed_all(self,seed) works
         seed = 0 # random.randint(0,500)
-        qag = QA_unit_tester_example()
+        qag = utg.QA_unit_tester_example()
         qag.seed_all(seed)
         name1,name2 = qag.get_names(2)
         for i in range(30):
