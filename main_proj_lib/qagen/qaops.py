@@ -151,11 +151,11 @@ class QAOps:
         # TODO: greek_letters
         # TODO: we could eventually extend it to also have like x_1 x_2 x_3
         if symbols_str != None or symbols_list != None:
-            if symbols_str == None:
+            if symbols_str != None:
                 symbols = sympy.symbols(symbols_str)
             else:
                 symbols = symbols_list
-            if set(symbols).issubset(self.sympy_vars):
+            if set(symbols).issubset(set(self.sympy_vars)):
                 # if the error is user provided then we warn them
                 raise ValueError('Your list {} should not be a subset of the names already defined: {}'.format(symbols,self.sympy_vars))
                 # TODO if this is true then library starts using x_1,x_2,...etc to avoid issue

@@ -56,8 +56,8 @@ class Test_QAOps(unittest.TestCase):
         args = ['Lorem ipsum', '1', 2, 3, expr1]
         kwargs = {}
         test1 = qag.seqg(*args)
-        self.assertEqual(test1(), 'Lorem ipsum 1 2 3 Eq(x, y)') 
-        self.assertEqual(str(test1), str((qag.seqg, args, kwargs)))
+        self.assertEqual(test1(), 'Lorem ipsum 1 2 3 x = y') 
+        self.assertEqual(str(test1), str((qag.seqg, tuple(args), kwargs)))
 
     def test_perg(self):
         seed = 0
@@ -69,7 +69,7 @@ class Test_QAOps(unittest.TestCase):
         args = ['Lorem ipsum', '1', 2, 3, expr1]
         kwargs = {}
         test1 = qag.perg(*args)
-        self.assertEqual(str(test1), str((qag.perg, args, kwargs)))
+        self.assertEqual(str(test1), str((qag.perg, tuple(args), kwargs)))
         test1_str = test1()
         qag.seed_all(seed)
         test2_str = test1()
@@ -89,10 +89,11 @@ class Test_QAOps(unittest.TestCase):
         qag.generator_unit_test = True
         x, y, z = symbols('x y z')
         expr1 = Eq(x, y)
+        qag.seed_all(seed)
         args = ['Lorem ipsum', '1', 2, 3, expr1]
         kwargs = {}
         test1 = qag.choiceg(*args)
-        self.assertEqual(str(test1), str((qag.choiceg, args, kwargs)))
+        self.assertEqual(str(test1), str((qag.choiceg, tuple(args), kwargs)))
         test1_str = test1()
         qag.seed_all(seed)
         test2_str = test1()
@@ -110,16 +111,16 @@ class Test_QAOps(unittest.TestCase):
         x, y, z = symbols('x y z')
         arg_expr = Eq(x, y)
         qag.generator_unit_test = True
-        args = ['Lorem ipsum', '1', 2, 3, expr1]
+        args = ['Lorem ipsum', '1', 2, 3, arg_expr]
         arg_de = qag.seqg(*args)
         arg_str = 'Lorem ipsum'
         arg_sym = x
         arg_int = 1
-        unittest.assertEquals(qag._preprocess_arg(arg_expr), arg_expr)
-        unittest.assertEquals(qag._preprocess_arg(arg_de), 'Lorem ipsum 1 2 3 Eq(x, y)' )
-        unittest.assertEquals(qag._preprocess_arg(arg_str), arg_str)
-        unittest.assertEquals(qag._preprocess_arg(arg_sym), arg_sym)
-        unittest.assertEquals(qag._preprocess_arg(arg_int), arg_int)
+        self.assertEqual(qag._preprocess_arg(arg_expr), arg_expr)
+        self.assertEqual(qag._preprocess_arg(arg_de), 'Lorem ipsum 1 2 3 x = y' )
+        self.assertEqual(qag._preprocess_arg(arg_str), arg_str)
+        self.assertEqual(qag._preprocess_arg(arg_sym), arg_sym)
+        self.assertEqual(qag._preprocess_arg(arg_int), arg_int)
         
     
     def test_convert_to_list_of_string(self):
@@ -129,7 +130,7 @@ class Test_QAOps(unittest.TestCase):
         x, y, z = symbols('x y z')
         expr1 = Eq(x, y)
         args = ['Lorem ipsum', '1', 2, 3, expr1]
-        self.assertEqual(self.args, ['Lorem ipsum', '1', '2', '3', qag.sympy2text(expr1)]) 
+        self.assertEqual(qag.convert_to_list_of_string(args), ['Lorem ipsum', '1', '2', '3', qag.sympy2text(expr1)]) 
         
 
     def test_sympy2text(self):
@@ -138,11 +139,11 @@ class Test_QAOps(unittest.TestCase):
         seed = 0
         qag = utg.QA_unit_tester_example()
         qag.use_latex = True
-        self.assertEqual(expr1, latex(expr1))
-        self.assertEqual(x, latex(x))
+        self.assertEqual(qag.sympy2text(expr1), latex(expr1))
+        self.assertEqual(qag.sympy2text(x), latex(x))
         qag.use_latex = False   
-        self.assertEqual(expr1, str(expr1))
-        self.assertEqual(x, 'xray')
+        self.assertEqual(qag.sympy2text(expr1), str(expr1))
+        self.assertEqual(qag.sympy2text(x), 'xray')
 
     def test_get_symbols(self):
         seed = 0
@@ -158,7 +159,7 @@ class Test_QAOps(unittest.TestCase):
         self.assertNotEqual(str(test2a), str(test2b))
         self.assertTrue((test2a in symbols_list and test2b in symbols_list))
         self.assertNotEqual(str(test3a), str(test3b))
-        self.assertTrue((str(test3a) in list(string.ascii_lowercase) and str(test3b) in list(string.ascii_lowercase))
+        self.assertTrue((str(test3a) in list(string.ascii_lowercase) and str(test3b) in list(string.ascii_lowercase)))
         self.assertNotEqual(str(test4a), str(test4b))
         self.assertTrue((str(test4a) in list(string.ascii_letters) and str(test4b) in list(string.ascii_letters)))
         prev_choices = [] 
@@ -175,7 +176,7 @@ class Test_QAOps(unittest.TestCase):
         test1a, test1b = qag.get_names(2)
         test2a, test2b = qag.get_names(2, full_name=False)
         names_list = ['Harry', 'Dick', 'Bob']
-        test3 = qag.get_names(1, names_list=names_list)
+        test3 = qag.get_names(1, names_list=names_list)[0]
         self.assertNotEqual(test1a, test1b)
         self.assertTrue((' ' in test1a and ' ' in test1b))
         self.assertNotEqual(test2a, test2b)

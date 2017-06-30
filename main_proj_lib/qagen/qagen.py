@@ -110,7 +110,7 @@ class QAGen(QA,QAOps):
         # set q and correct a
         q_str = self.Q(*variables,*variables_consistent)
         # collect alternative correct answers
-        ans_list = [a_str]
+        ans_list = []
         for i in range(nb_answers):
             a_str = self.A(*variables,*variables_consistent)
             ans_list.append(a_str)
