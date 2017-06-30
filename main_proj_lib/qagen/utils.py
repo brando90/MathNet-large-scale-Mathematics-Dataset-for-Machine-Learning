@@ -3,6 +3,8 @@ import random
 import collections
 import string
 import re
+import importlib.util
+import inspect
 
 import pdb
 
@@ -43,3 +45,12 @@ def make_strings_to_single_spaced(inp_string):
     list_words = inp_string.split() # Return a list of the words in the string, using sep as the delimiter string.
     string_single_spaces = ' '.join(list_words)
     return string_single_spaces
+
+def get_classes(question):
+    file_spec = importlib.util.spec_from_file_location(question, question)
+    file_module = importlib.util.module_from_spec(file_spec)
+    file_spec.loader.exec_module(file_module)
+    classes = [x[1] for x in inspect.getmembers(file_module, inspect.isclass)]
+    classes = [x for x in classes if (issubclass(x, QAGen) and x().__class__.__name__ != 'QAGen')]
+    
+    return classes

@@ -18,10 +18,12 @@ class QA:
     def seed_all(self, seed):
         raise NotImplementedError
 
-    def init_consistent_qa_variables(self, debug):
+    def init_consistent_qa_variables(self, debug=False):
+        ''' returns consistent variables as list'''
         raise NotImplementedError
 
     def init_qa_variables(self,*args,**kwargs):
+        '''returns consistent variables as list'''
         raise NotImplementedError
 
     def Q(self,*args,**kwargs):
