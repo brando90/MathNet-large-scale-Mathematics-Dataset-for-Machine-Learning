@@ -3,9 +3,9 @@ import random
 import numpy as np
 import pdb
 
-from qagen import *
+from qagen.qagen import *
 from qagen import utils
-#from qagen import unit_test_for_user as user_test
+from qagen import unit_test_for_user as user_test
 
 # Mary had x=10 lambs, y=9 goats, z=8 dogs and each was decreased by d=2 units
 # by the wolf named Gary. How many of each are there left?
@@ -203,11 +203,10 @@ def check_get_symbol(qagenerator):
 
 if __name__ == '__main__':
     qagenerator = QA_constraint()
-    #check_single_question(qagenerator)
-    ## uncomment the following to check formats:
+    # uncomment the following to check formats:
     #check_mc(qagenerator)
     #check_many_to_many(qagenerator)
     #check_many_to_one_consistent_format(qagenerator)
     ## run unit test given by framework
-    #user_test.run_unit_test_for_user(QA_constraint)
-    check_get_symbol(qagenerator)
+    user_test.run_unit_test_for_user(QA_constraint)
+    # check_get_symbol(qagenerator)

@@ -203,6 +203,9 @@ class QAOps:
     def get_name(self):
         return self.get_names(1) 
 
+    def get_symbol(self):
+        return self.get_symbols(1)
+
     def register_qa_variables(self, variables):
         # add args to duplicate checker lists
         for var in variables:
