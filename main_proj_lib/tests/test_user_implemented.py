@@ -5,6 +5,7 @@ import random
 from qagen import delayed_execution as de
 from qagen import utils
 import os
+import sys
 
 def run_tests(qag_file):
    
@@ -25,12 +26,12 @@ def test_seed_all(qag):
         seed = random.randint(0, 1000)
         qag.seed_all(seed)
         name1 = qag.get_names(1)
-        symbol1 = qag.get_symbol(1)
+        symbol1 = qag.get_symbols(1)
         variables1, const_variables1 = qag._create_all_variables()
         qag.reset_variables_states()
         qag.seed_all(seed)
         name2 = qag.get_names(1)
-        symbol2 = qag.get_symbol(1)
+        symbol2 = qag.get_symbols(1)
         variables2, const_variables2 = qag._create_all_variables()
         
         assert name1 == name2
@@ -49,17 +50,17 @@ def test_init_consistent_qa_variables(qag):
     
     seed2 = random.randint(0, 1000)
     seed3 = random.randint(0, 1000)
+    qag.debug = True
     qag.seed_all(seed2)
-    vars3 = qag.init_consistent_qa_variables(debug=True)
-    qag.reset_variables_states()
+    vars3 = qag.init_consistent_qa_variables()
     qag.seed_all(seed3)
-    vars4 = qag.init_consistent_qa_variables(debug=True)
+    vars4 = qag.init_consistent_qa_variables()
     
     assert vars2 == vars1
     assert vars3 == vars4 #test that debug flag removes randomness
     assert len(vars1) == len(set(vars1))
     assert len(vars1) > 0
-    assert (len(qag.sympy_vars) > 0 or len(qag.names) > 0)
+    assert ((len(qag.sympy_vars)) > 0 or (len(qag.names) > 0))
     
 
 def test_init_qa_variables(qag):
@@ -72,11 +73,11 @@ def test_init_qa_variables(qag):
     
     seed2 = random.randint(0, 1000)
     seed3 = random.randint(0, 1000)
+    qag.debug = True
     qag.seed_all(seed2)
-    vars3 = qag.init_qa_variables(debug=True)
-    qag.reset_variables_states()
+    vars3 = qag.init_qa_variables()
     qag.seed_all(seed3)
-    vars4 = qag.init_qa_variables(debug=True)
+    vars4 = qag.init_qa_variables()
     
     assert vars2 == vars1
     assert vars3 == vars4 #test that debug flag removes randomness
@@ -84,20 +85,20 @@ def test_init_qa_variables(qag):
 
 def test_Q(qag):
     variables, const_variables = qag._create_all_variables() 
-    qag.debug = True
-    question_ob = qag.Q(variables, const_variables)
+    qag.generator_unit_test = True
+    question_ob = qag.Q(*variables, *const_variables)
     assert isinstance(question_ob, de.DelayedExecution)
     
 
 def test_A(qag):
     variables, const_variables = qag._create_all_variables() 
-    qag.debug = True
-    answer_ob = qag.A(variables, const_variables)
+    qag.generator_unit_test = True
+    answer_ob = qag.A(*variables, *const_variables)
     assert isinstance(answer_ob, de.DelayedExecution)
     
     
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 0:
-        run_tests(sys.argv[0])
+    if len(sys.argv) > 1:
+        run_tests(sys.argv[1])

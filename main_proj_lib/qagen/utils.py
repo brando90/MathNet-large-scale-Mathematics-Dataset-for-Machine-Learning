@@ -5,6 +5,7 @@ import string
 import re
 import importlib.util
 import inspect
+from qagen.qagen import *
 
 import pdb
 

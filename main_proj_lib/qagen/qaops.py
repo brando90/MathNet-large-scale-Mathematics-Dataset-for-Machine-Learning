@@ -188,6 +188,7 @@ class QAOps:
                 if name in self.names:
                     # faker probably has enough long enough list no collisons?
                     continue
+                self.names.append(name)
                 names.append(name)
         else:
             # if names_list is a subset of self.names
@@ -201,7 +202,7 @@ class QAOps:
         return tuple(names)
     
     def get_name(self):
-        return self.get_names(1) 
+        return self.get_names(1)[0] 
 
     def register_qa_variables(self, variables):
         # add args to duplicate checker lists
