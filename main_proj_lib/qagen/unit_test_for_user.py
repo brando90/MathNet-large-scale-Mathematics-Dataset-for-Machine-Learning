@@ -212,7 +212,7 @@ class Test_random_modules_registered(unittest.TestCase):
         self.kwargs = kwargs
 
     def runTest(self):
-        
+        pass
 
 class Test_seeding_func(unittest.TestCase):
     def __init__(self, qa_constructor, args, kwargs):
@@ -222,6 +222,7 @@ class Test_seeding_func(unittest.TestCase):
         self.kwargs = kwargs
 
     def runTest(self):
+        pass
 
 class Test_generate_many_to_one_consistent_format(unittest.TestCase):
     def __init__(self, qa_constructor, args, kwargs):
@@ -231,6 +232,7 @@ class Test_generate_many_to_one_consistent_format(unittest.TestCase):
         self.kwargs = kwargs
     
     def runTest(self):
+        pass
 
 
     # it would be nice to add some tests where we create a lot of questions
