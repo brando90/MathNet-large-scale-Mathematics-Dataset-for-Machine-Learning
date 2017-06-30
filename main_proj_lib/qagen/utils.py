@@ -8,8 +8,7 @@ import pdb
 
 def get_farm_animals():
     '''
-    Returns a lisk for farm animal.
-
+    Returns a list for farm animal.
     '''
     farm_animals = ['goats','lambs','dogs','cats','ducks','chicken','hen','pigs',
     'horses','donkeys','rabbits','guinea pigs','gooses','sheeps','piglets'
@@ -17,9 +16,21 @@ def get_farm_animals():
     return farm_animals
 
 def get_colleges():
+    '''
+    Returns a list of colleges
+    '''
     colleges = ["MIT", "Vanderbilt", "Tufts", "Stanford", "Harvard", "Boston College", 
     "Northeastern", "Yale", "Dartmouth", "Duke", "Northwestern", "Boston University"]
     return colleges
+
+
+def get_team_sports():
+    '''
+    Returns a list of team sports
+    '''
+    team_sports = ["basketball", "soccer", "volleyball", "baseball", "dodgeball", "football", 
+    "ice hockey"]
+    return team_sports
 
 def duplicates_present(args1,args2):
     '''
@@ -31,6 +42,7 @@ def duplicates_present(args1,args2):
     [1,2,3],[1,2,3] -> True
     '''
     # if length of joint list decreases, then there is some duplicate (either btw the lists or within a list)
+    print(args1, args2)
     if len(args1+args2) == 0:
         # TODO check hairuo, what do we do when both are empty?
         # said true cuz if there are duplicates other code will keep trying to
