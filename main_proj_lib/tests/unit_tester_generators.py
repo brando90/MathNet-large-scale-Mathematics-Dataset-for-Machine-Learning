@@ -14,6 +14,7 @@ class QA_unit_tester_example(QAGen):
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['unit_test']
         self.use_latex = True
+        self.generator_unit_test = True
 
     def seed_all(self,seed):
         random.seed(seed)

@@ -3,7 +3,7 @@ import unittest
 import random
 import numpy as np
 import unit_tester_generators as utg
-
+import string
 from qagen import utils
 from qagen import *
 

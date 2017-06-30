@@ -26,8 +26,8 @@ class TestQAGen(unittest.TestCase):
             q2, a2 = qag.generate_single_qa_MC(4, n)
             if (q1, a1) != qag.generate_single_qa_MC(4, n-1):
                 permute = True
-            self.assertEqual(q1, q2)
-            self.assertEqual(a1, a2)
+            self.assertEqual(str(q1), str(q2))
+            self.assertEqual(str(a1), str(a2))
             self.assertEqual(len(a1), len(set(a1)))
         self.assertTrue(permute)
 
@@ -39,8 +39,8 @@ class TestQAGen(unittest.TestCase):
             q_list2, a_str2 = qag.generate_single_qa_many_to_one(3, n)
             if a_str1 != qag.generate_single_qa_many_to_one(3, n-1):
                 permute = True
-            self.assertEqual(q_list1, q_list2)
-            self.assertEqual(a_str1, a_str2)
+            self.assertEqual(str(q_list1), str(q_list2))
+            self.assertEqual(str(a_str1), str(a_str2))
             self.assertEqual(len(q_list1), 3)
             self.assertEqual(len(q_list2), 3)
             #self.assertEqual(qag.Q.args, qag.A.args) # check to make sure that values passed into Q,A are same.
@@ -51,15 +51,16 @@ class TestQAGen(unittest.TestCase):
     def test_generate_one_to_many(self):
         qag = utg.QA_unit_tester_example()
         permute = False
+        qag.debug = True
         for n in range(1, 100):
-            q_list1, a_str1 = qag.generate_one_to_many(3, n)
-            q_list2, a_str2 = qag.generate_one_to_many(3, n)
-            if a_str1 != qag.generate_one_to_many(3, n-1):
+            q_1, a_list1 = qag.generate_one_to_many(3, n)
+            q_2, a_list2 = qag.generate_one_to_many(3, n)
+            if q_1 != qag.generate_one_to_many(3, n-1)[0]:
                 permute = True
-            self.assertEqual(q_list1, q_list2)
-            self.assertEqual(a_str1, a_str2)
-            self.assertEqual(len(q_list1), 3)
-            self.assertEqual(len(q_list2), 3)
+            self.assertEqual(str(q_1), str(q_2))
+            self.assertEqual(str(a_list1), str(a_list2))
+            self.assertEqual(len(a_list1), 3)
+            self.assertEqual(len(a_list2), 3)
             #self.assertEqual(qag.Q.args, qag.A.args)# check to make sure that values passed into Q,A are same.
         self.assertTrue(permute)
         #check variables are same  
@@ -72,8 +73,8 @@ class TestQAGen(unittest.TestCase):
             q_list2, a_str2 = qag.generate_many_to_many(3, 3, n)
             if a_str1 != qag.generate_many_to_many(3, 3, n-1):
                 permute = True
-            self.assertEqual(q_list1, q_list2)
-            self.assertEqual(a_str1, a_str2)
+            self.assertEqual(str(q_list1), str(q_list2))
+            self.assertEqual(str(a_str1), str(a_str2))
             self.assertEqual(len(q_list1), 3)
             self.assertEqual(len(q_list2), 3)
             #self.assertEqual(qag.Q.args, qag.A.args)# check to make sure that values passed into Q,A are same.
@@ -100,10 +101,8 @@ class TestQAGen(unittest.TestCase):
             q_list2, a_str2 = qag.get_single_qa(n)
             if a_str1 != qag.get_single_qa(n-1):
                 permute = True
-            self.assertEqual(q_list1, q_list2)
-            self.assertEqual(a_str1, a_str2)
-            self.assertEqual(len(q_list1), 3)
-            self.assertEqual(len(q_list2), 3)
+            self.assertEqual(str(q_list1), str(q_list2))
+            self.assertEqual(str(a_str1), str(a_str2))
             #self.assertEqual(qag.Q.args, qag.A.args)# check to make sure that values passed into Q,A are same.
         self.assertTrue(permute)
 
