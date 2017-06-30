@@ -120,7 +120,7 @@ class QA_constraint(QAGen):
 
     ##
 
-    def get_qa(self,seed):
+    ef get_qa(self,seed):
         '''
         Example of how Q,A are formed in general.
         '''
@@ -200,6 +200,19 @@ def check_get_symbol(qagenerator):
     symbol2 = qagenerator.get_symbol()
     print(symbol1)
     print(symbol2)
+
+def check_seed_all(qagenerator):
+
+def check_init_consistent_qa_variables(qagenerator):
+
+def check_init_qa_variables(qagenerator):
+
+def check_Q(qagenerator):
+
+def check_A(qagenerator):
+#should check if same DE object if seed is same
+
+#TODO: tests that check all nonimplemented in QA that user must implement.
 
 if __name__ == '__main__':
     qagenerator = QA_constraint()

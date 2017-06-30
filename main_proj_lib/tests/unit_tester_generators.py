@@ -1,12 +1,6 @@
-from sympy import *
-import unittest
-import random
-import numpy as np
-
-from qagen import utils
 from qagen import *
-
-#
+from qagen.qagen import *
+import numpy as np
 
 class QA_unit_tester_example(QAGen):
 
@@ -20,6 +14,7 @@ class QA_unit_tester_example(QAGen):
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['unit_test']
         self.use_latex = True
+        self.generator_unit_test = True
 
     def seed_all(self,seed):
         random.seed(seed)
@@ -48,56 +43,29 @@ class QA_unit_tester_example(QAGen):
         return x_val,y_val,z_val,d_val
 
     def Q(s, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary,goats,lambs,dogs):
+        #Q.args = locals() #so that we can access passed arguments for testing
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        #
-        return
+        s.use_latex = True
+        permutable_part = perg(seqg(Eq(x,x_val),','),seqg(Eq(y,y_val),','),seqg(Eq(z,z_val),','))
+        #print(permutable_part)
+        #pdb.set_trace()
+        animal_list = perg( goats+',', lambs+',', dogs)
+        question1 = seqg(Mary+' had ',
+        permutable_part, animal_list,' respectively. Each was decreased by',Eq(d,d_val),'by the wolf named '+Gary+'.')
+        q = choiceg(question1)
+        return q
 
     def A(s, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary,goats,lambs,dogs):
+        #A.args = locals() #so that we can access passed arguments for testing 
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        #
-        return
+        
+        permutable_part = perg(seqg(Eq(x-d,x_val-d_val),','),seqg(Eq(y-d,y_val-d_val),','),seqg(Eq(z-d,z_val-d_val),','))
+        animal_list = perg( goats+',', lambs+',', dogs)
+        ans_vnl_vsympy = seqg(Mary+' has ',permutable_part, animal_list, 'left and each was decreased by the wolf named '+Gary+'.')
+        ans_vnl_vsympy2 = seqg('The wolf named '+Gary+' decreased each of '+Mary+'\'s ',animal_list,' and she now has ',permutable_part,' ',animal_list,' left.')
+        a = choiceg(ans_vnl_vsympy,ans_vnl_vsympy2)
+        return a
 
 
-class Test_QAOps(unittest.TestCase):
-
-    # def __ini__(self):
-    #     super().__init__()
-
-    def test_names_are_deterministic_with_seed(self):
-        # TODO
-        # check that seed_all(self,seed) works
-        seed = 0 # random.randint(0,500)
-        qag = QA_unit_tester_example()
-        qag.seed_all(seed)
-        name1,name2 = qag.get_names(2)
-        for i in range(30):
-            qag.seed_all(seed)
-            qag.reset_variables_states()
-            new_name1,new_name2 = qag.get_names(2)
-            self.assertEqual(new_name1,name1)
-            self.assertEqual(new_name2,name2)
-
-    def test_symbols_are_deterministic_with_seed(self):
-        '''
-
-        Note: that in the test we need to create a new instance because the
-        an instance is created, it will not allow to select the same symbol
-        or name twice in a row.
-        '''
-        # TODO
-        # check that seed_all(self,seed) works
-        seed = 0 # random.randint(0,500)
-        qag = QA_unit_tester_example()
-        qag.seed_all(seed)
-        symbol1,symbol2 = qag.get_symbols(2)
-        for i in range(30):
-            qag.seed_all(seed)
-            qag.reset_variables_states()
-            new_symbol1,new_symbol2 = qag.get_symbols(2)
-            self.assertEqual(new_symbol1,symbol1)
-            self.assertEqual(new_symbol2,symbol2)
-
-if __name__ == '__main__':
-    unittest.main()

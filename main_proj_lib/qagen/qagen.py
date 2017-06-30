@@ -18,10 +18,12 @@ class QA:
     def seed_all(self, seed):
         raise NotImplementedError
 
-    def init_consistent_qa_variables(self, debug):
+    def init_consistent_qa_variables(self, debug=False):
+        ''' returns consistent variables as list'''
         raise NotImplementedError
 
     def init_qa_variables(self,*args,**kwargs):
+        '''returns consistent variables as list'''
         raise NotImplementedError
 
     def Q(self,*args,**kwargs):
@@ -80,7 +82,7 @@ class QAGen(QA,QAOps):
 
     def generate_single_qa_many_to_one(self,nb_questions,seed):
         '''
-        Generates single question with nb_questions number of choice answers.
+        Generates single question with nb_questions number of choice questions.
         Note that "single" means that the variables for the question and answer
         are the same, just maybe the formats might be different.
         '''
@@ -98,7 +100,7 @@ class QAGen(QA,QAOps):
 
     def generate_one_to_many(self,nb_answers,seed):
         '''
-        Generates single question with nb_answers number of choice question.
+        Generates single question with nb_answers number of choice answers.
         Note that "single" means that the variables for the question and answer
         are the same, just maybe the formats might be different.
         '''
@@ -108,7 +110,7 @@ class QAGen(QA,QAOps):
         # set q and correct a
         q_str = self.Q(*variables,*variables_consistent)
         # collect alternative correct answers
-        ans_list = [a_str]
+        ans_list = []
         for i in range(nb_answers):
             a_str = self.A(*variables,*variables_consistent)
             ans_list.append(a_str)
@@ -163,24 +165,6 @@ class QAGen(QA,QAOps):
             qa_pair_list.append( (q_list,correct_a_str) )
         return qa_pair_list
 
-    def generate_many_to_one(self,nb_questions,seed_output_format=1):
-        '''
-        Generates a deterministic output answer based on the formatting seed
-        '''
-        self.debug = False # Note this is a temporary hack to turn of randomness of choiceg,permg
-        self.reset_variables_states()
-        q_list = []
-        self.seed_all(seed_output_format)
-        # get variables for qa and register them for the current q,a
-        variables, variables_consistent = self._create_all_variables()
-        # now give NL variety to the qustions
-        for seed_q in range(nb_questions):
-            q_str = self.Q(*variables,*variables_consistent)
-            q_list.append(q_str)
-        self.seed_all(seed_output_format) # TODO why doesn't it work with this?
-        #self.debug = True # Note this is a temporary hack to turn of randomness of choiceg,permg
-        correct_a_str = self.A(*variables,*variables_consistent)
-        return q_list, correct_a_str
 
     def reset_variables_states(self):
         '''
