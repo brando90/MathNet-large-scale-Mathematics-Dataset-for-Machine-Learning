@@ -1,6 +1,5 @@
-from qaflow import *
-from qaflow.question_answer import *
 from sympy import *
+from qagen import *
 
 '''
 A point P(x,x**2) lies on the curve y=x**2. 

@@ -16,6 +16,11 @@ def get_farm_animals():
     ,'bulls','stallions','rams','cows','calfs','trukeys']
     return farm_animals
 
+def get_colleges():
+    colleges = ["MIT", "Vanderbilt", "Tufts", "Stanford", "Harvard", "Boston College", 
+    "Northeastern", "Yale", "Dartmouth", "Duke", "Northwestern", "Boston University"]
+    return colleges
+
 def duplicates_present(args1,args2):
     '''
     Check for dulplicates between and within lists
