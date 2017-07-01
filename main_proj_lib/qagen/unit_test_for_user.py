@@ -129,10 +129,12 @@ class Test_seed_all_provides_variation(unittest.TestCase):
         seed = 0 # random.randint()
         q_original,a_original = qagenerator.get_single_qa(seed=seed)
         for i in range(1,501):
+            seed = i
             qagenerator.seed_all(seed)
             q,a = qagenerator.get_single_qa(seed=seed)
             self.assertNotEqual( q,q_original )
             self.assertNotEqual( a,a_original )
+
 
 class Test_all_funcs_with_seed_are_deterministic(unittest.TestCase):
     '''
