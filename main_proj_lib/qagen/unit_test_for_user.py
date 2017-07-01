@@ -112,10 +112,11 @@ class Test_basic_uses_generators(unittest.TestCase):
 
 class Test_seed_all_provides_variation(unittest.TestCase):
     '''
-    This test checks that the user implemented seed all correctly. If this test
-    does not pass it means that framework is not able to generate variation to
+    Checks that different questions can be made (i.e. there is variation in creating q,a's)
+    If this test does not pass it means that framework is not able to generate variation to
     your question for some reason. Usually it means you did not have all 3 seeding
     functions that the template provides.
+    Note: this test checks that the user implemented seed all not ridicuously wrongly. 
     '''
     def __init__(self,qa_constructor,args,kwargs):
         super().__init__()
