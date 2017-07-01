@@ -67,7 +67,7 @@ class QA_constraint(QAGen):
             a_val, b_val, c_val, d_val = 2, 2, -3/5, 4/5
         else:
             a_val, b_val = np.random.randint(1, 99, [2])
-            c_val, d_val = -3/5, 4/5
+            c_val, d_val = np.random.randint(-5, 5, [2])
         return a_val, b_val, c_val, d_val
 
     def Q(s, a_val, b_val, c_val, d_val, x, y):
@@ -97,7 +97,9 @@ class QA_constraint(QAGen):
         vector = (c_val, d_val)
         partial_x = function.diff(x)
         partial_y = function.diff(y)
-        answer = partial_x * c_val + partial_y * d_val
+        magnitude = (c_val**2 + d_val**2)**0.5
+        unit_v = (c_val/magnitude, d_val/magnitude)
+        answer = partial_x * unit_v[0] + partial_y * unit_v[1]
         answer1 = seqg(answer, 'is the directional derivative of', function, 'in the', vector, 'direction at the point ({0},{1})'.format(x, y))
         a = choiceg(answer1)
         return a
@@ -185,6 +187,6 @@ def check_many_to_one_consistent_format(qagenerator):
 
 if __name__ == '__main__':
     qagenerator = QA_constraint()
-    check_single_question_debug(qagenerator)
-    # user_test.run_unit_test_for_user(QA_constraint)
+    # check_single_question_debug(qagenerator)
+    user_test.run_unit_test_for_user(QA_constraint)
 
