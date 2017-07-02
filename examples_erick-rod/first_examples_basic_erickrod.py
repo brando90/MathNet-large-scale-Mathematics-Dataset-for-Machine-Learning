@@ -1,5 +1,4 @@
-import sys
-sys.path.insert(0,"D:/tfpri/EIT/eit_proj1-master/main_proj_lib")
+
 from sympy import *
 import random
 import qaflow
@@ -14,8 +13,10 @@ def example1():
     ques3 = seqg("1/",R_3," = ","1/",R_2," + ","1/",R_1,", ")
     question = seqg('solve ', R_3 ,', ', perg(ques1,ques2,ques3))
     answer = choiceg(seqg( R_3, ' = ',64), seqg(R_3,' = ',2**-1/128**-1),seqg( R_3 ,'= 128/2'))
-    q,a = make_qa_pair(question,answer,seed=3)
+    q,a = make_qa_pair(question,answer,seed=7)
     print('question: %s \nanswer: %s'%(q,a))
     
 def example2():
     x,y,a,b,c,X = symbols('x y a b c X')
+    
+example1()
