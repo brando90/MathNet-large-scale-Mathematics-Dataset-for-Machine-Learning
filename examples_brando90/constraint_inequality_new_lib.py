@@ -120,7 +120,7 @@ class QA_constraint(QAGen):
 
     ##
 
-    ef get_qa(self,seed):
+    def get_qa(self,seed):
         '''
         Example of how Q,A are formed in general.
         '''
