@@ -1,5 +1,4 @@
 from sympy import *
-from sympy.functions.combinatorial.numbers import nC, nP, nT
 import random
 import numpy as np
 import pdb
@@ -18,10 +17,10 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'theosech'
-        self.description = "The first three terms of a geometric sequence are 27, -9, and 3." 
-        "Find the sum to infinity of the sequence." 
+        self.description = '''Let f(x) = 3*x + 5*sin(x). Find the gradient of the normal to the curve of f at x=1.'''
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['geometric series sum', 'geometric series', 'sum to infinity']
+        self.keywords = ['normal gradient', 'derivative', 
+        'normal to curve']
         self.use_latex = True
 
     def seed_all(self,seed):
@@ -31,6 +30,8 @@ class QA_constraint(QAGen):
         framework will assume it can seed stuff for you. It needs this for
         the library to work.
         '''
+        np.random.seed(seed)
+        self.fake.random.seed(seed)
         random.seed(seed)
 
     def init_consistent_qa_variables(self):
@@ -46,6 +47,7 @@ class QA_constraint(QAGen):
         Note: debug flag can be used to deterministically output a QA that has
         simple numbers to check the correctness of your QA.
         """
+
         return tuple()
 
     def init_qa_variables(self):
@@ -64,17 +66,16 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            a1 = 27
-            r = -1/3
+            value = 1
+            const1 = 3
+            const2 = 5
         else:
-            a1 = random.randint(-1000,1000)
-            r = random.randint(-999,999)/1000
-        a2 = a1*r
-        a3 = a2*r
+            value = random.randint(-1000,1000)
+            const1 = random.randint(-1000,1000)
+            const2 = random.randint(-1000,1000)  
+        return value, const1, const2
 
-        return a1,a2,a3,r
-
-    def Q(s, a1,a2,a3,r): #TODO change the signature of the function according to your question
+    def Q(s, value, const1, const2): #TODO change the signature of the function according to your question
         '''
         Small question description.
 
@@ -92,14 +93,14 @@ class QA_constraint(QAGen):
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
 
-        first_sentence = "The first three terms of a geometric sequence are {0}, {1}, and {2}.".format(a1,a2,a3)
-        second_sentence = "Find the sum to infinity of the sequence."
-        question = perg(first_sentence, second_sentence)
+        first_sentence = "Let f(x) = {}*x + {}*sin(x).".format(const1, const2)
+        second_sentence = "Find the gradient of the normal to the curve of f at x={}.".format(value)
+        question = seqg(first_sentence, second_sentence)
 
         q = choiceg(question)
         return q
 
-    def A(s, a1,a2,a3,r): #TODO change the signature of the function according to your answer
+    def A(s, value, const1,const2): #TODO change the signature of the function according to your answer
         '''
         Small answer description.
 
@@ -116,12 +117,19 @@ class QA_constraint(QAGen):
         # choices, try providing a few
         # these can include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        ans = a1/(1-r)
-        ans_vnl = "The sum to infinity is {}.".format(ans)
-        a = choiceg(ans, ans_vnl)
-        return a
+        x = Symbol('x')
+        temp = diff(const1*x + const2*sin(x))
+        normGradient = -1/temp
+        ans_sympy = normGradient.subs(x, value)
+        ans_numerical = ans_sympy.evalf(10)
+        ans_vnl_vsympy1 = "The gradient of the normal to the curve is {}".format(ans_numerical)
+        ans_vnl_vsympy2 = "The gradient of the normal to the curve is {}".format(ans_sympy)
+        answer = choiceg(ans_sympy, ans_numerical, ans_vnl_vsympy1, ans_vnl_vsympy2)
+
+        return answer
 
 if __name__ == '__main__':
     qagenerator = QA_constraint()
+    user_test.run_unit_test_for_user(QA_constraint)
     print(qagenerator.get_single_qa(None))
 

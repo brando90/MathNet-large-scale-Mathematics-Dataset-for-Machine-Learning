@@ -18,8 +18,7 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'theosech'
-        self.description = "Out of 30 people we want to form a team of 5 to play" 
-        " basketball. How many such distinct teams can be formed?"
+        self.description = "Out of 30 people we want to form a team of 5 to play basketball. How many such distinct teams can be formed?"
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['combinatorics', 'distinct groups', 'combinations']
         self.use_latex = True
@@ -50,9 +49,8 @@ class QA_constraint(QAGen):
             basketball = "basketball"
         else:
             team_sports = utils.get_team_sports()
-            basketball = self.get_names(1,names_list=team_sports)
-            basketball = basketball
-        return basketball
+            basketball = self.get_name(names_list=team_sports)
+        return (basketball,)
 
     def init_qa_variables(self):
         '''
@@ -96,7 +94,7 @@ class QA_constraint(QAGen):
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
 
-        first_sentence = "Out of {} people we want to form a team of {} to play.".format(total_num_people, group_size)
+        first_sentence = "Out of {} people we want to form a team of {} to play {}.".format(total_num_people, group_size, basketball)
         second_sentence = "How many such distinct teams can be formed?"
 
         question1 = seqg(first_sentence, second_sentence)
@@ -128,4 +126,6 @@ class QA_constraint(QAGen):
 if __name__ == '__main__':
     qagenerator = QA_constraint()
     print(qagenerator.get_single_qa(None))
+    user_test.run_unit_test_for_user(QA_constraint)
+
 
