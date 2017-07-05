@@ -35,6 +35,13 @@ def get_team_sports():
     "ice hockey"]
     return team_sports
 
+def get_capital_letters():
+    '''
+    Returns a list of the capital letters of the english alphabet
+    '''
+    capital_letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    return capital_letters
+
 def duplicates_present(args1,args2):
     '''
     Check for dulplicates between and within lists

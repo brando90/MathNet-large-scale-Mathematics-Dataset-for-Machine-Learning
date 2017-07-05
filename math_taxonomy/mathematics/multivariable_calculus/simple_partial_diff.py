@@ -182,7 +182,7 @@ def check_many_to_one_consistent_format(qagenerator):
 
 if __name__ == '__main__':
     qagenerator = QA_constraint()
-    print(qagenerator.get_single_qa(None))
+    # print(qagenerator.get_single_qa(None))
 
     # check_single_question_debug(qagenerator)
 
