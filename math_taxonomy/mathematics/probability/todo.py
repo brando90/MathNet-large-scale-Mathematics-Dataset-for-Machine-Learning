@@ -1,0 +1,3 @@
+Bayesian Update
+Joint Distribution
+

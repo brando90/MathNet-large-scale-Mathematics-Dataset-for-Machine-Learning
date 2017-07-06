@@ -17,7 +17,7 @@ class QA_constraint(QAGen):
         super().__init__()
         self.author = 'Erick Rodriguez'
         self.description = '''''' #TODO example string of your question
-        self.keywords = [''] #TODO math keywords to search type of question
+        self.keywords = ['Bayes rule', 'probability', 'mathematics'] #TODO math keywords to search type of question
         self.use_latex = True
 
     def seed_all(self,seed):
