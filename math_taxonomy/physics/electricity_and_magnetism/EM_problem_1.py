@@ -76,7 +76,7 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         question1 = seqg('What must be the magnitude of the charge of a particle of mass', m,'=', m_val,'(kg) if it is to remain stationary in an electric field of magnitude', e,'=', e_val,'(N/C) that is directed downward?')
-        question2 = seqg('If a particle of mass', seqg(m, m_val), '(kg) is in an electric field that is directed downward and is of magnitude', seqg(e, e_val),'(N/C) , then what must be the magnitude of the charge of the particle so that it remains stationary?')
+        question2 = seqg('If a particle of mass', m, '=', m_val, '(kg) is in an electric field that is directed downward and is of magnitude', e,'=', e_val,'(N/C) , then what must be the magnitude of the charge of the particle so that it remains stationary?')
         q = choiceg(question1, question2)
         return q
 
