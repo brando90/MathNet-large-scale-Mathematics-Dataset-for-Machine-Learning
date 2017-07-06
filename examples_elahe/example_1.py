@@ -8,7 +8,7 @@ def example1():
     # 'Find velocity of the object that moves from, x0=0 to x1=1 (m) in time frame of t0 = 0 to t1=1.
     x0, x1, t0, t1 = symbols('x0 x1 t0 t1')
     # addition of matrices'
-    question = seqg('Find velocity of the object that moves from,', Eq(x0,3), 'to ', Eq(x1 , 4), '(m) in time frame of ', Eq(t0,1), ' to ', Eq(t1 ,2),'.')
+    question = seqg('Find velocity of the object that moves from ,', Eq(x0,3), 'to ', Eq(x1 , 4), '(m) in time frame of ', Eq(t0,1), ' to ', Eq(t1 ,2),'.')
 
     # @func_flow
     # def vel(x1,x0,t1,t0):

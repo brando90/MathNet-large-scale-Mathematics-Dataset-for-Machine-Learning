@@ -17,9 +17,9 @@ class QA_constraint(QAGen):
 
         super().__init__()
         self.author = 'Ivan Jutamulia'
-        self.description = '''Differentiate the expression with respect to x. x^{2} + 3 x y + 1'''
+        self.description = '''Are the 2-d vectors v = (1, 2) and u = (-4, 2) perpendicular to each other?'''
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['multivariable calculus']
+        self.keywords = ['algebra']
         self.use_latex = True
 
     def seed_all(self, seed):
@@ -45,10 +45,10 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            x, y = symbols('x y')
+            v, u = symbols('v u')
         else:
-            x, y = self.get_symbols(2)
-        return x, y
+            v, u = symbols('v u')
+        return v, u
 
     def init_qa_variables(self):
         """
@@ -64,12 +64,12 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            a_val, b_val, c_val = 2, 3, 1
+            a_val, b_val, c_val, d_val = 1, 2, -4, 2
         else:
-            a_val, b_val, c_val = np.random.randint(1, 99, [3])
-        return a_val, b_val, c_val
+            a_val, b_val, c_val, d_val = np.random.randint(-5, 5, [4])
+        return a_val, b_val, c_val, d_val
 
-    def Q(s, a_val, b_val, c_val, x, y):
+    def Q(s, a_val, b_val, c_val, d_val, v, u):
         """
         Small question description.
         Important Note: first variables are the not consistent variables followed
@@ -77,13 +77,11 @@ class QA_constraint(QAGen):
         """
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         s.use_latex = True
-        expression = x**a_val + b_val * x * y + c_val
-        question1 = perg('Differentiate the expression with respect to {0}.'.format(x), expression)
-        question2 = perg('What is the derivative of the expression with respect to {0}?'.format(x), expression)
-        q = choiceg(question1, question2)
+        question1 = seqg('Are the 2-d vectors {0} = ({1}, {2}) and {3} = ({4}, {5}) perpendicular to each other?'.format(v, a_val, b_val, u, c_val, d_val))
+        q = choiceg(question1)
         return q
 
-    def A(s, a_val, b_val, c_val, x, y):
+    def A(s, a_val, b_val, c_val, d_val, v, u):
         """
         Small answer description.
         Important Note: first variables are the not consistent variables followed
@@ -92,11 +90,12 @@ class QA_constraint(QAGen):
         # define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         s.use_latex = True
-        expression = x**a_val + b_val * x * y + c_val
-        answer = expression.diff(x)
-        answer1 = seqg(answer, 'is the derivative of', expression, 'with respect to {0}'.format(x))
-        answer2 = seqg(expression, 'differentiated with respect to {0} is'.format(x), answer)
-        a = choiceg(answer1, answer2)
+        dot = a_val * c_val + b_val * d_val
+        if dot == 0:
+            answer1 = seqg('Yes the vectors {0} = ({1}, {2}) and {3} = ({4}, {5}) are perpendicular to each other.'.format(v, a_val, b_val, u, c_val, d_val))
+        else:
+            answer1 = seqg('No the vectors {0} = ({1}, {2}) and {3} = ({4}, {5}) are not perpendicular to each other.'.format(v, a_val, b_val, u, c_val, d_val))
+        a = choiceg(answer1)
         return a
 
     ##
@@ -182,9 +181,6 @@ def check_many_to_one_consistent_format(qagenerator):
 
 if __name__ == '__main__':
     qagenerator = QA_constraint()
-    # print(qagenerator.get_single_qa(None))
-
-    # check_single_question_debug(qagenerator)
-
-    user_test.run_unit_test_for_user(QA_constraint)
+    check_single_question_debug(qagenerator)
+    # user_test.run_unit_test_for_user(QA_constraint)
 
