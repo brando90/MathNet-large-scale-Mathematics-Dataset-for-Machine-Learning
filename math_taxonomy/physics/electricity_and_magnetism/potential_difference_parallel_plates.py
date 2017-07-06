@@ -17,7 +17,7 @@ class QA_constraint(QAGen):
         self.description = 'What is the potential difference across a parallel-plate capacitor that has a capacitance of 1000 pF and a charge of 10 µC on each plate?'
 
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['Physics', 'Electricity and Magnetism', 'E&M', 'capacitance', 'electric potential difference']
+        self.keywords = ['physics', 'Electricity and Magnetism', 'E&M', 'capacitance', 'electric potential difference']
         self.use_latex = True
 
     def seed_all(self,seed):
