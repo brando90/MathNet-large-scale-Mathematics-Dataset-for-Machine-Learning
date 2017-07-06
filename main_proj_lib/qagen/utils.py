@@ -22,16 +22,24 @@ def get_colleges():
     '''
     Returns a list of colleges
     '''
-    colleges = ["MIT", "Vanderbilt", "Tufts", "Stanford", "Harvard", "Boston College", 
+    colleges = ["MIT", "Vanderbilt", "Tufts", "Stanford", "Harvard", "Boston College",
     "Northeastern", "Yale", "Dartmouth", "Duke", "Northwestern", "Boston University"]
     return colleges
 
+def get_diseases():
+    '''
+    Returns a list of diseases of varying severity
+    '''
+    diseases = ['Cancer','Gingivitis','Scurvy','Alzheimers', 'Carpal Tunnel Syndrome',
+    'Type I Diabetes','Type II Diabetes', 'Depression', 'Diarrhea', 'Down Syndrome', 'Dyslexia',
+    'Dermatitis']
+    return diseases
 
 def get_team_sports():
     '''
     Returns a list of team sports
     '''
-    team_sports = ["basketball", "soccer", "volleyball", "baseball", "dodgeball", "football", 
+    team_sports = ["basketball", "soccer", "volleyball", "baseball", "dodgeball", "football",
     "ice hockey"]
     return team_sports
 
@@ -77,5 +85,5 @@ def get_classes(question):
     file_spec.loader.exec_module(file_module)
     classes = [x[1] for x in inspect.getmembers(file_module, inspect.isclass)]
     classes = [x for x in classes if (issubclass(x, QAGen) and x().__class__.__name__ != 'QAGen')]
-    
+
     return classes
