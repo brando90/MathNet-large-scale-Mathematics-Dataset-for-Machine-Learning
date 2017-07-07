@@ -91,6 +91,7 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         #
+        s.use_latex = True
         permutable_part = perg(seqg(Eq(x,x_val),','),seqg(Eq(y,y_val),','),seqg(Eq(z,z_val),','))
         #print(permutable_part)
         #pdb.set_trace()
@@ -199,17 +200,6 @@ def check_get_symbol(qagenerator):
     symbol2 = qagenerator.get_symbol()
     print(symbol1)
     print(symbol2)
-
-def check_seed_all(qagenerator):
-
-def check_init_consistent_qa_variables(qagenerator):
-
-def check_init_qa_variables(qagenerator):
-
-def check_Q(qagenerator):
-
-def check_A(qagenerator):
-#should check if same DE object if seed is same
 
 #TODO: tests that check all nonimplemented in QA that user must implement.
 

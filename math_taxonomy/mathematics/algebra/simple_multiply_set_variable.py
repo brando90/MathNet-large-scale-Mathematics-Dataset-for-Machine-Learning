@@ -18,7 +18,7 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'Brando Miranda'
-        self.description = '''Mary had  x = 2 , y = 3 , z = 4 , goats, lambs, dogs  respectively. Each was decreased by d = 1 by the wolf named Gary.'''
+        self.description = '''What's x if x = cb, b = a and a = 3, c = 2?'''
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['basic algebra']
         self.use_latex = True
@@ -48,15 +48,10 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            x,y,z,d = symbols('x y z d')
-            Mary, Gary = 'Mary', 'Gary'
-            goats,lambs,dogs = 'goats','lambs','dogs'
+            x,a,b,c = symbols('x a b c')
         else:
-            x,y,z,d = self.get_symbols(4)
-            Mary, Gary = self.get_names(2)
-            farm_animals = utils.get_farm_animals()
-            goats,lambs,dogs = self.get_names(3,names_list=farm_animals)
-        return x,y,z,d,Mary,Gary,goats,lambs,dogs
+            x,a,b,c = self.get_symbols(4)
+        return x,a,b,c
 
     def init_qa_variables(self):
         '''
@@ -74,14 +69,12 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            x_val,y_val,z_val = 2,3,4
-            d_val = 1
+            a_val,c_val = 3,2
         else:
-            x_val,y_val,z_val = np.random.randint(1,1000,[3])
-            d_val = np.random.randint(1,np.min([x_val,y_val,z_val]))
-        return x_val,y_val,z_val,d_val
+            a_val,c_val = np.random.randint(-1000,1000,[2])
+        return a_val,c_val
 
-    def Q(s, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary,goats,lambs,dogs):
+    def Q(s, a_val,c_val, x,a,b,c):
         '''
         Small question description.
 
@@ -91,16 +84,14 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         #
-        permutable_part = perg(seqg(Eq(x,x_val),','),seqg(Eq(y,y_val),','),seqg(Eq(z,z_val),','))
-        #print(permutable_part)
-        #pdb.set_trace()
-        animal_list = perg( goats+',', lambs+',', dogs)
-        question1 = seqg(Mary+' had ',
-        permutable_part, animal_list,' respectively. Each was decreased by',Eq(d,d_val),'by the wolf named '+Gary+'.')
-        q = choiceg(question1)
+        perm1 = perg(Eq(x,c*b), Eq(b,a) )
+        perm2 = perg(Eq(a,3), Eq(c,2) )
+        q1 = seqg('What\'s',x,'if ',perm1,' when ',perm2,'?')
+        q2 = seqg('Find the value of',x,'if ',perm1,'when the variables are',perm2,'?')
+        q = choiceg(q1,q2)
         return q
 
-    def A(s, x_val,y_val,z_val,d_val, x,y,z,d,Mary,Gary,goats,lambs,dogs):
+    def A(s, a_val,c_val, x,a,b,c):
         '''
         Small answer description.
 
@@ -110,11 +101,10 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         #
-        permutable_part = perg(seqg(Eq(x-d,x_val-d_val),','),seqg(Eq(y-d,y_val-d_val),','),seqg(Eq(z-d,z_val-d_val),','))
-        animal_list = perg( goats+',', lambs+',', dogs)
-        ans_vnl_vsympy = seqg(Mary+' has ',permutable_part, animal_list, 'left and each was decreased by the wolf named '+Gary+'.')
-        ans_vnl_vsympy2 = seqg('The wolf named '+Gary+' decreased each of '+Mary+'\'s ',animal_list,' and she now has ',permutable_part,' ',animal_list,' left.')
-        a = choiceg(ans_vnl_vsympy,ans_vnl_vsympy2)
+        a1 = seqg( Eq(x,a_val*c_val) )
+        a2 = seqg('The value of ',x,' has been computed to be: ',choiceg(Eq(x,a_val*c_val),a_val*c_val) )
+        a3 = seqg( Eq( Eq(x,b*c),a_val*c_val) )
+        a = choiceg(a1,a2,a3)
         return a
 
     ##
@@ -200,15 +190,6 @@ def check_get_symbol(qagenerator):
     print(symbol1)
     print(symbol2)
 
-def check_seed_all(qagenerator):
-
-def check_init_consistent_qa_variables(qagenerator):
-
-def check_init_qa_variables(qagenerator):
-
-def check_Q(qagenerator):
-
-def check_A(qagenerator):
 #should check if same DE object if seed is same
 
 #TODO: tests that check all nonimplemented in QA that user must implement.
