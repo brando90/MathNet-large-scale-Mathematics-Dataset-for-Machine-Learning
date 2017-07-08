@@ -16,10 +16,9 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'Elaheh Ahmadi' #TODO your full name
-        self.description = 'Find acceleration of an object that moves in dim = one dimensional world given that we know its velocity changes from  v0 = 0 (m/s) to v1 = 1(m/s) in time frame of t0 = 2 (s) to t1 = 3 (s).')
-
+        self.description = 'Find the dot product of the two given vectors V = [0,1] and U = [2, 3].') #TODO example string of your question
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['Physics', 'Finding Acceleration'] #TODO keywords to search type of question
+        self.keywords = ['Geometry', 'Vectors', 'Multi variable calculus'] #TODO keywords to search type of question
         self.use_latex = True
 
     def seed_all(self,seed):
@@ -48,10 +47,12 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-             v0, v1, t0, t1, dim = symbols('v0 v1 t0 t1 dim')
+            U, V = symbols ('U V')
         else:
-             v0, v1, t0, t1, dim = self.get_symbols(4)
-        return  v0, v1, t0, t1, dim
+            U, V = self.get_symbols(2)
+        return U, V
+
+################# Edit from here
 
     def init_qa_variables(self):
         '''
@@ -69,44 +70,53 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            v0_val, v1_val, t0_val, t1_val, dim_val = 1, 2, 3, 4, 1
+            V_val , U_val = np.array([0,2]), np.array([2,0])
         else:
-            dim_val = np.random.randint(1,100)
-            v0_val = np.random.randint(-1000,1000,dim_val)
-            v1_val = np.random.randint(-1000, 1000, dim_val)
-            t0_val = np.random.randint(0, 1000)
-            t1_val = np.random.randint(1000, 2000)
+            dim = np.random.randint(2,100)
+            V_val = np.random.randint(-1000,1000,dim)
+            U_val = np.random.randint(-1000,1000,dim)
+        return V_val, U_val
 
-        return v0_val, v1_val, t0_val, t1_val, dim_val
-
-    def Q(s,v0, v1, t0, t1, dim, v0_val, v1_val, t0_val, t1_val, dim_val): #TODO change the signature of the function according to your question
+    def Q(s, V, U, V_val, U_val): #TODO change the signature of the function according to your question
+        # type: (object, object, object, object) -> object
         '''
-        Finding the acceleration of an object bassed on having its velocity at two different times
+        Finding the dot product between two vectors.
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        question1 = seqg('Find acceleration of an object that moves in', Eq(dim, dim_val),' dimensional world given that we know its velocity changes from ', Eq(v0, v0_val), '(m/s) to ', Eq(v1, v1_val), '(m/s) in time frame of ', Eq(t0, t0_val), '(s) to ', Eq(t1, t1_val), '(s).')
-        q = choiceg(question1)
-        return q
+        # TODO
+        question_1 = seqg("Find the dot product of two vectors ", Eq(V,V_val), " and ", Eq(U, U_val),'.')
 
-    def A(s,v0_val, v1_val, t0_val, t1_val, dim_val, v0, v1, t0, t1, dim): #TODO change the signature of the function according to your answer
-        '''
-        We use this equationto find the acceleration a = (v1_val - v0_val)/(t1_val - t0_val).
-
-        Important Note: first variables are the not consistent variables followed
-        by the consistent ones. See sample QA example if you need too.
-        '''
-        #define some short cuts
-        seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        acceleration = (v1_val - v0_val)/(t1_val - t0_val)
-        answer = seqg('The acceleration in ', Eq(dim, dim_val), 'dimension is equal to ', acceleration, '(m/s^2).')
+        #q_format2
+        #...
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        a = choiceg(answer)
+        q = choiceg(question_1)
+        return q
+
+    def A(s, U_val, V_val, U, V): #TODO change the signature of the function according to your answer
+        '''
+        Dot_product = V.U
+
+        Important Note: first variables are the not consistent variables followed
+        by the consistent ones. See sample QA example if you need too.
+        '''
+        #define some short cuts
+        seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
+        dot_product = np.dot(U_val,V_val)
+        answer_1 = seqg("The dot product of two vectors, ", Eq(U,U_val), " and ", Eq(V, V_val), "is ", dot_product, ".")
+
+        #ans_numerical
+        #ans_vnl_vsympy1
+        #ans_vnl_vsympy2
+        # choices, try providing a few
+        # these van include variations that are hard to encode with permg or variable substitution
+        # example, NL variations or equaiton variations
+        a = choiceg(answer_1)
         return a
 
     ##
