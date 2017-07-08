@@ -16,8 +16,12 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'Erick Rodriguez'
-        self.description = '''''' #TODO example string of your question
-        self.keywords = ['Bayes rule', 'probability', 'mathematics'] #TODO math keywords to search type of question
+        self.description = 'A patient takes a test to see if they have Cancer.'
+        self.description+= 'A person has Cancer with probability 0.05, and does not have Cancer with probability 0.95.'
+        self.description+= 'The test reads a true positive with probability 0.85.'
+        self.description+= 'The test incorrectly reads positive with probability 0.10.'
+        self.description+= 'What is the probability of the patient having Cancer if the test reads positive?'
+        self.keywords = ['Bayes Theorem', 'probability', 'mathematics', 'Bayes Rule']
         self.use_latex = True
 
     def seed_all(self,seed):
@@ -30,7 +34,6 @@ class QA_constraint(QAGen):
         random.seed(seed)
         np.random.seed(seed)
         fake.random.seed(seed)
-        # TODO write more seeding libraries that you are using
 
     def init_consistent_qa_variables(self):
         """
@@ -44,10 +47,11 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            #TODO
+            Cancer = 'Cancer'
         else:
-            #TODO
-        return
+            diseases = utils.get_diseases()
+            Cancer = self.get_names(1, names_list=diseases)
+        return Cancer
 
     def init_qa_variables(self):
         '''
@@ -63,12 +67,18 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            #TODO
+            true_pos = 0.85
+            false_pos = 0.10
+            cancer_prob = 0.05
+            no_cancer = 1-cancer_prob
         else:
-            #TODO
-        return
+            true_pos = np.random.randint(60,95)*0.01
+            false_pos = np.random.randint(1,20)*0.01
+            cancer_prob = np.random.randint(1,20)*0.01
+            no_cancer = 1-cancer_prob
+        return true_pos,false_pos,cancer_prob,no_cancer
 
-    def Q(s,not_consistent,consistent): #TODO change the signature of the function according to your question
+    def Q(s,true_pos,false_pos,cancer_prob,no_cancer,Cancer):
         '''
         Small question description.
         Important Note: first variables are the not consistent variables followed
@@ -77,16 +87,22 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         # TODO
-        #q_format1
+        q_start = seqg('A patient takes a test to see if they have '+Cancer+'. ')
+        perm1 = seqg('A person has'+Cancer+' with probability '+cancer_prob+', and does not have Cancer with probability '+no_cancer+'. ')
+        perm2 = seqg('The test reads a true positive with probability '+true_pos+'. ')
+        perm3 = seqg('The test incorrectly reads positive with probability '+false_pos+'. ')
+        q_end = seqg('What is the probability of the patient having '+Cancer+'if the test reads positive?')
+        permutable_part= perg(perm1,perm2,perm3)
+        q_format1 = seqg(q_start,permutable_part,q_end)
         #q_format2
         #...
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        q = choiceg()
+        q = choiceg(q_format1)
         return q
 
-    def A(s,not_consistent,consistent): #TODO change the signature of the function according to your answer
+    def A(s,true_pos,false_pos,cancer_prob,no_cancer,Cancer):
         '''
         Small answer description.
         Important Note: first variables are the not consistent variables followed
@@ -96,13 +112,13 @@ class QA_constraint(QAGen):
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         # TODO
         #ans_sympy
-        #ans_numerical
-        #ans_vnl_vsympy1
+        ans_numerical = (true_pos*cancer_prob)/(true_pos*cancer_prob+false_pos*no_cancer)
+        ans_vnl_vsympy1 = seqg("If the test reads positive, the probability of the patient having "+Cancer+" is {0}.".format(str(ans_numerical))
         #ans_vnl_vsympy2
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        a = choiceg()
+        a = choiceg(ans_vnl_vsympy1)
         return a
 
     ##
