@@ -76,7 +76,6 @@ class QA_constraint(QAGen):
         by the consistent ones. See sample QA example if you need too.
         """
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        s.use_latex = True
         expression = x ** e_val * y ** f_val
         given = seqg('Let R be the rectangle [{0}, {1}] x [{2}, {3}] in the {4}, {5} coordinate system.'.format(a_val, b_val, c_val, d_val, x, y))
         calc = seqg('Calculate the integral of the function', expression, 'over the region R.')
@@ -96,7 +95,6 @@ class QA_constraint(QAGen):
         """
         # define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        s.use_latex = True
         expression = x ** e_val * y ** f_val
         answer = integrate(expression, (x, a_val, b_val), (y, c_val, d_val))
         answer1 = seqg('The value of the integral over the region R is {0}.'.format(answer))

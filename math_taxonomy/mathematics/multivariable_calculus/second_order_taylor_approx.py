@@ -77,7 +77,6 @@ class QA_constraint(QAGen):
         by the consistent ones. See sample QA example if you need too.
         """
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        s.use_latex = True
         expression = x**a_val * y**b_val
         question1 = seqg('Find the second order Taylor expansion of the function', expression, 'around the point (x,y)')
         q = choiceg(question1)
@@ -91,7 +90,6 @@ class QA_constraint(QAGen):
         """
         # define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        s.use_latex = True
         expression = x**a_val * y**b_val
         partial_x = expression.diff(x)
         partial_y = expression.diff(y)
