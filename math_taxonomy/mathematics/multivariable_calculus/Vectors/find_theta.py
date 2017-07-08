@@ -70,14 +70,16 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-
+            V_val , U_val = np.array([0,2]), np.array([2,0])
         else:
-            #TODO
-        return
+            dim = np.random.randint(2,100)
+            V_val = np.random.randint(-1000,1000,dim)
+            U_val = np.random.randint(-1000,1000,dim)
+        return V_val, U_val
 
-    def Q(s,not_consistent,consistent): #TODO change the signature of the function according to your question
+    def Q(s, V, U, V_val, U_val): #TODO change the signature of the function according to your question
         '''
-        Small question description.
+        Finding the angle between two vectors.
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
@@ -85,33 +87,38 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         # TODO
-        #q_format1
+        question_1 = seqg("Find the angle between two vectors ", Eq(V,V_val), " and ", Eq(U, U_val),'.')
+
         #q_format2
         #...
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        q = choiceg()
+        q = choiceg(question_1)
         return q
 
-    def A(s,not_consistent,consistent): #TODO change the signature of the function according to your answer
+    def A(s, U_val, V_val, U, V): #TODO change the signature of the function according to your answer
         '''
-        Small answer description.
+        theta = V.U/(|V|*|U|)
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        # TODO
-        #ans_sympy
+        costheta = np.dot(V_val,U_val)/(np.linalg.norm(U_val)*np.linalg.norm(V_val))
+        theta_radian = np.arccos(costheta)
+        pi = np.pi
+        theta_degree = theta_radian*180/pi
+        answer_1 = seqg("The angle between ", Eq(U,U_val), " and ", Eq(V, V_val), "is ", theta_radian, " radian.")
+        answer_2 = seqg("The angle between ", Eq(U,U_val), " and ", Eq(V, V_val), "is ", theta_degree, " degree.")
         #ans_numerical
         #ans_vnl_vsympy1
         #ans_vnl_vsympy2
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        a = choiceg()
+        a = choiceg(answer_1, answer_2)
         return a
 
     ##

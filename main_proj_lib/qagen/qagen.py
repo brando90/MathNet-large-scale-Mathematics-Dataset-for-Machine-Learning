@@ -77,7 +77,11 @@ class QAGen(QA,QAOps):
             ans_list.append(a_str)
         # randomize where the answer is
         ans_list = random.sample( ans_list, len(ans_list) )
-        mc = q_str, ans_list
+        for i in range(len(ans_list)):
+            if ans_list[i] == correct_a_str:
+                index_ans = i
+                break
+        mc = q_str, ans_list, index_ans
         return mc
 
     def generate_single_qa_many_to_one(self,nb_questions,seed):

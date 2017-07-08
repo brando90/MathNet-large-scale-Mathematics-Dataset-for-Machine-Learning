@@ -1,12 +1,14 @@
 from sympy import *
 import random
 import numpy as np
+import pdb
 
-from qagen import *
+from qagen.qagen import *
 from qagen import utils
 from qagen import unit_test_for_user as user_test
 
-# TODO: You can also put your quesiton example here
+# Mary had x=10 lambs, y=9 goats, z=8 dogs and each was decreased by d=2 units
+# by the wolf named Gary. How many of each are there left?
 
 class QA_constraint(QAGen):
 
@@ -15,11 +17,10 @@ class QA_constraint(QAGen):
         Initializer for your QA question.
         '''
         super().__init__()
-        self.author = 'Elaheh Ahmadi' #TODO your full name
-        self.description = 'Find acceleration of an object that moves in dim = one dimensional world given that we know its velocity changes from  v0 = 0 (m/s) to v1 = 1(m/s) in time frame of t0 = 2 (s) to t1 = 3 (s).')
-
+        self.author = 'Brando Miranda'
+        self.description = '''What's x if x = cb, b = a and a = 3, c = 2?'''
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['Physics', 'Finding Acceleration'] #TODO keywords to search type of question
+        self.keywords = ['basic algebra']
         self.use_latex = True
 
     def seed_all(self,seed):
@@ -31,8 +32,7 @@ class QA_constraint(QAGen):
         '''
         random.seed(seed)
         np.random.seed(seed)
-        fake.random.seed(seed)
-        # TODO write more seeding libraries that you are using
+        self.fake.random.seed(seed)
 
     def init_consistent_qa_variables(self):
         """
@@ -48,10 +48,10 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-             v0, v1, t0, t1, dim = symbols('v0 v1 t0 t1 dim')
+            x,a,b,c = symbols('x a b c')
         else:
-             v0, v1, t0, t1, dim = self.get_symbols(4)
-        return  v0, v1, t0, t1, dim
+            x,a,b,c = self.get_symbols(4)
+        return x,a,b,c
 
     def init_qa_variables(self):
         '''
@@ -59,7 +59,7 @@ class QA_constraint(QAGen):
         question and an answer. Good examples are numerical values that might
         make the answers not obviously wrong.
 
-        Example: when generating MC questions the non consistent variables will
+       Example: when generating MC questions the non consistent variables will
         be used to generate other options. However, the names, symbols, etc
         should remain consistent otherwise some answers will be obviously fake.
         Numerical values that have been fully evaluated are a good example of
@@ -69,44 +69,42 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            v0_val, v1_val, t0_val, t1_val, dim_val = 1, 2, 3, 4, 1
+            a_val,c_val = 3,2
         else:
-            dim_val = np.random.randint(1,100)
-            v0_val = np.random.randint(-1000,1000,dim_val)
-            v1_val = np.random.randint(-1000, 1000, dim_val)
-            t0_val = np.random.randint(0, 1000)
-            t1_val = np.random.randint(1000, 2000)
+            a_val,c_val = np.random.randint(-1000,1000,[2])
+        return a_val,c_val
 
-        return v0_val, v1_val, t0_val, t1_val, dim_val
-
-    def Q(s,v0, v1, t0, t1, dim, v0_val, v1_val, t0_val, t1_val, dim_val): #TODO change the signature of the function according to your question
+    def Q(s, a_val,c_val, x,a,b,c):
         '''
-        Finding the acceleration of an object bassed on having its velocity at two different times
+        Small question description.
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        question1 = seqg('Find acceleration of an object that moves in', Eq(dim, dim_val),' dimensional world given that we know its velocity changes from ', Eq(v0, v0_val), '(m/s) to ', Eq(v1, v1_val), '(m/s) in time frame of ', Eq(t0, t0_val), '(s) to ', Eq(t1, t1_val), '(s).')
-        q = choiceg(question1)
+        #
+        perm1 = perg(Eq(x,c*b), Eq(b,a) )
+        perm2 = perg(Eq(a,3), Eq(c,2) )
+        q1 = seqg('What\'s',x,'if ',perm1,' when ',perm2,'?')
+        q2 = seqg('Find the value of',x,'if ',perm1,'when the variables are',perm2,'?')
+        q = choiceg(q1,q2)
         return q
 
-    def A(s,v0_val, v1_val, t0_val, t1_val, dim_val, v0, v1, t0, t1, dim): #TODO change the signature of the function according to your answer
+    def A(s, a_val,c_val, x,a,b,c):
         '''
-        We use this equationto find the acceleration a = (v1_val - v0_val)/(t1_val - t0_val).
+        Small answer description.
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        acceleration = (v1_val - v0_val)/(t1_val - t0_val)
-        answer = seqg('The acceleration in ', Eq(dim, dim_val), 'dimension is equal to ', acceleration, '(m/s^2).')
-        # choices, try providing a few
-        # these van include variations that are hard to encode with permg or variable substitution
-        # example, NL variations or equaiton variations
-        a = choiceg(answer)
+        #
+        a1 = seqg( Eq(x,a_val*c_val) )
+        a2 = seqg('The value of ',x,' has been computed to be: ',choiceg(Eq(x,a_val*c_val),a_val*c_val) )
+        a3 = seqg( Eq( Eq(x,b*c),a_val*c_val) )
+        a = choiceg(a1,a2,a3)
         return a
 
     ##
@@ -123,8 +121,6 @@ class QA_constraint(QAGen):
         q_str = self.Q(*variables,*variables_consistent)
         a_str = self.A(*variables,*variables_consistent)
         return q_str, a_str
-
-## Some helper functions to check the formats are coming out correctly
 
 ##
 
@@ -184,13 +180,26 @@ def check_many_to_one_consistent_format(qagenerator):
         print("\n".join(q_list))
         print('a: ', a_consistent_format)
 
+def check_get_symbol(qagenerator):
+    seed = 1
+    seed = 2
+    qagenerator.seed_all(1)
+    symbol1 = qagenerator.get_symbol()
+    qagenerator.seed_all(1)
+    symbol2 = qagenerator.get_symbol()
+    print(symbol1)
+    print(symbol2)
+
+#should check if same DE object if seed is same
+
+#TODO: tests that check all nonimplemented in QA that user must implement.
+
 if __name__ == '__main__':
     qagenerator = QA_constraint()
-    check_single_question(qagenerator)
-    ## uncomment the following to check formats:
+    # uncomment the following to check formats:
     #check_mc(qagenerator)
-    #check_many_to_one(qagenerator)
-    #check_one_to_many(qagenerator)
+    #check_many_to_many(qagenerator)
     #check_many_to_one_consistent_format(qagenerator)
     ## run unit test given by framework
     user_test.run_unit_test_for_user(QA_constraint)
+    # check_get_symbol(qagenerator)

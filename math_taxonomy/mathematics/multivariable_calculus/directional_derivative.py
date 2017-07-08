@@ -77,7 +77,6 @@ class QA_constraint(QAGen):
         by the consistent ones. See sample QA example if you need too.
         """
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        s.use_latex = True
         function = x**a_val + x * y + y**b_val
         vector = (c_val, d_val)
         question1 = seqg('Find the directional derivative of', function, 'in the', vector, 'direction at the point ({0},{1})'.format(x, y))
@@ -92,7 +91,6 @@ class QA_constraint(QAGen):
         """
         # define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        s.use_latex = True
         function = x ** a_val + x * y + y ** b_val
         vector = (c_val, d_val)
         partial_x = function.diff(x)
@@ -187,6 +185,6 @@ def check_many_to_one_consistent_format(qagenerator):
 
 if __name__ == '__main__':
     qagenerator = QA_constraint()
-    # check_single_question_debug(qagenerator)
-    user_test.run_unit_test_for_user(QA_constraint)
+    check_single_question_debug(qagenerator)
+    # user_test.run_unit_test_for_user(QA_constraint)
 

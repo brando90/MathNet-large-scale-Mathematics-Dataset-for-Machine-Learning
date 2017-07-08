@@ -6,7 +6,7 @@ from qagen import *
 from qagen import utils
 from qagen import unit_test_for_user as user_test
 
-# TODO: You can also put your question example here
+# TODO: You can also put your quesiton example here
 
 class QA_constraint(QAGen):
 
@@ -15,9 +15,10 @@ class QA_constraint(QAGen):
         Initializer for your QA question.
         '''
         super().__init__()
-        self.author = 'Erick Rodriguez'
-        self.description = '''''' #TODO example string of your question
-        self.keywords = ['Bayes rule', 'probability', 'mathematics'] #TODO math keywords to search type of question
+        self.author = 'Elaheh Ahmadi' #TODO your full name
+        self.description = 'Find the dot product of the two given vectors V = [0,1] and U = [2, 3].') #TODO example string of your question
+        # keywords about the question that could help to make this more searchable in the future
+        self.keywords = ['Geometry', 'Vectors', 'Multi variable calculus'] #TODO keywords to search type of question
         self.use_latex = True
 
     def seed_all(self,seed):
@@ -37,72 +38,85 @@ class QA_constraint(QAGen):
         Defines and returns all the variables that need to be consistent
         between a question and an answer. Usually only names and variable/symbol
         names.
+
         Example: when generating MC questions the non consistent variables will
         be used to generate other options. However, the names, symbols, etc
         should remain consistent otherwise some answers will be obviously fake.
+
         Note: debug flag can be used to deterministically output a QA that has
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            #TODO
+            U, V = symbols ('U V')
         else:
-            #TODO
-        return
+            U, V = self.get_symbols(2)
+        return U, V
+
+################# Edit from here
 
     def init_qa_variables(self):
         '''
         Defines and returns all the variables that can vary between a
         question and an answer. Good examples are numerical values that might
         make the answers not obviously wrong.
+
         Example: when generating MC questions the non consistent variables will
         be used to generate other options. However, the names, symbols, etc
         should remain consistent otherwise some answers will be obviously fake.
         Numerical values that have been fully evaluated are a good example of
         how multiple choice answers can be generated.
+
         Note: debug flag can be used to deterministically output a QA that has
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            #TODO
+            V_val , U_val = np.array([0,2]), np.array([2,0])
         else:
-            #TODO
-        return
+            dim = np.random.randint(2,100)
+            V_val = np.random.randint(-1000,1000,dim)
+            U_val = np.random.randint(-1000,1000,dim)
+        return V_val, U_val
 
-    def Q(s,not_consistent,consistent): #TODO change the signature of the function according to your question
+    def Q(s, V, U, V_val, U_val): #TODO change the signature of the function according to your question
+        # type: (object, object, object, object) -> object
         '''
-        Small question description.
+        Finding the dot product between two vectors.
+
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         # TODO
-        #q_format1
+        question_1 = seqg("Find the dot product of two vectors ", Eq(V,V_val), " and ", Eq(U, U_val),'.')
+
         #q_format2
         #...
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        q = choiceg()
+        q = choiceg(question_1)
         return q
 
-    def A(s,not_consistent,consistent): #TODO change the signature of the function according to your answer
+    def A(s, U_val, V_val, U, V): #TODO change the signature of the function according to your answer
         '''
-        Small answer description.
+        Dot_product = V.U
+
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        # TODO
-        #ans_sympy
+        dot_product = np.dot(U_val,V_val)
+        answer_1 = seqg("The dot product of two vectors, ", Eq(U,U_val), " and ", Eq(V, V_val), "is ", dot_product, ".")
+
         #ans_numerical
         #ans_vnl_vsympy1
         #ans_vnl_vsympy2
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        a = choiceg()
+        a = choiceg(answer_1)
         return a
 
     ##
@@ -189,4 +203,4 @@ if __name__ == '__main__':
     #check_one_to_many(qagenerator)
     #check_many_to_one_consistent_format(qagenerator)
     ## run unit test given by framework
-user_test.run_unit_test_for_user(QA_constraint)
+    user_test.run_unit_test_for_user(QA_constraint)
