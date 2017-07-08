@@ -76,7 +76,6 @@ class QA_constraint(QAGen):
         by the consistent ones. See sample QA example if you need too.
         """
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        s.use_latex = True
         given = seqg('Let C be the curve parametrized by {0}({1}), {2}({3}) = (cos{4}, sin{5}) from {6} to {7}.'.format(x, t, y, t, t, t, a, b))
         calc = seqg('Find the arc length of C using an integral with respect to {0}.'.format(t))
         ask = seqg('Using an integral with respect to {0}, what is the arc length of C?'.format(t))
@@ -93,7 +92,6 @@ class QA_constraint(QAGen):
         """
         # define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        s.use_latex = True
         dx, dy = diff(cos(t), t), diff(sin(t), t)
         expression = sqrt(dx**2 + dy**2)
         length = integrate(expression, (t, a, b))
@@ -185,6 +183,6 @@ def check_many_to_one_consistent_format(qagenerator):
 
 if __name__ == '__main__':
     qagenerator = QA_constraint()
-    # check_single_question_debug(qagenerator)
-    user_test.run_unit_test_for_user(QA_constraint)
+    check_single_question_debug(qagenerator)
+    # user_test.run_unit_test_for_user(QA_constraint)
 
