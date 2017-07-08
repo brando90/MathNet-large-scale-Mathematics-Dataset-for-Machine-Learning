@@ -16,9 +16,9 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'Skylar Brooks' #TODO your full name
-        self.description = 'Integrate log(2*x)**2' #TODO example string of your question
+        self.description = 'Find the box (without a top) with a fixed volume v=100' #TODO example string of your question
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['single variable calculus'] #TODO keywords to search type of question
+        self.keywords = ['word problem', 'optimization'] #TODO keywords to search type of question
         self.use_latex = True
 
     def seed_all(self,seed):
@@ -47,10 +47,10 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            x, a = symbols('x a')
+            v= symbols('v')
         else:
-            x, a = get_symbols(2)
-        return x, a
+            v= get_symbols(1)
+        return
 
     def init_qa_variables(self):
         '''
@@ -68,12 +68,12 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            a_val = 2
+            #TODO
         else:
-            a_val = np.random.randint(100)
-        return a_val
+            #TODO
+        return
 
-    def Q(s, a_val, x, a): #TODO change the signature of the function according to your question
+    def Q(s,v,v_val): #TODO change the signature of the function according to your question
         '''
         Small question description.
 
@@ -89,12 +89,12 @@ class QA_constraint(QAGen):
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        expression_q = log(a_val*x)**2
-        question1 = seqg('Can you integrate this:', expression_q, '?')
-        q = choiceg(question1)
+        q1= seqg('Find the box (without a top) with the smallest surface area for a fixed volume ', Eq(v,v_val), '.')
+        q2= seqg('If you have a fixed volume ', Eq(v, v_val), ', then find the box with the smallest surface area.')
+        q = choiceg(q1, q2)
         return q
 
-    def A(s,not_consistent,consistent): #TODO change the signature of the function according to your answer
+    def A(s,v, v_val): #TODO change the signature of the function according to your answer
         '''
         Small answer description.
 
@@ -111,10 +111,12 @@ class QA_constraint(QAGen):
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        expression_q= log(a_val*x)**2
-        expression_ans =  Eq(Integral(log(a_val*x)**2, x), Integral(log(a_val*x)**2, x).doit() )      
-        ans1 = seqg(expression_ans)
-        a = choiceg(ans1)
+        length= 2**(1/3)*v_val**(1/3)
+        width= 2**(-2/3)*v_val**(1/3)
+        sa= 3*2**(2/3)*v_val**(2/3)
+        permutable_part=perg(seqg(' a length of ', length), seqg(' a width of ', width), seqg(' a surface area of ', sa))
+        a1= seqg('The optimal box with a fixed volume of ', Eq(v, v_val), 'has ', permutable_part, '.')
+        a = choiceg(a1)
         return a
 
     ##
