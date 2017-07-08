@@ -47,10 +47,12 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            l, a = symbols('a')
+            l = symbols('l')
+            l_val = 1
         else:
-            l, a = get_symbols(2)
-        return l
+            l = get_symbols(1)
+            l_val = np.random.randint(100)
+        return l, l_val
 
     def init_qa_variables(self):
         '''
@@ -68,12 +70,12 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            a_val = 1
+            
         else:
-            a_val=np.random.randint(100)
-        return a_val
+            
+        return 
 
-    def Q(s,l_val,l): #TODO change the signature of the function according to your question
+    def Q(s,l,l_val): #TODO change the signature of the function according to your question
         '''
         Small question description.
 
@@ -94,7 +96,7 @@ class QA_constraint(QAGen):
         q = choiceg(q1, q2)
         return q
 
-    def A(s,l_val,consistent): #TODO change the signature of the function according to your answer
+    def A(s,l,l_val): #TODO change the signature of the function according to your answer
         '''
         Small answer description.
 
