@@ -94,7 +94,7 @@ class QA_constraint(QAGen):
         q = choiceg(question1)
         return q
 
-    def A(s,not_consistent,consistent): #TODO change the signature of the function according to your answer
+    def A(s,a_val,x,a): #TODO change the signature of the function according to your answer
         '''
         Small answer description.
 
