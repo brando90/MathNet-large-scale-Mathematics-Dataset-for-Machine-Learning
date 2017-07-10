@@ -88,7 +88,7 @@ class QA_constraint(QAGen):
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
 
         if direction == 'left' or direction == 'right':
-            phrase = 'to the'
+            phrase = 'to the '
         else:
             phrase = ''
 
@@ -123,7 +123,7 @@ class QA_constraint(QAGen):
         potential = (k_val * 10**-6)/(q_val* 10**-9)
         answer1 = seqg('The electric potential is equal to', potential, 'V.')
         answer2 = seqg('The electric potential of the particle at its starting point with respect to its endpoint is', potential, 'V.')
-        answer3 = seqg('''The eletric potential of the particle's starting point with respect to its endpoint is''', potential, 'V.')
+        answer3 = seqg('''The electric potential of the particle's starting point with respect to its endpoint is''', potential, 'V.')
         a = choiceg(answer1, answer2, answer3)
         return a
 
@@ -205,10 +205,5 @@ def check_many_to_one_consistent_format(qagenerator):
 if __name__ == '__main__':
     qagenerator = QA_constraint()
     check_single_question(qagenerator)
-    ## uncomment the following to check formats:
-    #check_mc(qagenerator)
-    #check_many_to_one(qagenerator)
-    #check_one_to_many(qagenerator)
-    #check_many_to_one_consistent_format(qagenerator)
-    ## run unit test given by framework
-    user_test.run_unit_test_for_user(QA_constraint)
+
+    #user_test.run_unit_test_for_user(QA_constraint)
