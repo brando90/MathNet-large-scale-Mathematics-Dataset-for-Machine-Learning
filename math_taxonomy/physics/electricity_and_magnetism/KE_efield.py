@@ -17,7 +17,7 @@ class QA_constraint(QAGen):
         self.description = '''A particle with a charge of 2 nC is in a uniform electric field directed to the left. It is released from rest and moves to the left. After it has moved 5 cm, its kinetic energy is found to be 4*10^-6 J. What is the electric potential of the particle's starting point with respect to its endpoint?'''
 
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['physics', 'electricity and magnetism', 'electric field', 'kinetic energy', 'potential']
+        self.keywords = ['physics', 'electricity and magnetism', 'electric field', 'potential']
         self.use_latex = True
 
     def seed_all(self,seed):
