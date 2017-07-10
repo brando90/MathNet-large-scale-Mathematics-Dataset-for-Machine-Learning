@@ -76,7 +76,6 @@ class QA_constraint(QAGen):
         by the consistent ones. See sample QA example if you need too.
         """
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        s.use_latex = True
         question1 = seqg('Find the angle between the 2-d vectors {0} = ({1}, {2}) and {3} = ({4}, {5})'.format(v, a_val, b_val, u, c_val, d_val))
         q = choiceg(question1)
         return q
@@ -89,7 +88,6 @@ class QA_constraint(QAGen):
         """
         # define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        s.use_latex = True
         dot = a_val * c_val + b_val * d_val
         mag_v, mag_u = (a_val**2 + b_val**2)**.5, (c_val**2 + d_val**2)**.5
         cos_angle = dot/(mag_v * mag_u)

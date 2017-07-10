@@ -17,7 +17,7 @@ class QA_constraint(QAGen):
 
         super().__init__()
         self.author = 'Ivan Jutamulia'
-        self.description = '''Find the second order Taylor expansion of the function x^{3} y^{4} around the point (x,y)'''
+        self.description = '''Let C be the curve parametrized by x(t), y(t) = (cost, sint) from 0 to pi. Find the arc length of C using an integral with respect to t.'''
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['multivariable calculus']
         self.use_latex = True
@@ -45,11 +45,10 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            x, y, h, k = symbols('x y h k')
+            x, y, t = symbols('x y t')
         else:
-            x, y = self.get_symbols(2)
-            h, k = symbols('h k')
-        return x, y, h, k
+            x, y, t = self.get_symbols(3)
+        return x, y, t
 
     def init_qa_variables(self):
         """
@@ -65,24 +64,27 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            a_val, b_val = 3, 4
+            a, b = 0, pi
         else:
-            a_val, b_val = np.random.randint(1, 99, [2])
-        return a_val, b_val
+            a, b = np.random.randint(-100, 100, [2])
+        return a, b
 
-    def Q(s, a_val, b_val, x, y, h, k):
+    def Q(s, a, b, x, y, t):
         """
         Small question description.
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         """
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        expression = x**a_val * y**b_val
-        question1 = seqg('Find the second order Taylor expansion of the function', expression, 'around the point (x,y)')
-        q = choiceg(question1)
+        given = seqg('Let C be the curve parametrized by {0}({1}), {2}({3}) = (cos{4}, sin{5}) from {6} to {7}.'.format(x, t, y, t, t, t, a, b))
+        calc = seqg('Find the arc length of C using an integral with respect to {0}.'.format(t))
+        ask = seqg('Using an integral with respect to {0}, what is the arc length of C?'.format(t))
+        question1 = seqg(given, calc)
+        question2 = seqg(given, ask)
+        q = choiceg(question1, question2)
         return q
 
-    def A(s, a_val, b_val, x, y, h, k):
+    def A(s, a, b, x, y, t):
         """
         Small answer description.
         Important Note: first variables are the not consistent variables followed
@@ -90,15 +92,12 @@ class QA_constraint(QAGen):
         """
         # define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        expression = x**a_val * y**b_val
-        partial_x = expression.diff(x)
-        partial_y = expression.diff(y)
-        partial_xx = partial_x.diff(x)
-        partial_xy = partial_x.diff(y)
-        partial_yy = partial_y.diff(y)
-        answer = expression + partial_x * h + partial_y * k + .5 * partial_xx * h**2 + partial_xy * h * k + .5 * partial_yy * k**2
-        answer1 = seqg(answer, 'is the second order Taylor expansion of the function', expression, 'around the point (x,y)')
-        a = choiceg(answer1)
+        dx, dy = diff(cos(t), t), diff(sin(t), t)
+        expression = sqrt(dx**2 + dy**2)
+        length = integrate(expression, (t, a, b))
+        answer1 = seqg('The arc length of C from {0} to {1} is {2}.'.format(a, b, length))
+        answer2 = seqg('{0} is the arc length of C from {1} to {2}.'.format(length, a, b))
+        a = choiceg(answer1, answer2)
         return a
 
     ##

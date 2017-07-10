@@ -16,7 +16,7 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'Skylar Brooks' #TODO your full name
-        self.description = 'Integrate log(x**2)' #TODO example string of your question
+        self.description = 'Integrate log(2*x)**2' #TODO example string of your question
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['single variable calculus'] #TODO keywords to search type of question
         self.use_latex = True
@@ -47,10 +47,10 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            x = symbols('x')
+            x, a = symbols('x a')
         else:
-            x = get_symbols(1)
-        return x
+            x, a = get_symbols(2)
+        return x, a
 
     def init_qa_variables(self):
         '''
@@ -68,12 +68,12 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            #TODO
+            a_val = 2
         else:
-            #TODO
-        return
+            a_val = np.random.randint(100)
+        return a_val
 
-    def Q(s, x): #TODO change the signature of the function according to your question
+    def Q(s, a_val, x, a): #TODO change the signature of the function according to your question
         '''
         Small question description.
 
@@ -89,12 +89,12 @@ class QA_constraint(QAGen):
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        expression_q = log(x)**2
+        expression_q = log(a_val*x)**2
         question1 = seqg('Can you integrate this:', expression_q, '?')
         q = choiceg(question1)
         return q
 
-    def A(s,not_consistent,consistent): #TODO change the signature of the function according to your answer
+    def A(s,a_val,x,a): #TODO change the signature of the function according to your answer
         '''
         Small answer description.
 
@@ -111,7 +111,8 @@ class QA_constraint(QAGen):
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        expression_ans =  Eq(Integral(log(x)**2, x), Integral(log(x)**2, x).doit() )      
+        expression_q= log(a_val*x)**2
+        expression_ans =  Eq(Integral(log(a_val*x)**2, x), Integral(log(a_val*x)**2, x).doit() )      
         ans1 = seqg(expression_ans)
         a = choiceg(ans1)
         return a

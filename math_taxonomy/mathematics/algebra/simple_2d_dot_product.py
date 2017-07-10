@@ -76,7 +76,6 @@ class QA_constraint(QAGen):
         by the consistent ones. See sample QA example if you need too.
         """
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        s.use_latex = True
         question1 = seqg('Find the dot product of the 2-d vectors {0} = ({1}, {2}) and {3} = ({4}, {5})'.format(v, a_val, b_val, u, c_val, d_val))
         q = choiceg(question1)
         return q
@@ -89,7 +88,6 @@ class QA_constraint(QAGen):
         """
         # define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        s.use_latex = True
         answer = a_val * c_val + b_val * d_val
         answer1 = seqg(answer, 'is the dot product of the 2-d vectors {0} = ({1}, {2}) and {3} = ({4}, {5})'.format(v, a_val, b_val, u, c_val, d_val))
         a = choiceg(answer1)

@@ -1,112 +1,130 @@
 from sympy import *
 import random
 import numpy as np
-import pdb
 
-from qagen.qagen import *
+from qagen import *
 from qagen import utils
 from qagen import unit_test_for_user as user_test
 
+# TODO: You can also put your quesiton example here
 
 class QA_constraint(QAGen):
 
     def __init__(self):
-        """
+        '''
         Initializer for your QA question.
-        """
-
+        '''
         super().__init__()
-        self.author = 'Ivan Jutamulia'
-        self.description = '''Find the second order Taylor expansion of the function x^{3} y^{4} around the point (x,y)'''
+        self.author = 'Skylar Brooks' #TODO your full name
+        self.description = 'Find the box (without a top) with a fixed volume v=100' #TODO example string of your question
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['multivariable calculus']
+        self.keywords = ['word problem', 'optimization'] #TODO keywords to search type of question
         self.use_latex = True
 
-    def seed_all(self, seed):
-        """
+    def seed_all(self,seed):
+        '''
         Write the seeding functions of the libraries that you are using.
         Its important to seed all the libraries you are using because the
         framework will assume it can seed stuff for you. It needs this for
         the library to work.
-        """
+        '''
         random.seed(seed)
         np.random.seed(seed)
-        self.fake.random.seed(seed)
+        fake.random.seed(seed)
+        # TODO write more seeding libraries that you are using
 
     def init_consistent_qa_variables(self):
         """
         Defines and returns all the variables that need to be consistent
         between a question and an answer. Usually only names and variable/symbol
         names.
+
         Example: when generating MC questions the non consistent variables will
         be used to generate other options. However, the names, symbols, etc
         should remain consistent otherwise some answers will be obviously fake.
+
         Note: debug flag can be used to deterministically output a QA that has
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            x, y, h, k = symbols('x y h k')
+            v= symbols('v')
         else:
-            x, y = self.get_symbols(2)
-            h, k = symbols('h k')
-        return x, y, h, k
+            v= get_symbols(1)
+        return
 
     def init_qa_variables(self):
-        """
+        '''
         Defines and returns all the variables that can vary between a
         question and an answer. Good examples are numerical values that might
         make the answers not obviously wrong.
+
         Example: when generating MC questions the non consistent variables will
         be used to generate other options. However, the names, symbols, etc
         should remain consistent otherwise some answers will be obviously fake.
         Numerical values that have been fully evaluated are a good example of
         how multiple choice answers can be generated.
+
         Note: debug flag can be used to deterministically output a QA that has
         simple numbers to check the correctness of your QA.
-        """
+        '''
         if self.debug:
-            a_val, b_val = 3, 4
+            #TODO
         else:
-            a_val, b_val = np.random.randint(1, 99, [2])
-        return a_val, b_val
+            #TODO
+        return
 
-    def Q(s, a_val, b_val, x, y, h, k):
-        """
+    def Q(s,v,v_val): #TODO change the signature of the function according to your question
+        '''
         Small question description.
+
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
-        """
+        '''
+        #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        expression = x**a_val * y**b_val
-        question1 = seqg('Find the second order Taylor expansion of the function', expression, 'around the point (x,y)')
-        q = choiceg(question1)
+        # TODO
+        #q_format1
+        #q_format2
+        #...
+        # choices, try providing a few
+        # these van include variations that are hard to encode with permg or variable substitution
+        # example, NL variations or equaiton variations
+        q1= seqg('Find the box (without a top) with the smallest surface area for a fixed volume ', Eq(v,v_val), '.')
+        q2= seqg('If you have a fixed volume ', Eq(v, v_val), ', then find the box with the smallest surface area.')
+        q = choiceg(q1, q2)
         return q
 
-    def A(s, a_val, b_val, x, y, h, k):
-        """
+    def A(s,v, v_val): #TODO change the signature of the function according to your answer
+        '''
         Small answer description.
+
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
-        """
-        # define some short cuts
+        '''
+        #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        expression = x**a_val * y**b_val
-        partial_x = expression.diff(x)
-        partial_y = expression.diff(y)
-        partial_xx = partial_x.diff(x)
-        partial_xy = partial_x.diff(y)
-        partial_yy = partial_y.diff(y)
-        answer = expression + partial_x * h + partial_y * k + .5 * partial_xx * h**2 + partial_xy * h * k + .5 * partial_yy * k**2
-        answer1 = seqg(answer, 'is the second order Taylor expansion of the function', expression, 'around the point (x,y)')
-        a = choiceg(answer1)
+        # TODO
+        #ans_sympy
+        #ans_numerical
+        #ans_vnl_vsympy1
+        #ans_vnl_vsympy2
+        # choices, try providing a few
+        # these van include variations that are hard to encode with permg or variable substitution
+        # example, NL variations or equaiton variations
+        length= 2**(1/3)*v_val**(1/3)
+        width= 2**(-2/3)*v_val**(1/3)
+        sa= 3*2**(2/3)*v_val**(2/3)
+        permutable_part=perg(seqg(' a length of ', length), seqg(' a width of ', width), seqg(' a surface area of ', sa))
+        a1= seqg('The optimal box with a fixed volume of ', Eq(v, v_val), 'has ', permutable_part, '.')
+        a = choiceg(a1)
         return a
 
     ##
 
     def get_qa(self,seed):
-        """
+        '''
         Example of how Q,A are formed in general.
-        """
+        '''
         # set seed
         self.seed_all(seed)
         # get variables for qa and register them for the current q,a
@@ -116,9 +134,9 @@ class QA_constraint(QAGen):
         a_str = self.A(*variables,*variables_consistent)
         return q_str, a_str
 
+## Some helper functions to check the formats are coming out correctly
 
-# Some helper functions to check the formats are coming out correctly
-
+##
 
 def check_single_question_debug(qagenerator):
     '''
@@ -130,7 +148,6 @@ def check_single_question_debug(qagenerator):
     print('q: ', q)
     print('a: ', a)
 
-
 def check_single_question(qagenerator):
     '''
     Checks by printing a single quesiton on debug mode
@@ -139,7 +156,6 @@ def check_single_question(qagenerator):
     print('qagenerator.debug = ', qagenerator.debug)
     print('q: ', q)
     print('a: ', a)
-
 
 def check_mc(qagenerator):
     '''
@@ -154,7 +170,6 @@ def check_mc(qagenerator):
         print('-answers:')
         print("\n".join(ans_list))
 
-
 def check_many_to_many(qagenerator):
     for seed in range(3):
         q,a = qagenerator.generate_many_to_many(nb_questions=4,nb_answers=3,seed=seed)
@@ -162,7 +177,6 @@ def check_many_to_many(qagenerator):
         print("\n".join(q))
         print('-answers:')
         print("\n".join(a))
-
 
 def check_many_to_one_consis(qagenerator):
     for seed in range(3):
@@ -172,7 +186,6 @@ def check_many_to_one_consis(qagenerator):
         print('a: ', a)
         #print("\n".join(a))
 
-
 def check_many_to_one_consistent_format(qagenerator):
     nb_qa_pairs,nb_questions = 10,3
     qa_pair_list = qagenerator.generate_many_to_one_consistent_format(nb_qa_pairs,nb_questions)
@@ -181,9 +194,13 @@ def check_many_to_one_consistent_format(qagenerator):
         print("\n".join(q_list))
         print('a: ', a_consistent_format)
 
-
 if __name__ == '__main__':
     qagenerator = QA_constraint()
-    check_single_question_debug(qagenerator)
-    # user_test.run_unit_test_for_user(QA_constraint)
-
+    check_single_question(qagenerator)
+    ## uncomment the following to check formats:
+    #check_mc(qagenerator)
+    #check_many_to_one(qagenerator)
+    #check_one_to_many(qagenerator)
+    #check_many_to_one_consistent_format(qagenerator)
+    ## run unit test given by framework
+    user_test.run_unit_test_for_user(QA_constraint)
