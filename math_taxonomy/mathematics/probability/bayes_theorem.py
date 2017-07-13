@@ -113,8 +113,8 @@ class QA_constraint(QAGen):
         # TODO
         #ans_sympy
         ans_numerical = (true_pos*cancer_prob)/(true_pos*cancer_prob+false_pos*no_cancer)
-        ans_vnl_vsympy1 = seqg("If the test reads positive, the probability of the patient having "+Cancer+" is {0}.".format(str(ans_numerical))
-        #ans_vnl_vsympy2
+        ans_vnl_vsympy1 = seqg("If the test reads positive, the probability of the patient having "+Cancer+" is {0}.".format(str(ans_numerical)))
+        ans_vnl_vsympy2 = seqg("The probability of "+Cancer+" is {0}.".format(str(ans_numerical)))
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
