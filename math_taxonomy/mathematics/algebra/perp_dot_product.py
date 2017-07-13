@@ -76,6 +76,7 @@ class QA_constraint(QAGen):
         by the consistent ones. See sample QA example if you need too.
         """
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
+        s.use_latex = True
         question1 = seqg('Are the 2-d vectors {0} = ({1}, {2}) and {3} = ({4}, {5}) perpendicular to each other?'.format(v, a_val, b_val, u, c_val, d_val))
         q = choiceg(question1)
         return q
@@ -88,6 +89,7 @@ class QA_constraint(QAGen):
         """
         # define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
+        s.use_latex = True
         dot = a_val * c_val + b_val * d_val
         if dot == 0:
             answer1 = seqg('Yes the vectors {0} = ({1}, {2}) and {3} = ({4}, {5}) are perpendicular to each other.'.format(v, a_val, b_val, u, c_val, d_val))

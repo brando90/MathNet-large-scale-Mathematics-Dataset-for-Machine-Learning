@@ -78,6 +78,7 @@ class QA_constraint(QAGen):
         by the consistent ones. See sample QA example if you need too.
         """
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
+        s.use_latex = True
         expression = x**a_val + b_val * x + c_val
         question1 = perg('Integrate the expression with respect to {0}.'.format(x), expression)
         question2 = perg('What is the integral of the expression with respect to {0}?'.format(x), expression)
@@ -92,6 +93,7 @@ class QA_constraint(QAGen):
         """
         # define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
+        s.use_latex = True
         expression = x**a_val + b_val * x + c_val
         answer = expression.integrate(x)
         answer1 = seqg(answer, 'is the integral of', expression, 'with respect to x')
@@ -182,6 +184,9 @@ def check_many_to_one_consistent_format(qagenerator):
 
 if __name__ == '__main__':
     qagenerator = QA_constraint()
-    check_single_question_debug(qagenerator)
+    print(qagenerator.get_single_qa(None))
+
+    # check_single_question_debug(qagenerator)
+
     # user_test.run_unit_test_for_user(QA_constraint)
 
