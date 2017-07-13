@@ -16,9 +16,9 @@ def make_qa_to_data_set(path_to_qa, number_examples,qa_format_type, nb_questions
     # also there should not be a infinit loop if it keeps trying to generate
     # unique examples CHECK THIS.
     taxonomy_base = os.path.abspath('../math_taxonomy/')
-    classes = utils.get_classes(os.path.join(taxonomy_base, path_to_qa))
+    classes = utils.get_classes(os.path.join(taxonomy_base, path_to_qa))#get classes declared in file
     qa = classes[0]
-    qa = qa()
+    qa = qa()#make instance of class
     dataset = []
     for n in range(number_examples):
         #try:
