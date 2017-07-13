@@ -183,4 +183,4 @@ def check_many_to_one_consistent_format(qagenerator):
 if __name__ == '__main__':
     qagenerator = QA_constraint()
     check_single_question(qagenerator)
-    user_test.run_unit_test_for_user(QA_constraint)
+    #user_test.run_unit_test_for_user(QA_constraint)
