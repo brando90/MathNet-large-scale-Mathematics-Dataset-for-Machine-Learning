@@ -91,9 +91,13 @@ class QA_constraint(QAGen):
         perm1 = seqg('A person has'+Cancer+' with probability '+cancer_prob+', and does not have Cancer with probability '+no_cancer+'. ')
         perm2 = seqg('The test reads a true positive with probability '+true_pos+'. ')
         perm3 = seqg('The test incorrectly reads positive with probability '+false_pos+'. ')
+        perm4 = seqg('The test reads a false positive with probabiliy '+false_pos+'. ')
         q_end = seqg('What is the probability of the patient having '+Cancer+'if the test reads positive?')
-        permutable_part= perg(perm1,perm2,perm3)
-        q_format1 = seqg(q_start,permutable_part,q_end)
+        q_end2 - seqg(' If the test comes back positive, What is the likelihood the patient actually has '+Cancer+'? ')
+        false_pos_perm = choiceg(perm3,perm4)
+        end_perm = choiceg(q_end,q_end2)
+        permutable_part= perg(perm1,perm2,false_pos_perm)
+        q_format1 = seqg(q_start,permutable_part,end_perm)
         #q_format2
         #...
         # choices, try providing a few
@@ -113,8 +117,8 @@ class QA_constraint(QAGen):
         # TODO
         #ans_sympy
         ans_numerical = (true_pos*cancer_prob)/(true_pos*cancer_prob+false_pos*no_cancer)
-        ans_vnl_vsympy1 = seqg("If the test reads positive, the probability of the patient having "+Cancer+" is {0}.".format(str(ans_numerical))
-        #ans_vnl_vsympy2
+        ans_vnl_vsympy1 = seqg("If the test reads positive, the probability of the patient having "+Cancer+" is {0}.".format(str(ans_numerical)))
+        ans_vnl_vsympy2 = seqg("The probability of "+Cancer+" is {0}.".format(str(ans_numerical)))
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations

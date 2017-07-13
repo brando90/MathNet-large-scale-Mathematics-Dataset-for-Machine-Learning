@@ -76,6 +76,7 @@ class QA_constraint(QAGen):
         by the consistent ones. See sample QA example if you need too.
         """
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
+        s.use_latex = True
         expression = x**a + y**b + z**c
         given = seqg('Let V be the volume defined by [{0}, {1}] x [{2}, {3}] x [{4}, {5}] in the x, y, z coordinate system.'.format(a_val, b_val, c_val, d_val, e_val, f_val))
         calc = seqg('Calculate the integral of the function', expression, 'over the volume V.')
@@ -95,6 +96,7 @@ class QA_constraint(QAGen):
         """
         # define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
+        s.use_latex = True
         expression = x**a + y**b + z**c
         answer = integrate(expression, (x, a_val, b_val), (y, c_val, d_val), (z, e_val, f_val))
         answer1 = seqg('The value of the integral over the volume V is {0}.'.format(answer))

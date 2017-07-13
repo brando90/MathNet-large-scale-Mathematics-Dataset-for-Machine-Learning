@@ -17,7 +17,7 @@ class QA_constraint(QAGen):
 
         super().__init__()
         self.author = 'Ivan Jutamulia'
-        self.description = '''Differentiate the expression with respect to y. x^{3} y^{4} + x y^{0.5} z + x y + z^{2}'''
+        self.description = '''Let R be the rectangle [4, 11] x [5, 8]. Let the function f = y. Compute the line integral around the boundary of R of f with respect to x using Greens Theorem.'''
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['multivariable calculus']
         self.use_latex = True
@@ -45,10 +45,10 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            x, y, z = symbols('x y z')
+            x, y = symbols('x y')
         else:
-            x, y, z = self.get_symbols(3)
-        return x, y, z
+            x, y = self.get_symbols(2)
+        return x, y
 
     def init_qa_variables(self):
         """
@@ -64,38 +64,42 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            a_val, b_val, c_val, d_val = 3, 4, 1/2, 2
+            a, b, c, d = 4, 11, 5, 8
         else:
-            a_val, b_val, c_val, d_val = np.random.randint(1, 99, [4])
-        return a_val, b_val, c_val, d_val
+            a, b, c, d = np.random.randint(-100, 100, [4])
+        return a, b, c, d
 
-    def Q(s, a_val, b_val, c_val, d_val, x, y, z):
+    def Q(s, a, b, c, d, x, y):
         """
         Small question description.
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         """
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        s.use_latex = True
-        expression = x**a_val * y**b_val + x * y + y**c_val * x * z + z**d_val
-        question1 = perg('Differentiate the expression with respect to {0}.'.format(y), expression)
-        question2 = perg('What is the derivative of the expression with respect to {0}?'.format(y), expression)
+        given1 = seqg('Let R be the rectangle [{0}, {1}] x [{2}, {3}].'.format(a, b, c, d))
+        given2 = seqg('Let the function f = {0}.'.format(y))
+        ask = seqg('Using Greens Theorem, what is the value of the line integral around the boundary of R of f with respect to {0}?'.format(x))
+        calc = seqg('Compute the line integral around the boundary of R of f with respect to {0} using Greens Theorem.'.format(x))
+        givens = perg(given1, given2)
+        question1 = seqg(givens, calc)
+        question2 = seqg(givens, ask)
         q = choiceg(question1, question2)
         return q
 
-    def A(s, a_val, b_val, c_val, d_val, x, y, z):
+    def A(s, a, b, c, d, x, y):
         """
         Small answer description.
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         """
-        #define some short cuts
+        # define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        s.use_latex = True
-        expression = x ** a_val * y ** b_val + x * y + y ** c_val * x * z + z ** d_val
-        answer = expression.diff(y)
-        answer1 = seqg(answer, 'is the derivative of', expression, 'with respect to y')
-        answer2 = seqg(expression, 'differentiated with respect to y is', answer)
+
+        function = y
+        p_y, q_x = diff(function, y), diff(function, x)
+        integral = integrate(-p_y + q_x, (x, a, b), (y, c, d))
+        answer1 = seqg('The value of the line integral with respect to {0} is {1}.'.format(x, integral))
+        answer2 = seqg('{0} is the value of the line integral with respect to {1}.'.format(integral, x))
         a = choiceg(answer1, answer2)
         return a
 
@@ -182,9 +186,7 @@ def check_many_to_one_consistent_format(qagenerator):
 
 if __name__ == '__main__':
     qagenerator = QA_constraint()
-    print(qagenerator.get_single_qa(None))
-
-    # check_single_question_debug(qagenerator)
-
+    check_single_question_debug(qagenerator)
     # user_test.run_unit_test_for_user(QA_constraint)
+
 
