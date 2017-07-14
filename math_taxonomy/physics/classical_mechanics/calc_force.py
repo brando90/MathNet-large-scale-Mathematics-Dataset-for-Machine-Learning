@@ -16,9 +16,9 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'Elaheh Ahmadi' #TODO your full name
-        self.description = 'Find the dot product of the two given vectors V = [0,1] and U = [2, 3].' #TODO example string of your question
+        self.description = "Calculating a total force applied to a mass given its acceleration and mass"  #TODO example string of your question
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['Geometry', 'Vectors', 'Multi variable calculus'] #TODO keywords to search type of question
+        self.keywords = [''] #TODO keywords to search type of question
         self.use_latex = True
 
     def seed_all(self,seed):
@@ -47,12 +47,10 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            U, V = symbols ('U V')
+            m, a = symbols('m a')
         else:
-            U, V = self.get_symbols(2)
-        return U, V
-
-################# Edit from here
+            m, a = self.get_symbols(2)
+        return m, a
 
     def init_qa_variables(self):
         '''
@@ -70,17 +68,15 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            V_val , U_val = np.array([0,2]), np.array([2,0])
+            m_val, a_val = 1, 2
         else:
-            dim = np.random.randint(2,100)
-            V_val = np.random.randint(-1000,1000,dim)
-            U_val = np.random.randint(-1000,1000,dim)
-        return V_val, U_val
+            dim = np.random.randint(1,100)
+            m_val, a_val = round(np.random.randint(1,1000000)/100,1), round(np.random.randint(-1000000, 1000000, dim)/100,1)
+        return m_val, a_val
 
-    def Q(s, V, U, V_val, U_val): #TODO change the signature of the function according to your question
-        # type: (object, object, object, object) -> object
+    def Q(s,m_val, a_val, m, a): #TODO change the signature of the function according to your question
         '''
-        Finding the dot product between two vectors.
+        Finding the force applied to a mass given its acceleration and mass.
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
@@ -88,35 +84,68 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         # TODO
-        question_1 = seqg("Find the dot product of two vectors ", Eq(V,V_val), " and ", Eq(U, U_val),'.')
+        question_1 =  ('Find the force applied to a mass with the mass ', Eq(m, m_val), " (kg) with acceleration ",
+                       Eq(a, a_val), " (m/s^2).")
+        question_2 = ('There is a mass floating in a multi dimensional world with the mass ',
+                      Eq(m, m_val), "(kg). We observed that its acceleration is, ", Eq(a, a_val),
+                      " (m/s^2). Find the total force applied to it given these information.")
+        question_3 = ('What is the total force applied to a mass with acceleration ', Eq(a, a_val),
+                      " (m/s^2) and the mass of", Eq(m, m_val), " (kg).")
+        question_4 = ('Given the fact that total force applied to a mass is its acceleration times its mass,'
+                      ' find the total forced applied to a mass with mass', Eq(m, m_val), "(kg), and acceleration ",
+                      Eq(a, a_val), " (m/s^2).")
+        question_5 = ('A spaceship is wondering around in a multi dimensional world. The captain wants to know to total'
+                      ' mass that is beeing applied to the spaceship to be able to control it. There are a lot physicist '
+                      'and mathematicians on the spaceship. They calculate the total mass of the ship to be ',
+                      Eq(m, m_val), "(kg), and its acceleration in the world to be, ", Eq(a, a_val),
+                      "(m/s^2). Help the captain with contrlong the ship by finding the total mass applied to the ship.")
+        # question_6 = (
+        # 'Find the force applied to a mass with the mass ', Eq(m, m_val), " (Lb) with acceleration ", Eq(a, a_val),
+        # " (mile/s^2).")
+        # question_7 = ('There is a mass floating in a multi dimensional world with the mass ', Eq(m, m_val),
+        #               "(Lb). We observed that its acceleration is, ", Eq(a, a_val),
+        #               " (mile/s^2). Find the total force applied to it given these information.")
+        # question_8 = (
+        # 'What is the total force applied to a mass with acceleration ', Eq(a, a_val), " (mile/s^2) and the mass of",
+        # Eq(m, m_val), " (Lb).")
+        # question_9 = (
+        # 'Given the fact that total force applied to a mass is its acceleration times its mass, find the total forced'
+        # ' applied to a mass with mass', Eq(m, m_val), "(Lb), and acceleration ", Eq(a, a_val), " (mile/s^2).")
+        # question_10 = (
+        # 'A spaceship is wondering around in a multi dimensional world. The captain wants to know to total mass that is'
+        # ' beeing applied to the spaceship to be able to control it. There are a lot physicist and mathematicians on the'
+        # ' spaceship. They calculate the total mass of the ship to be ',
+        # Eq(m, m_val), "(Lb), and its acceleration in the world to be, ", Eq(a, a_val),
+        # "(mile/s^2). Help the captain with contrlong the ship by finding the total mass applied to the ship.")
 
-        #q_format2
-        #...
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        q = choiceg(question_1)
+        q = choiceg(question_1, question_2, question_3, question_4, question_5)
+        # , question_6, question_7, question_8,
+        #         question_9, question_10)
         return q
 
-    def A(s, U_val, V_val, U, V): #TODO change the signature of the function according to your answer
+    def A(s,m_val, a_val, m, a): #TODO change the signature of the function according to your answer
         '''
-        Dot_product = V.U
+        The answer is F = m*a
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        dot_product = np.dot(U_val,V_val)
-        answer_1 = seqg("The dot product of two vectors, ", Eq(U,U_val), " and ", Eq(V, V_val), "is ", dot_product, ".")
-
+        ans_val = m_val*a_val
+        answer_1 = seqg("The total force is", ans_val," (N).")
+        answer_2 = seqg("After multiplying mass and accelertion the total force applied to the mass is: ", ans_val,"(N).")
+        #ans_sympy
         #ans_numerical
         #ans_vnl_vsympy1
         #ans_vnl_vsympy2
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        a = choiceg(answer_1)
+        a = choiceg(answer_1, answer_2)
         return a
 
     ##
