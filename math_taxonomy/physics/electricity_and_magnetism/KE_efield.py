@@ -191,7 +191,7 @@ def check_many_to_one_consis(qagenerator):
         print()
         q,a = qagenerator.generate_many_to_one(nb_questions=5,seed=seed)
         print("\n".join(q))
-        print('a: ', a)3
+        print('a: ', a)
         #print("\n".join(a))
 
 def check_many_to_one_consistent_format(qagenerator):
