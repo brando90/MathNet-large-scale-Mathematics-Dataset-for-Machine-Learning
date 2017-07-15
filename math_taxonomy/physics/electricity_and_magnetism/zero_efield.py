@@ -17,7 +17,7 @@ class QA_constraint(QAGen):
         self.description = 'In a certain region of space, the electric potential is V(x,y,z) = axy + bx^5 + cy, where a = 2 b = 3 c = 4 . Find the x, y, and z values where the electric field is zero.'
 
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['physics', 'electricity and magnetism', 'electric field', 'potential']
+        self.keywords = ['physics', 'electricity and magnetism', 'magnetic field']
         self.use_latex = True
 
     def seed_all(self,seed):
@@ -69,7 +69,7 @@ class QA_constraint(QAGen):
             b_val = np.random.randint(1,100)
             c_val = np.random.randint(1,100)
             exp = np.random.randint(2,10)
-            order_val = np.random.randint(1,6)
+            order_val = np.random.randint(0,5)
 
         return a_val,b_val, c_val, exp, order_val
 
