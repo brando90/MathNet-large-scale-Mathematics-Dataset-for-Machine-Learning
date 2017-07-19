@@ -136,7 +136,7 @@ class QAOps:
         '''
         # TODO: improve this!
         if self.use_latex:
-            str_symp_var = sympy.latex(sympy_var)
+            str_symp_var = '$%s$' % (sympy.latex(sympy_var),)
         else:
             #str_symp_var = srepr(sympy_var) #TODO why do we have this? it seems to make things be displayed weirdly
             str_symp_var = str(sympy_var)
