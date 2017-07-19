@@ -2,7 +2,7 @@ from sympy import *
 import random
 import numpy as np
 
-from qagen import *
+from qagen.qagen import *
 
 class QA_constraint(QAGen):
 
@@ -137,4 +137,6 @@ def check_many_to_one_consistent_format(qagenerator):
 
 if __name__ == '__main__':
     qagenerator = QA_constraint()
+    qagenerator.debug = True
+    qagenerator.get_single_qa(0)
     check_single_question(qagenerator)
