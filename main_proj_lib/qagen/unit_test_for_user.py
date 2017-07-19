@@ -21,6 +21,7 @@ def run_unit_test_for_user(qa_constructor,*args,user_defined_unit_test=None,**kw
     test_suite.addTest( Test_basic_uses_generators(qa_constructor,arg,kwargs) )
     test_suite.addTest( Test_seed_all_provides_variation(qa_constructor,arg,kwargs) )
     test_suite.addTest( Test_all_funcs_with_seed_are_deterministic(qa_constructor,arg,kwargs) )
+    test_suite.addTest( Test_user_does_not_set_latex_flag_in_Q_or_A(qa_constructor,arg,kwargs) )
     runner.run(test_suite)
 
 class Test_author_and_description_and_keywords(unittest.TestCase):
@@ -116,7 +117,7 @@ class Test_seed_all_provides_variation(unittest.TestCase):
     If this test does not pass it means that framework is not able to generate variation to
     your question for some reason. Usually it means you did not have all 3 seeding
     functions that the template provides.
-    Note: this test checks that the user implemented seed all not ridicuously wrongly. 
+    Note: this test checks that the user implemented seed all not ridicuously wrongly.
     '''
     def __init__(self,qa_constructor,args,kwargs):
         super().__init__()
@@ -153,19 +154,27 @@ class Test_all_funcs_with_seed_are_deterministic(unittest.TestCase):
     def runTest (self):
         # TODO how do I stop hardcoding the tests here, just go over your
         print()
-        qag = self.qa_constructor()
-        seed = 0 # random.randint(0,500)
-        #q_original,a_original = qag.get_single_qa(seed=seed)
-        a,b = qag.get_symbols(2)
-        qag.seed_all(seed)
-        print('a,b: ', a,b)
+        qagenerator = self.qa_constructor()
         #
-        qag = self.qa_constructor()
-        seed = 0 # random.randint(0,500)
-        qag.seed_all(seed)
-        #q_original,a_original = qag.get_single_qa(seed=seed)
-        a,b = qag.get_symbols(2)
-        print('a,b: ', a,b)
+        seed = 0 # random.randint()
+        original_latex_flag = qagenerator.use_latex
+        q_original,a_original = qagenerator.get_single_qa(seed=seed)
+        # the latex flag should still be as original
+        self.assertEqual(original_latex_flag,qagenerator.use_latex)
+        #
+        qagenerator.use_latex = True
+        seed = 1 # random.randint()
+        original_latex_flag = qagenerator.use_latex
+        q_original,a_original = qagenerator.get_single_qa(seed=seed)
+        # the latex flag should still be as original
+        self.assertEqual(original_latex_flag,qagenerator.use_latex)
+        #
+        qagenerator.use_latex = False
+        seed = 2 # random.randint()
+        original_latex_flag = qagenerator.use_latex
+        q_original,a_original = qagenerator.get_single_qa(seed=seed)
+        # the latex flag should still be as original
+        self.assertEqual(original_latex_flag,qagenerator.use_latex)
 
 
     # def runTest (self):
@@ -193,6 +202,26 @@ class Test_all_funcs_with_seed_are_deterministic(unittest.TestCase):
     # def test_keywords(self):
     # TODO
     #     self.assertTrue(len(self.QAFormat.keywords) > 0)
+
+#Test_user_does_not_set_latex_flag_in_Q_or_A
+
+class Test_user_does_not_set_latex_flag_in_Q_or_A(unittest.TestCase):
+    '''
+    Checks that the user is not artificially setting the latex flag within their
+    implementation of Q or A.
+    '''
+
+    def __init__(self,qa_constructor,args,kwargs):
+        super().__init__()
+        self.qa_constructor = qa_constructor
+        self.args = args
+        self.kwargs = kwargs
+
+    def runTest (self):
+        # TODO how do I stop hardcoding the tests here, just go over your
+        print()
+        qag = self.qa_constructor()
+        seed = 0 # random.randint(0,500)
 
 ###
 
