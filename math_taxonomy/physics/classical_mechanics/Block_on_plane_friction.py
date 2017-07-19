@@ -209,4 +209,6 @@ if __name__ == '__main__':
     #check_one_to_many(qagenerator)
     #check_many_to_one_consistent_format(qagenerator)
     ## run unit test given by framework
-    user_test.run_unit_test_for_user(QA_constraint)
+    qagenerator.debug = True
+    qagenerator.get_single_qa(0)
+    #user_test.run_unit_test_for_user(QA_constraint)

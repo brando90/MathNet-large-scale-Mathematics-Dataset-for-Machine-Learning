@@ -189,8 +189,7 @@ class QAGen(QA,QAOps):
         variables, variables_consistent = self._create_all_variables()
         # get concrete qa strings
         q_str = self.Q(*variables,*variables_consistent)
-        #a_str = self.A(*variables,*variables_consistent)
-        a_str = '$\\left[\\begin{matrix}1 & -1\\\\3 & 4\\\\0 & 2\\end{matrix}\\right]$' 
+        a_str = self.A(*variables,*variables_consistent)
         if self.debug:
             '''Start code for latex visualization'''
             rcParams['text.usetex'] = True #use local latex compiler
