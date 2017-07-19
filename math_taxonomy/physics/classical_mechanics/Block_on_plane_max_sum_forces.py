@@ -17,7 +17,8 @@ class QA_constraint(QAGen):
         super().__init__()
         self.author = 'Elaheh Ahmadi' #TODO your full name
         self.description = 'A block sits on a plane that is inclined at an angle theta. Assume that the friction force is ' \
-                           'large enough to keep the block at rest. For what theta horizontal components of friction and normal forces are maximum?'
+                           'large enough to keep the block at rest. What is the maximum sum of horizontal components ' \
+                           'of friction and normal forces?'
 
 
         # keywords about the question that could help to make this more searchable in the future
@@ -74,8 +75,9 @@ class QA_constraint(QAGen):
             g_val, m_val = 10, 30, 1
         else:
             g_val = random.choice([10, 9.8, 9.81, 9.807])
+
             m_val = np.random.randint(1,100000,1)/10
-        return g_val,  , m_val
+        return g_val, m_val
 
     def Q(s, g_val, m_val , g, theta, m): #TODO change the signature of the function according to your question
         '''
@@ -87,6 +89,8 @@ class QA_constraint(QAGen):
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
+
+        friction_force = m*g*np.sin()
         question_1 = seqg('A block sits on a plane that is inclined at an angle', theta,'. Assume '
         'that the friction force is large enough to keep the block at rest. In what ', theta,
                           'the sum of horizontal components of friction force and normal force are maximum?'
@@ -104,7 +108,7 @@ class QA_constraint(QAGen):
         q = choiceg(question_1, question_2, question_3)
         return q
 
-    def A(s, g_val, m_val , g, theta, m): #TODO change the signature of the function according to your answer
+    def A(s, g_val, m_val, g, theta, m): #TODO change the signature of the function according to your answer
         '''
         F_total = m*g*cos(theta)*sin(theta) + m*g*sin(theta)*cos(theta) =  m*g*(sin(2*theta))/2
         For theta = pi/2 the horizontal force would reach its maximum value.
@@ -115,6 +119,15 @@ class QA_constraint(QAGen):
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         pi = np.pi
         char_pi = chr(960)
+        theta_val_rad = round(pi/2,2)
+        theta_val_degree = 45.0
+        theta_val_char = char_pi+'/2'
+        friction_force = round(m_val*g_val*np.sin(theta_val_rad),2)
+        friction_force_horizontal = round(friction_force * np.cos(theta_val_rad), 2)
+        normal_force = round(m_val*g_val*np.cos(theta_val_rad),2)
+        normal_force_horizontal = round(normal_force * np.sin(theta_val_rad),2)
+
+        #### WORK ON THE ANSWERSSSSSSSSSSSSS ######## 
         answer_1 = seqg('The ', theta ,'in which sum of horizontal component of friction force and normal force is '
                                             'maximum is', char_pi,'/2.')
         answer_2 = seqg('The ', theta, ' in which sum of horizontal component of friction force and normal force is '
