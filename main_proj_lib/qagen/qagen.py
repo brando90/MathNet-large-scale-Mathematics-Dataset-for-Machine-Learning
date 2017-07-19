@@ -190,7 +190,7 @@ class QAGen(QA,QAOps):
         # get concrete qa strings
         q_str = self.Q(*variables,*variables_consistent)
         a_str = self.A(*variables,*variables_consistent)
-        if self.debug:
+        if self.latex_visualize:
             '''Start code for latex visualization'''
             rcParams['text.usetex'] = True #use local latex compiler
             rcParams['text.latex.preamble'] = r'\usepackage{amsmath}' #use amsmath package

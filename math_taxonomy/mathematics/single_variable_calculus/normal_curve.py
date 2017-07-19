@@ -130,6 +130,7 @@ class QA_constraint(QAGen):
 
 if __name__ == '__main__':
     qagenerator = QA_constraint()
+    qagenerator.latex_visualize = True
     user_test.run_unit_test_for_user(QA_constraint)
     print(qagenerator.get_single_qa(None))
 
