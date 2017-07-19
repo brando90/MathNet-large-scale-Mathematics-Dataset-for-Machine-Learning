@@ -22,6 +22,7 @@ class QAOps:
         self.names = []
         self.use_latex = True
         self.debug = False
+        self.latex_visualize = False
         self.generator_unit_test = False
         self.fake = Factory.create()
     
@@ -136,7 +137,9 @@ class QAOps:
         '''
         # TODO: improve this!
         if self.use_latex:
-            str_symp_var = '$%s$' % (sympy.latex(sympy_var),)
+            str_symp_var = sympy.latex(sympy_var)
+            if self.latex_visualize:
+                str_symp_var = '$%s$' % (str_symp_var,)
         else:
             #str_symp_var = srepr(sympy_var) #TODO why do we have this? it seems to make things be displayed weirdly
             str_symp_var = str(sympy_var)
