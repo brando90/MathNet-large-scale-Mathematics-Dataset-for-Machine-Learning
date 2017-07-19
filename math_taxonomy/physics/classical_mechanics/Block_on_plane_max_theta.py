@@ -71,13 +71,14 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            g_val, m_val = 10, 30, 1
+            g_val, theta_val, m_val = 10, 30, 1
         else:
             g_val = random.choice([10, 9.8, 9.81, 9.807])
+            theta_val = np.random.randint(0,90)
             m_val = np.random.randint(1,100000,1)/10
-        return g_val,  , m_val
+        return g_val, theta_val, m_val
 
-    def Q(s, g_val, m_val , g, theta, m): #TODO change the signature of the function according to your question
+    def Q(s, g_val, theta_val, m_val , g, theta, m): #TODO change the signature of the function according to your question
         '''
         A block sits on a plane that is inclined at an angle theta. Assume that the friction force is large enough to
         keep the block at rest. What is the horizontal components of the friction.
@@ -87,16 +88,17 @@ class QA_constraint(QAGen):
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        question_1 = seqg('A block sits on a plane that is inclined at an angle', theta,'. Assume '
-        'that the friction force is large enough to keep the block at rest. In what ', theta,
+        char_theta = chr(952)
+        question_1 = seqg('A block sits on a plane that is inclined at an angle', char_theta,'. Assume '
+        'that the friction force is large enough to keep the block at rest. In what ', char_theta,
                           'the sum of horizontal components of friction force and normal force are maximum?'
                           'The object mass is ', Eq(m, m_val), ' (kg) and the gravitational acceleration is,'
                           , Eq(g, g_val), ' (m/s^2).')
-        question_2 = seqg('An object with ', Eq(m, m_val), ' (kg) is sited on a plane that is inclined at an angle', theta,'.'
+        question_2 = seqg('An object with ', Eq(m, m_val), ' (kg) is sited on a plane that is inclined at an angle', char_theta,'.'
                           ' We know that the the friction force is large enough to keep the block at rest. '
-                          'In what ', theta, ' the sum of horizontal components of friction force and normal force are maximum.'
+                          'In what ', char_theta, ' the sum of horizontal components of friction force and normal force are maximum.'
                                                   ' The gravitational acceleration is ', Eq(g, g_val), ' (m/s^2).')
-        question_3 = seqg('There is an object in rest on a plane that is inclined at an angle', theta,'. The mass of the object is'
+        question_3 = seqg('There is an object in rest on a plane that is inclined at an angle', char_theta,'. The mass of the object is'
                           ' ', Eq(m, m_val), ' (kg) What should be the angle of the plane so that the sum of horizontal'
                                              ' components of friction force and normal force maximum. The gravitational '
                                              'acceleration is ,', Eq(g, g_val), ' (m/s^2).')
@@ -104,7 +106,7 @@ class QA_constraint(QAGen):
         q = choiceg(question_1, question_2, question_3)
         return q
 
-    def A(s, g_val, m_val , g, theta, m): #TODO change the signature of the function according to your answer
+    def A(s, g_val, theta_val, m_val , g, theta, m): #TODO change the signature of the function according to your answer
         '''
         F_total = m*g*cos(theta)*sin(theta) + m*g*sin(theta)*cos(theta) =  m*g*(sin(2*theta))/2
         For theta = pi/2 the horizontal force would reach its maximum value.
@@ -114,31 +116,34 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         pi = np.pi
+        char_theta = chr(952)
         char_pi = chr(960)
-        answer_1 = seqg('The ', theta ,'in which sum of horizontal component of friction force and normal force is '
+        theta_radian = (theta_val * pi)/180
+        ans = m_val*g_val*np.cos(theta_radian)
+        answer_1 = seqg('The ', char_theta ,'in which sum of horizontal component of friction force and normal force is '
                                             'maximum is', char_pi,'/2.')
-        answer_2 = seqg('The ', theta, ' in which sum of horizontal component of friction force and normal force is '
+        answer_2 = seqg('The ', char_theta, ' in which sum of horizontal component of friction force and normal force is '
                                             'maximum is 45 degree.')
-        answer_3 = seqg('The horizontal component of the friction force is m*g*cos(',theta,')*sin(',theta,
-                        ') and the horizontal component of normal force is also m*g*cos(',theta,')*sin(',theta,
+        answer_3 = seqg('The horizontal component of the friction force is m*g*cos(',char_theta,')*sin(',char_theta,
+                        ') and the horizontal component of normal force is also m*g*cos(',char_theta,')*sin(',char_theta,
                         '). The sum of these two forces is equal to m*g*(sin(2*',theta,'))/2. Thus, in order to maximize this force the'
-                        , theta,' must be 45 degree.')
-        answer_4 = seqg('The horizontal component of the friction force is m*g*cos(', theta, ')*sin(', theta,
-                        ') and the horizontal component of normal force is also m*g*cos(', theta, ')*sin(',
-                        theta, '). The sum of these two forces is equal to m*g*(sin(2*', theta,
-                        '))/2. Thus, in order to maximize this force the', theta, ' must be ', char_pi,'/2.')
+                        , char_theta,' must be 45 degree.')
+        answer_4 = seqg('The horizontal component of the friction force is m*g*cos(', char_theta, ')*sin(', char_theta,
+                        ') and the horizontal component of normal force is also m*g*cos(', char_theta, ')*sin(',
+                        char_theta, '). The sum of these two forces is equal to m*g*(sin(2*', theta,
+                        '))/2. Thus, in order to maximize this force the', char_theta, ' must be ', char_pi,'/2.')
         answer_5 = seqg('Normal force is equal to the projection of the weight perpendicular to the plane which is m*g*cos('
-                        ,theta,') and its horizontal component is m*g*cos(',theta,')*sin(',theta,
+                        ,char_theta,') and its horizontal component is m*g*cos(',char_theta,')*sin(',char_theta,
                         '). The friction force is equal to the projection of the weight in the direction of the plane which is m*g*sin('
-                        ,theta,') and its horizontal component is m*g*cos(',theta,')*sin(',theta,
-                        '). The sum of these two forces is equal to m*g*(sin(2*',theta,
-                        '))/2. Thus, in order to maximize this force the', theta,' must be 45 degree.')
+                        ,char_theta,') and its horizontal component is m*g*cos(',char_theta,')*sin(',char_theta,
+                        '). The sum of these two forces is equal to m*g*(sin(2*',char_theta,
+                        '))/2. Thus, in order to maximize this force the', char_theta,' must be 45 degree.')
         answer_6 = seqg('The friction force is equal to the projection of the weight in the direction of the plane which is m*g*sin('
-            , theta, ') and its horizontal component is m*g*cos(', theta, ')*sin(', theta,
+            , char_theta, ') and its horizontal component is m*g*cos(', char_theta, ')*sin(', char_theta,
             '). Normal force is equal to the projection of the weight perpendicular to the plane which is m*g*cos('
-            , theta, ') and its horizontal component is m*g*cos(', theta, ')*sin(', theta,
-            '). The sum of these two forces is equal to m*g*(sin(2*', theta,
-            '))/2. Thus, in order to maximize this force the', theta, ' must be 45 degree.')
+            , char_theta, ') and its horizontal component is m*g*cos(', char_theta, ')*sin(', char_theta,
+            '). The sum of these two forces is equal to m*g*(sin(2*', char_theta,
+            '))/2. Thus, in order to maximize this force the', char_theta, ' must be 45 degree.')
 
 
         # choices, try providing a few
