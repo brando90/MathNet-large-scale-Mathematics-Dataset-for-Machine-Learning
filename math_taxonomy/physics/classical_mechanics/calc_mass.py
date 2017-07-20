@@ -2,7 +2,7 @@ from sympy import *
 import random
 import numpy as np
 
-from qagen import *
+from qagen.qagen import *
 from qagen import utils
 from qagen import unit_test_for_user as user_test
 
@@ -30,7 +30,6 @@ class QA_constraint(QAGen):
         '''
         random.seed(seed)
         np.random.seed(seed)
-        fake.random.seed(seed)
         # TODO write more seeding libraries that you are using
 
     def init_consistent_qa_variables(self):
@@ -71,7 +70,7 @@ class QA_constraint(QAGen):
             force_val, a_val = 1, 2
         else:
             dim = np.random.randint(1,100)
-            force_val, a_val = round(np.random.randint(-1000000,1000000, dim)/100,1), round(np.random.randint(-1000000, 1000000, dim)/100,1)
+            force_val, a_val =  np.random.randint(-1000000,1000000, dim) , np.random.randint(-1000000, 1000000, dim)
         return force_val, a_val
 
     def Q(s, force_val, a_val, force, a): #TODO change the signature of the function according to your question

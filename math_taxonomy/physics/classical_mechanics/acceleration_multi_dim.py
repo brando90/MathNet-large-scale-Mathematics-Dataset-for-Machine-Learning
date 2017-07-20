@@ -1,8 +1,9 @@
+# an error that I dont know what is it about
 from sympy import *
 import random
 import numpy as np
 
-from qagen import *
+from qagen.qagen import *
 from qagen import utils
 from qagen import unit_test_for_user as user_test
 
@@ -16,7 +17,7 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'Elaheh Ahmadi' #TODO your full name
-        self.description = 'Find acceleration of an object that moves in dim = one dimensional world given that we know its velocity changes from  v0 = 0 (m/s) to v1 = 1(m/s) in time frame of t0 = 2 (s) to t1 = 3 (s).')
+        self.description = 'Find acceleration of an object that moves in dim = one dimensional world given that we know its velocity changes from  v0 = 0 (m/s) to v1 = 1(m/s) in time frame of t0 = 2 (s) to t1 = 3 (s).'
 
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['Physics', 'Finding Acceleration'] #TODO keywords to search type of question
@@ -31,8 +32,6 @@ class QA_constraint(QAGen):
         '''
         random.seed(seed)
         np.random.seed(seed)
-        fake.random.seed(seed)
-        # TODO write more seeding libraries that you are using
 
     def init_consistent_qa_variables(self):
         """
@@ -50,7 +49,7 @@ class QA_constraint(QAGen):
         if self.debug:
              v0, v1, t0, t1, dim = symbols('v0 v1 t0 t1 dim')
         else:
-             v0, v1, t0, t1, dim = self.get_symbols(4)
+             v0, v1, t0, t1, dim = self.get_symbols(5)
         return  v0, v1, t0, t1, dim
 
     def init_qa_variables(self):
@@ -69,7 +68,7 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            v0_val, v1_val, t0_val, t1_val, dim_val = 1, 2, 3, 4, 1
+            v0_val, v1_val, t0_val, t1_val, dim_val = [1], [2], 3, 4, 1
         else:
             dim_val = np.random.randint(1,100)
             v0_val = np.random.randint(-1000,1000,dim_val)

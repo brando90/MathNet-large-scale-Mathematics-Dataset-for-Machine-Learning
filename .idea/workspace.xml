@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="79b26a56-2cf1-43b0-93e6-5f64641d0642" name="Default" comment="" />
+    <list default="true" id="79b26a56-2cf1-43b0-93e6-5f64641d0642" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_NormalF.py" afterPath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_NormalF.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_friction.py" afterPath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_friction.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_max_sum_forces.py" afterPath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_max_sum_forces.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_max_theta.py" afterPath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_max_theta.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/acceleration_multi_dim.py" afterPath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/acceleration_multi_dim.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_acceleration" afterPath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_acceleration" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_force.py" afterPath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_force.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_mass.py" afterPath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_mass.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/velocity_and_acceleration.py" afterPath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/velocity_and_acceleration.py" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,11 +26,69 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="acceleration_multi_dim.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/acceleration_multi_dim.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1080">
+              <caret line="72" column="45" lean-forward="false" selection-start-line="72" selection-start-column="45" selection-end-line="72" selection-end-column="45" />
+              <folding>
+                <element signature="e#45#64#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="qagen.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main_proj_lib/qagen/qagen.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="calc_force.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_force.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="31" column="28" lean-forward="false" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="utils.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main_proj_lib/qagen/utils.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-915">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="calc_acceleration" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_acceleration">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="59">
+              <caret line="4" column="16" lean-forward="false" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="Block_on_plane_NormalF.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_NormalF.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="97" column="0" lean-forward="false" selection-start-line="97" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
+            <state relative-caret-position="105">
+              <caret line="34" column="28" lean-forward="false" selection-start-line="34" selection-start-column="28" selection-end-line="34" selection-end-column="28" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -30,43 +99,8 @@
       <file leaf-file-name="Block_on_plane_max_theta.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_max_theta.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="303">
-              <caret line="116" column="26" lean-forward="false" selection-start-line="116" selection-start-column="26" selection-end-line="116" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="calc_force.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_force.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="velocity_1D.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/velocity_1D.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="98" column="64" lean-forward="false" selection-start-line="98" selection-start-column="64" selection-end-line="98" selection-end-column="64" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-                <element signature="e#4954#5024#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="geometric_series.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/math_taxonomy/mathematics/algebra/geometric_series.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="53" column="20" lean-forward="false" selection-start-line="53" selection-start-column="20" selection-end-line="53" selection-end-column="20" />
+            <state relative-caret-position="315">
+              <caret line="34" column="28" lean-forward="false" selection-start-line="34" selection-start-column="28" selection-end-line="34" selection-end-column="28" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -77,9 +111,33 @@
       <file leaf-file-name="Block_on_plane_max_sum_forces.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_max_sum_forces.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="129" column="54" lean-forward="false" selection-start-line="129" selection-start-column="54" selection-end-line="129" selection-end-column="54" />
+            <state relative-caret-position="60">
+              <caret line="4" column="16" lean-forward="false" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Block_on_plane_friction.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_friction.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-421">
+              <caret line="37" column="11" lean-forward="true" selection-start-line="37" selection-start-column="11" selection-end-line="37" selection-end-column="11" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="calc_mass.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_mass.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="72" column="116" lean-forward="false" selection-start-line="72" selection-start-column="116" selection-end-line="72" selection-end-column="116" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -110,23 +168,25 @@
         <option value="$PROJECT_DIR$/examples_brando90/empty_template.py" />
         <option value="$PROJECT_DIR$/examples_elahe/acceleration_multi_dim.py" />
         <option value="$PROJECT_DIR$/math_taxonomy/mathematics/geometry/find_theta.py" />
-        <option value="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/acceleration_multi_dim.py" />
         <option value="$PROJECT_DIR$/math_taxonomy/mathematics/multivariable_calculus/Vectors/find_theta.py" />
         <option value="$PROJECT_DIR$/math_taxonomy/mathematics/multivariable_calculus/complicated_partial_diff.py" />
         <option value="$PROJECT_DIR$/math_taxonomy/mathematics/multivariable_calculus/Vectors/find_dot_product.py" />
+        <option value="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/velocity_1D.py" />
+        <option value="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/acceleration_multi_dim.py" />
+        <option value="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/velocity_and_acceleration.py" />
         <option value="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_mass.py" />
+        <option value="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_force.py" />
         <option value="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_acceleration" />
         <option value="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_NormalF.py" />
         <option value="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_max_theta.py" />
         <option value="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_max_sum_forces.py" />
-        <option value="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_force.py" />
-        <option value="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/velocity_1D.py" />
+        <option value="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_friction.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="35" />
-    <option name="y" value="79" />
+    <option name="x" value="-16" />
+    <option name="y" value="83" />
     <option name="width" value="1280" />
     <option name="height" value="717" />
   </component>
@@ -210,6 +270,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="math_taxonomy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eit_proj1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eit_proj1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main_proj_lib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -402,10 +476,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="35" y="79" width="1280" height="717" extended-state="0" />
-    <editor active="false" />
+    <frame x="-16" y="83" width="1280" height="717" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2239873" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2239873" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -458,27 +532,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/examples_hairuoguo/examples.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/examples_dpatters97/example1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examples_ysiahpoosh/find_slope.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -577,13 +630,6 @@
     <entry file="file://$PROJECT_DIR$/examples_elahe/example_2.py" />
     <entry file="file://$PROJECT_DIR$/examples_elahe/find_acceleration.py" />
     <entry file="file://$PROJECT_DIR$/examples_elahe/find_theta.py" />
-    <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/acceleration_multi_dim.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1414">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/math_taxonomy/mathematics/multivariable_calculus/complicated_partial_diff.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
@@ -595,22 +641,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2880">
           <caret line="198" column="51" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="198" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_acceleration">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2025">
-          <caret line="141" column="56" lean-forward="true" selection-start-line="141" selection-start-column="56" selection-end-line="141" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_mass.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="96" column="25" lean-forward="false" selection-start-line="96" selection-start-column="25" selection-end-line="96" selection-end-column="25" />
           <folding />
         </state>
       </provider>
@@ -633,57 +663,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_friction.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#19#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examples_brando90/constraint_inequality_new_lib.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="207">
           <caret line="203" column="0" lean-forward="true" selection-start-line="203" selection-start-column="0" selection-end-line="203" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_NormalF.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="97" column="0" lean-forward="false" selection-start-line="97" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_max_theta.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="116" column="26" lean-forward="false" selection-start-line="116" selection-start-column="26" selection-end-line="116" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_max_sum_forces.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="129" column="54" lean-forward="false" selection-start-line="129" selection-start-column="54" selection-end-line="129" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_force.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -708,10 +692,116 @@
     <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/velocity_1D.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
-          <caret line="98" column="64" lean-forward="false" selection-start-line="98" selection-start-column="64" selection-end-line="98" selection-end-column="64" />
+          <caret line="98" column="82" lean-forward="false" selection-start-line="98" selection-start-column="82" selection-end-line="98" selection-end-column="82" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
             <element signature="e#4954#5024#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main_proj_lib/qagen/qagen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main_proj_lib/qagen/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-915">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/velocity_and_acceleration.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1740">
+          <caret line="118" column="21" lean-forward="true" selection-start-line="118" selection-start-column="21" selection-end-line="118" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/acceleration_multi_dim.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="72" column="45" lean-forward="false" selection-start-line="72" selection-start-column="45" selection-end-line="72" selection-end-column="45" />
+          <folding>
+            <element signature="e#45#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_mass.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="72" column="116" lean-forward="false" selection-start-line="72" selection-start-column="116" selection-end-line="72" selection-end-column="116" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_force.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="31" column="28" lean-forward="false" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_acceleration">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="59">
+          <caret line="4" column="16" lean-forward="false" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_NormalF.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="34" column="28" lean-forward="false" selection-start-line="34" selection-start-column="28" selection-end-line="34" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_max_theta.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="34" column="28" lean-forward="false" selection-start-line="34" selection-start-column="28" selection-end-line="34" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_max_sum_forces.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="16" lean-forward="false" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_friction.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-421">
+          <caret line="37" column="11" lean-forward="true" selection-start-line="37" selection-start-column="11" selection-end-line="37" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
