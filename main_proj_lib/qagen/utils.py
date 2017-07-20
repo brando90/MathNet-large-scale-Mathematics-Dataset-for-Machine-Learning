@@ -7,6 +7,9 @@ import importlib.util
 import inspect
 from qagen.qagen import *
 
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
+
 import pdb
 
 def get_farm_animals():
@@ -60,7 +63,6 @@ def duplicates_present(args1,args2):
     [1,2,3],[1,2,3] -> True
     '''
     # if length of joint list decreases, then there is some duplicate (either btw the lists or within a list)
-    print(args1, args2)
     if len(args1+args2) == 0:
         # TODO check hairuo, what do we do when both are empty?
         # said true cuz if there are duplicates other code will keep trying to
@@ -95,3 +97,19 @@ def get_alt_coords():
     alt_coords = ['x', 'y', 'z', 'x_1', 'y_1', 'z_1', 'x_2', 'y_2', 'z_2', 'x_3', 'y_3', 'z_3']
 
     return alt_coords
+
+def display_latex(q_str,a_str):
+    '''
+    Displays strings with latex if arguments are in latex format
+    '''
+    rcParams['text.usetex'] = True #use local latex compiler
+    rcParams['text.latex.preamble'] = r'\usepackage{amsmath}' #use amsmath package
+    fig = plt.figure() #plot question and answer using matplotlib
+    renderer = fig.canvas.get_renderer()
+    t = plt.text(0.001, 0.001, "Question: %s \n Answer: %s" % (q_str, a_str), fontsize = 12)
+    wext = t.get_window_extent(renderer=renderer)
+    fig.set_size_inches(wext.width / 65, wext.height / 40, forward=True)
+    fig.patch.set_facecolor('white')
+    plt.axis('off')
+    plt.tight_layout()
+    plt.show()

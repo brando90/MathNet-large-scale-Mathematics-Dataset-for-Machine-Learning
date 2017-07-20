@@ -9,8 +9,6 @@ import pdb
 from qagen.delayed_execution import *
 from qagen.qaops import *
 from qagen import utils
-import matplotlib.pyplot as plt
-from matplotlib import rcParams
 
 class QA:
     '''
@@ -190,20 +188,6 @@ class QAGen(QA,QAOps):
         # get concrete qa strings
         q_str = self.Q(*variables,*variables_consistent)
         a_str = self.A(*variables,*variables_consistent)
-        if self.latex_visualize:
-            '''Start code for latex visualization'''
-            rcParams['text.usetex'] = True #use local latex compiler
-            rcParams['text.latex.preamble'] = r'\usepackage{amsmath}' #use amsmath package
-            fig = plt.figure() #plot question and answer using matplotlib
-            renderer = fig.canvas.get_renderer()
-            t = plt.text(0.001, 0.001, "Question: %s \n Answer: %s" % (q_str, a_str), fontsize = 12)
-            wext = t.get_window_extent(renderer=renderer)
-            fig.set_size_inches(wext.width / 65, wext.height / 40, forward=True)
-            fig.patch.set_facecolor('white')
-            plt.axis('off')
-            plt.tight_layout()
-            plt.show()
-            '''End code for latex visualization'''
         return q_str, a_str
 ##
 
