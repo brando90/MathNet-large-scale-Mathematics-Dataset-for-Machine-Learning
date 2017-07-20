@@ -2,7 +2,7 @@ from sympy import *
 import random
 import numpy as np
 
-from qagen import *
+from qagen.qagen import *
 from qagen import utils
 from qagen import unit_test_for_user as user_test
 
@@ -15,10 +15,10 @@ class QA_constraint(QAGen):
         Initializer for your QA question.
         '''
         super().__init__()
-        self.author = 'Elaheh Ahmadi'  # TODO your full name
+        self.author = 'Elaheh Ahmadi'
         self.description = 'Find velocity of the object that moves from x0 = 3 (m) to x1 = 4 (m) in the time frame of t0 = 0(s) to t1 = 1 (s).'  # TODO example string of your question
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['Physics', 'Velocity']  # TODO keywords to search type of question
+        self.keywords = ['Physics', 'Velocity']
         self.use_latex = True
 
     def seed_all(self, seed):
@@ -29,9 +29,9 @@ class QA_constraint(QAGen):
         the library to work.
         '''
         random.seed(seed)
-        np.random.seed(seed)
-        self.fake.random.seed(seed)
-        # TODO write more seeding libraries that you are using
+        # np.random.seed(seed)
+        # self.fake.random.seed(seed)
+
 
     def init_consistent_qa_variables(self):
         """
@@ -84,9 +84,8 @@ class QA_constraint(QAGen):
 
         # define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        # TODO
-        question1 = seqg('Find velocity of the object that moves from', Eq(x0, x0_val), '(m) to', Eq(x1, x1_val),
-                         '(m) in the time frame of', Eq(t0, t0_val), '(s) to', Eq(t1, t1_val), '(s).')
+        question1 = seqg('Find velocity of the object that moves from ', Eq(x0, x0_val), '(m) to ', Eq(x1, x1_val),
+                         '(m) in the time frame of ', Eq(t0, t0_val), '(s) to ', Eq(t1, t1_val), '(s).')
         q = choiceg(question1)
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
@@ -95,7 +94,7 @@ class QA_constraint(QAGen):
         return q
 
     def A(s, x0_val, x1_val, t0_val, t1_val, x0, x1, t0,
-          t1):  # TODO change the signature of the function according to your answer
+          t1):
         '''
         In order to find the velocity we can use this function:  V = (x1-x0)/t1-t0
 
@@ -104,17 +103,9 @@ class QA_constraint(QAGen):
         '''
         # define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        # TODO
         velocity = (x1_val - x0_val) / (t1_val - t0_val)
         ans = seqg('The velocity is equal to', velocity, '(m/s).')
-        # ans_sympy
-        # ans_numerical
-        # ans_vnl_vsympy1
-        # ans_vnl_vsympy2
-        # choices, try providing a few
-        # these van include variations that are hard to encode with permg or variable substitution
-        # example, NL variations or equaiton variations
-        a = choiceg()
+        a = choiceg(ans)
         return a
 
     ##
