@@ -77,7 +77,7 @@ class QA_constraint(QAGen):
             x_val,y_val,z_val = 2,3,4
             d_val = 1
         else:
-            x_val,y_val,z_val = np.random.randint(1,1000,[3])
+            x_val,y_val,z_val = np.random.randint(2,1000,[3])
             d_val = np.random.randint(1,np.min([x_val,y_val,z_val]))
         return x_val,y_val,z_val,d_val
 
@@ -208,6 +208,8 @@ if __name__ == '__main__':
     #check_mc(qagenerator)
     #check_many_to_many(qagenerator)
     #check_many_to_one_consistent_format(qagenerator)
+    # Latex diplay
+    #q,a = qagenerator.get_single_qa(seed=0)
+    #utils.display_latex(q,a)
     ## run unit test given by framework
     user_test.run_unit_test_for_user(QA_constraint)
-    # check_get_symbol(qagenerator)

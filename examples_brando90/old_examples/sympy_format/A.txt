@@ -1,0 +1,2 @@
+Eq(x,Add(y,-z))
+Eq(b,Add(a,-c))
