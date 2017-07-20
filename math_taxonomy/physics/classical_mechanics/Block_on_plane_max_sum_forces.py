@@ -2,7 +2,7 @@ from sympy import *
 import random
 import numpy as np
 
-from qagen import *
+from qagen.qagen import *
 from qagen import utils
 from qagen import unit_test_for_user as user_test
 
@@ -34,8 +34,6 @@ class QA_constraint(QAGen):
         '''
         random.seed(seed)
         np.random.seed(seed)
-        fake.random.seed(seed)
-        # TODO write more seeding libraries that you are using
 
     def init_consistent_qa_variables(self):
         """
