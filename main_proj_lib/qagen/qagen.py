@@ -34,6 +34,12 @@ class QA:
 
 class QAGen(QA,QAOps):
 
+    def _to_hashable_(self, variables):
+        '''
+        Convert a set of variables to a format that can be hashed to check for duplicates
+        '''
+        return variables
+
     def _create_all_variables(self):
         '''
         Create distinct variables for qa and register them for the current QA
@@ -48,7 +54,7 @@ class QAGen(QA,QAOps):
             variables = self.init_qa_variables()
             self.register_qa_variables(variables)
             # if no duplicates variable generation was successful
-            if not utils.duplicates_present(variables_consistent,variables):
+            if not utils.duplicates_present(self._to_hashable_(variables_consistent),self._to_hashable_(variables)):
                 break
             tries +=1
         self.reset_variables_states()

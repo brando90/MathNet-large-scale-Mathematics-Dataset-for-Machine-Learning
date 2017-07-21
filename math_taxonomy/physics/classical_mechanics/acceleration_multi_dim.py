@@ -52,6 +52,11 @@ class QA_constraint(QAGen):
              v0, v1, t0, t1, dim = self.get_symbols(5)
         return  v0, v1, t0, t1, dim
 
+    def _to_hashable_(self, variables):
+        v0, v1, t0, t1, dim = variables
+        flattener = lambda x: x if isinstance(x, Symbol) else tuple(x);
+        return list(map(flattener, (v0,v1))) + [t0, t1, dim]
+
     def init_qa_variables(self):
         '''
         Defines and returns all the variables that can vary between a
