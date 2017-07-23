@@ -1,0 +1,2 @@
+Solve for x, y=x+z.
+Solve for b, a=b+c.

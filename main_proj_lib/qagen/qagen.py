@@ -9,8 +9,6 @@ import pdb
 from qagen.delayed_execution import *
 from qagen.qaops import *
 from qagen import utils
-import matplotlib.pyplot as plt
-from matplotlib import rcParams
 
 class QA:
     '''
@@ -36,6 +34,12 @@ class QA:
 
 class QAGen(QA,QAOps):
 
+    def _to_hashable_(self, variables):
+        '''
+        Convert a set of variables to a format that can be hashed to check for duplicates
+        '''
+        return variables
+
     def _create_all_variables(self):
         '''
         Create distinct variables for qa and register them for the current QA
@@ -50,7 +54,7 @@ class QAGen(QA,QAOps):
             variables = self.init_qa_variables()
             self.register_qa_variables(variables)
             # if no duplicates variable generation was successful
-            if not utils.duplicates_present(variables_consistent,variables):
+            if not utils.duplicates_present(self._to_hashable_(variables_consistent),self._to_hashable_(variables)):
                 break
             tries +=1
         self.reset_variables_states()
@@ -190,20 +194,6 @@ class QAGen(QA,QAOps):
         # get concrete qa strings
         q_str = self.Q(*variables,*variables_consistent)
         a_str = self.A(*variables,*variables_consistent)
-        if self.latex_visualize:
-            '''Start code for latex visualization'''
-            rcParams['text.usetex'] = True #use local latex compiler
-            rcParams['text.latex.preamble'] = r'\usepackage{amsmath}' #use amsmath package
-            fig = plt.figure() #plot question and answer using matplotlib
-            renderer = fig.canvas.get_renderer()
-            t = plt.text(0.001, 0.001, "Question: %s \n Answer: %s" % (q_str, a_str), fontsize = 12)
-            wext = t.get_window_extent(renderer=renderer)
-            fig.set_size_inches(wext.width / 65, wext.height / 40, forward=True)
-            fig.patch.set_facecolor('white')
-            plt.axis('off')
-            plt.tight_layout()
-            plt.show()
-            '''End code for latex visualization'''
         return q_str, a_str
 ##
 
