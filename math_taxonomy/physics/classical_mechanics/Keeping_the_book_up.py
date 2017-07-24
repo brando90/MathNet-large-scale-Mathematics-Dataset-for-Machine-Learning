@@ -1,6 +1,3 @@
-# Completed
-# Debugg status: 'Symbol' object is not iterable
-
 from sympy import *
 import random
 import numpy as np
@@ -18,10 +15,13 @@ class QA_constraint(QAGen):
         Initializer for your QA question.
         '''
         super().__init__()
-        self.author = 'Elaheh Ahmadi' #TODO your full name
-        self.description = "Calculating acceleration of an object given the total force applied to it and its mass"  #TODO example string of your question
+        self.author = 'Elaheh Ahmadi'
+        self.description = 'A book of mass M is positioned against a vertical wall. The coefficient of friction between ' \
+                           'the book and the wall is μ. You wish to keep the book from falling by pushing on it with a ' \
+                           'force F applied at an angle theta with respect to the horizontal. For a given theta, what is ' \
+                           'the minimum F required?'
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['physics' ,'classical mechanics' ,'force', 'mass', 'acceleration'] #TODO keywords to search type of question
+        self.keywords = ['Physics', 'Classical Mechanics', 'Mass', 'Wall', 'Friction', 'Force']
         self.use_latex = True
 
     def seed_all(self,seed):
@@ -33,7 +33,7 @@ class QA_constraint(QAGen):
         '''
         random.seed(seed)
         np.random.seed(seed)
-        # TODO write more seeding libraries that you are using
+
 
     def init_consistent_qa_variables(self):
         """
@@ -49,15 +49,10 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            m, force = symbols('m force')
+            #TODO
         else:
-            m, force = self.get_symbols(2)
-        return m, force
-
-    def _to_hashable_(self, variables):
-        force, m = variables
-        flattener = lambda x: x if isinstance(x, Symbol) else tuple(x);
-        return list(map(flattener, force)) + [m]
+            #TODO
+        return
 
     def init_qa_variables(self):
         '''
@@ -75,63 +70,49 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            m_val, force_val = 1, 2
+            #TODO
         else:
-            dim = np.random.randint(1,100)
-            m_val, force_val = np.random.randint(1,1000000) , np.random.randint(-1000000, 1000000, dim)
-        return m_val, force_val
+            #TODO
+        return
 
-    def Q(s, m_val, force_val, m, force): #TODO change the signature of the function according to your question
+    def Q(s,not_consistent,consistent): #TODO change the signature of the function according to your question
         '''
-        Finding the acceleration of an object given its total force and mass.
+        Small question description.
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        question_1 =  seqg('Find the acceleration of an object with the mass ', Eq(m, m_val),
-                       " (kg) given that the total force applied to it is ", Eq(force, force_val), " (N).")
-        question_2 = seqg('There is an object floating in a multi dimensional world with the mass ',
-                      Eq(m, m_val), "(kg). We observed that the total force on it is, ", Eq(force, force_val),
-                      " (N). Find the objects acceleration given these information.")
-        question_3 = seqg('What is the acceleration of a mass if the total force applied on it is ', Eq(force, force_val),
-                      " (N) and its mass is ", Eq(m, m_val), " (kg).")
-        question_4 = seqg('Given the fact that total force applied to a mass is its acceleration times its mass,'
-                      ' find the acceleration of an object if the total force applied to it is', Eq(force, force_val),
-                      ' (N) and its mass is', Eq(m, m_val), '(kg).')
-        question_5 = seqg('A spaceship is wondering around in a multi dimensional world. The captain wants to know the '
-                      'acceleration of the spaceship to be able to control it. There are there physicists '
-                      'and mathematicians on the spaceship. They calculated the total mass and the total force on the ship ',
-                      'and it is equal to ', Eq(m, m_val), '(kg), and ', Eq(force, force_val),
-                      '(N). Help the captain to control the ship by finding the acceleration of the ship.')
-
+        # TODO
+        #q_format1
+        #q_format2
+        #...
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        q = choiceg(question_1, question_2, question_3, question_4, question_5)
-        # , question_6, question_7, question_8,
-        #         question_9, question_10)
+        q = choiceg()
         return q
 
-    def A(s, m_val, force_val, m, force): #TODO change the signature of the function according to your answer
+    def A(s,not_consistent,consistent): #TODO change the signature of the function according to your answer
         '''
-        The answer is a = F/m
+        Small answer description.
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        ans_val = force_val/m_val
-        answer_1 = seqg("The acceleration is", ans_val," (m/s^2).")
-        answer_2 = seqg("After dividing the total force over the objects mass the acceleration is equal to ", ans_val,"(m/s^2).")
-         
+        # TODO
+        #ans_sympy
+        #ans_numerical
+        #ans_vnl_vsympy1
+        #ans_vnl_vsympy2
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        force = choiceg(answer_1, answer_2)
-        return force
+        a = choiceg()
+        return a
 
     ##
 

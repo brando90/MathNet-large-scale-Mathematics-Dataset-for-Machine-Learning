@@ -1,3 +1,6 @@
+# Completed
+# Debug status: Runtime error
+
 from sympy import *
 import random
 import numpy as np
@@ -74,7 +77,7 @@ class QA_constraint(QAGen):
         else:
             g_val = random.choice([10, 9.8, 9.81, 9.807])
             theta_val = np.random.randint(0,90)
-            m_val = np.random.randint(1,100000,1)/10
+            m_val = np.random.randint(1,100000)/10
         return g_val, theta_val, m_val
 
     def Q(s, g_val, theta_val, m_val , g, theta, m): #TODO change the signature of the function according to your question

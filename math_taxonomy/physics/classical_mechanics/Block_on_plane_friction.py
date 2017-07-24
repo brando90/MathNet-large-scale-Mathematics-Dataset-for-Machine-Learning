@@ -1,3 +1,6 @@
+#Completed
+#DEBUGG status: RUN TIME error
+
 from sympy import *
 import random
 import numpy as np
@@ -17,7 +20,7 @@ class QA_constraint(QAGen):
         super().__init__()
         self.author = 'Elaheh Ahmadi' #TODO your full name
         self.description = 'A block sits on a plane that is inclined at an angle theta. Assume that the friction force is ' \
-                           'large enough to keep the block at rest. What is the horizontal components of the friction. '
+                           'large enough to keep the block at rest. What is the friction force. '
 
 
         # keywords about the question that could help to make this more searchable in the future
@@ -49,10 +52,12 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            g, theta, m = symbols('g theta m')
+            g, m = symbols('g m')
+            theta = symbols(chr(952))
         else:
             g, theta, m = self.get_symbols(3)
         return g, theta, m
+
 
     def init_qa_variables(self):
         '''
@@ -74,7 +79,7 @@ class QA_constraint(QAGen):
         else:
             g_val = random.choice([10, 9.8, 9.81, 9.807])
             theta_val = np.random.randint(0,90)
-            m_val = np.random.randint(1,100000,1)/10
+            m_val = np.random.randint(1,100000)/10
         return g_val, theta_val, m_val
 
     def Q(s, g_val, theta_val, m_val , g, theta, m): #TODO change the signature of the function according to your question

@@ -1,3 +1,6 @@
+#completed
+# Debbug Status: tRun Time Error
+
 from sympy import *
 import random
 import numpy as np
@@ -49,7 +52,8 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            g, theta, m = symbols('g', chr(952),'m')
+            g, m = symbols('g m')
+            theta = symbols(chr(952))
         else:
             g, theta, m = self.get_symbols(3)
         return g, theta, m
@@ -74,7 +78,7 @@ class QA_constraint(QAGen):
         else:
             g_val = random.choice([10, 9.8, 9.81, 9.807])
 
-            m_val = np.random.randint(1,100000,1)/10
+            m_val = np.random.randint(1,100000)/10
         return g_val, m_val
 
     def Q(s, g_val, m_val , g, theta, m): #TODO change the signature of the function according to your question
@@ -88,19 +92,18 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
 
-        friction_force = m*g*np.sin()
         question_1 = seqg('A block sits on a plane that is inclined at an angle', theta,'. Assume '
-        'that the friction force is large enough to keep the block at rest. In what ', theta,
-                          'the sum of horizontal components of friction force and normal force are maximum?'
+        'that the friction force is large enough to keep the block at rest. What is the maximum '
+                          ' sum of horizontal components of friction force and normal force and in what ', theta, ' is it maximum'
                           'The object mass is ', Eq(m, m_val), ' (kg) and the gravitational acceleration is,'
                           , Eq(g, g_val), ' (m/s^2).')
         question_2 = seqg('An object with ', Eq(m, m_val), ' (kg) is sited on a plane that is inclined at an angle', theta,'.'
                           ' We know that the the friction force is large enough to keep the block at rest. '
-                          'In what ', theta, ' the sum of horizontal components of friction force and normal force are maximum.'
+                          'In what ', theta, ' the sum of horizontal components of friction force and normal force are maximum and what is the maximum value of this sum.'
                                                   ' The gravitational acceleration is ', Eq(g, g_val), ' (m/s^2).')
         question_3 = seqg('There is an object in rest on a plane that is inclined at an angle', theta,'. The mass of the object is'
                           ' ', Eq(m, m_val), ' (kg) What should be the angle of the plane so that the sum of horizontal'
-                                             ' components of friction force and normal force maximum. The gravitational '
+                                             ' components of friction force and normal force maximum and what is the value of the sum of forces. The gravitational '
                                              'acceleration is ,', Eq(g, g_val), ' (m/s^2).')
 
         q = choiceg(question_1, question_2, question_3)
@@ -124,32 +127,34 @@ class QA_constraint(QAGen):
         friction_force_horizontal = round(friction_force * np.cos(theta_val_rad), 2)
         normal_force = round(m_val*g_val*np.cos(theta_val_rad),2)
         normal_force_horizontal = round(normal_force * np.sin(theta_val_rad),2)
+        total_horizontal_force = normal_force_horizontal + friction_force_horizontal
 
         #### WORK ON THE ANSWERSSSSSSSSSSSSS ######## 
         answer_1 = seqg('The ', theta ,'in which sum of horizontal component of friction force and normal force is '
-                                            'maximum is', char_pi,'/2.')
+                                            'maximum is', char_pi,'/2. And the sum of horizontal forces is ', total_horizontal_force, ' (N)')
         answer_2 = seqg('The ', theta, ' in which sum of horizontal component of friction force and normal force is '
-                                            'maximum is 45 degree.')
+                                            'maximum is 45 degree. And the sum of horizontal forces is ', total_horizontal_force, ' (N)')
         answer_3 = seqg('The horizontal component of the friction force is m*g*cos(',theta,')*sin(',theta,
                         ') and the horizontal component of normal force is also m*g*cos(',theta,')*sin(',theta,
                         '). The sum of these two forces is equal to m*g*(sin(2*',theta,'))/2. Thus, in order to maximize this force the'
-                        , theta,' must be 45 degree.')
+                        , theta,' must be 45 degree. Thus the maximum value of the sum of horizontal forces is ', total_horizontal_force, ' (N)')
         answer_4 = seqg('The horizontal component of the friction force is m*g*cos(', theta, ')*sin(', theta,
                         ') and the horizontal component of normal force is also m*g*cos(', theta, ')*sin(',
                         theta, '). The sum of these two forces is equal to m*g*(sin(2*', theta,
-                        '))/2. Thus, in order to maximize this force the', theta, ' must be ', char_pi,'/2.')
+                        '))/2. Thus, in order to maximize this force the', theta, ' must be ', char_pi,
+                        '/2. Thus the maximum value of the sum of horizontal forces is ', total_horizontal_force, ' (N)')
         answer_5 = seqg('Normal force is equal to the projection of the weight perpendicular to the plane which is m*g*cos('
                         ,theta,') and its horizontal component is m*g*cos(',theta,')*sin(',theta,
                         '). The friction force is equal to the projection of the weight in the direction of the plane which is m*g*sin('
                         ,theta,') and its horizontal component is m*g*cos(',theta,')*sin(',theta,
                         '). The sum of these two forces is equal to m*g*(sin(2*',theta,
-                        '))/2. Thus, in order to maximize this force the', theta,' must be 45 degree.')
+                        '))/2. Thus, in order to maximize this force the', theta,' must be 45 degree. And the maximum value of the sum of horizontal forces is ', total_horizontal_force, ' (N)')
         answer_6 = seqg('The friction force is equal to the projection of the weight in the direction of the plane which is m*g*sin('
             , theta, ') and its horizontal component is m*g*cos(', theta, ')*sin(', theta,
             '). Normal force is equal to the projection of the weight perpendicular to the plane which is m*g*cos('
             , theta, ') and its horizontal component is m*g*cos(', theta, ')*sin(', theta,
             '). The sum of these two forces is equal to m*g*(sin(2*', theta,
-            '))/2. Thus, in order to maximize this force the', theta, ' must be 45 degree.')
+            '))/2. Thus, in order to maximize this force the', theta, ' must be 45 degree. And the maximum value of the sum of horizontal forces is ', total_horizontal_force, ' (N)')
 
 
         # choices, try providing a few

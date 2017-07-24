@@ -1,3 +1,6 @@
+#Completed
+# Debbug Status: tRun Time Error
+
 from sympy import *
 import random
 import numpy as np
@@ -49,7 +52,8 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            g, theta, m = symbols('g', chr(952),'m')
+            g, m = symbols('g m')
+            theta = symbols(chr(952))
         else:
             g, theta, m = self.get_symbols(3)
         return g, theta, m
@@ -73,7 +77,7 @@ class QA_constraint(QAGen):
             g_val, m_val = 10, 1
         else:
             g_val = random.choice([10, 9.8, 9.81, 9.807])
-            m_val = np.random.randint(1,100000,1)/10
+            m_val = np.random.randint(1,100000)/10
         return g_val, m_val
 
     def Q(s, g_val, m_val , g, theta, m): #TODO change the signature of the function according to your question
