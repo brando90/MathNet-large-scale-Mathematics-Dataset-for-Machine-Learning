@@ -47,7 +47,8 @@ class QA_constraint(QAGen):
         if self.debug:
             x, y, z = symbols('x y z')
         else:
-            x, y, z = symbols('x y z')
+            alt_coords = utils.get_alt_coords(3)
+            x, y, z = self.get_symbols(3, alt_coords)
         return x, y, z
 
     def init_qa_variables(self):
@@ -187,7 +188,7 @@ def check_many_to_one_consistent_format(qagenerator):
 
 if __name__ == '__main__':
     qagenerator = QA_constraint()
-    check_single_question_debug(qagenerator)
-    # user_test.run_unit_test_for_user(QA_constraint)
+    # check_single_question_debug(qagenerator)
+    user_test.run_unit_test_for_user(QA_constraint)
 
 
