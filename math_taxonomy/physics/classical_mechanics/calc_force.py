@@ -70,7 +70,7 @@ class QA_constraint(QAGen):
             m_val, a_val = 1, 2
         else:
             dim = np.random.randint(1,100)
-            m_val, a_val = round(np.random.randint(1,1000000)/100,1), round(np.random.randint(-1000000, 1000000, dim)/100,1)
+            m_val, a_val = np.random.randint(1,1000000), np.random.randint(-1000000, 1000000, dim)
         return m_val, a_val
 
     def Q(s,m_val, a_val, m, a): #TODO change the signature of the function according to your question
