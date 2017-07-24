@@ -70,11 +70,11 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            g_val, m_val = 10, 30, 1
+            g_val, m_val = 10, 1
         else:
             g_val = random.choice([10, 9.8, 9.81, 9.807])
             m_val = np.random.randint(1,100000,1)/10
-        return g_val,  , m_val
+        return g_val, m_val
 
     def Q(s, g_val, m_val , g, theta, m): #TODO change the signature of the function according to your question
         '''

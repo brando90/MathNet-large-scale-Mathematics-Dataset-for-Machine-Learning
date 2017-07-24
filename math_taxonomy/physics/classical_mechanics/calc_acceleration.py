@@ -70,7 +70,7 @@ class QA_constraint(QAGen):
             m_val, force_val = 1, 2
         else:
             dim = np.random.randint(1,100)
-            m_val, force_val = round(np.random.randint(1,1000000)/100,1), round(np.random.randint(-1000000, 1000000, dim)/100,1)
+            m_val, force_val = np.random.randint(1,1000000) , np.random.randint(-1000000, 1000000, dim)
         return m_val, force_val
 
     def Q(s, m_val, force_val, m, force): #TODO change the signature of the function according to your question
@@ -96,7 +96,7 @@ class QA_constraint(QAGen):
         question_5 = seqg('A spaceship is wondering around in a multi dimensional world. The captain wants to know the '
                       'acceleration of the spaceship to be able to control it. There are there physicists '
                       'and mathematicians on the spaceship. They calculated the total mass and the total force on the ship ',
-                      'and it is equal to 'Eq(m, m_val), '(kg), and ', Eq(force, force_val),
+                      'and it is equal to ', Eq(m, m_val), '(kg), and ', Eq(force, force_val),
                       '(N). Help the captain to control the ship by finding the acceleration of the ship.')
 
         # choices, try providing a few
