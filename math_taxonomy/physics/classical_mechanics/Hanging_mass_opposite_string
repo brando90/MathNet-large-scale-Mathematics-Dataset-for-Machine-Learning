@@ -17,7 +17,7 @@ class QA_constraint(QAGen):
         super().__init__()
         self.author = 'Elaheh Ahmadi' #TODO your full name
         self.description = 'A mass m, held up by two strings, hangs from a ceiling. The strings ' \
-                           'form a right angle. If the right String makes an angle theta with the ceiling, what is the tension in right string? '
+                           'form a right angle. If the right string makes an angle theta with the ceiling, what is the tension in the left string? '
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['Physics', 'Classical Mechanics', 'Mass', 'Strings', 'Tension'] #TODO keywords to search type of question
         self.use_latex = True
@@ -50,7 +50,7 @@ class QA_constraint(QAGen):
             g, m, T_wanted = symbols('g m T_wanted')
             theta = symbols(chr(952))
         else:
-            g, theta, m, T_wanted = self.get_symbols(4)
+            g, theta, m,  = self.get_symbols(4)
         return g, theta, m, T_wanted
 
     def init_qa_variables(self):
@@ -90,16 +90,16 @@ class QA_constraint(QAGen):
         # TODO
         question_1 = seqg('A mass ', Eq(m, m_val), ' held up by two strings, hangs from a ceiling. The two strings form' \
                                                     ' a right angle. If the right string makes an angle ', Eq(theta, theta_val), ' with the' \
-                                                    ' ceiling what is the tension in this string. The gravitational acceleration is,', Eq(g, g_val), ' (m/s^2).')
+                                                    ' ceiling what is the tension in the left string. The gravitational acceleration is,', Eq(g, g_val), ' (m/s^2).')
         question_2 = seqg('A mass ', Eq(m, m_val), ' held up by two strings, hangs from a ceiling. The two strings form' \
                                                     ' a right angle. If the left string makes an angle theta with the' \
-                                                    ' ceiling what is the tension in this string. The gravitational acceleration is,', Eq(g, g_val), ' (m/s^2).')
+                                                    ' ceiling what is the tension in the right string. The gravitational acceleration is,', Eq(g, g_val), ' (m/s^2).')
         question_3 = seqg('A mass ', Eq(m, m_val), ' held up by two strings, hangs from a ceiling. The two strings form' \
                                                     ' a right angle. If the left string makes an angle theta with the' \
-                                                    ' ceiling what is the tension in this string if the gravitational acceleration is,', Eq(g, g_val), ' (m/s^2).')
+                                                    ' ceiling what is the tension in right string if the gravitational acceleration is,', Eq(g, g_val), ' (m/s^2).')
         question_4 = seqg('A mass ', Eq(m, m_val), ' held up by two strings, hangs from a ceiling. The two strings form' \
                                                    ' a right angle. If the right string makes an angle theta with the' \
-                                                   ' ceiling what is the tension in this string if the gravitational acceleration is,',
+                                                   ' ceiling what is the tension in left string if the gravitational acceleration is,',
                           Eq(g, g_val), ' (m/s^2).')
 
         # choices, try providing a few
@@ -110,7 +110,7 @@ class QA_constraint(QAGen):
 
     def A(s, g_val, m_val, theta_val, g, theta, m, T_wanted):
         '''
-        T_wanted = m*g*cos(theta)
+        T_wanted = m*g*sin(theta)
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
@@ -119,8 +119,8 @@ class QA_constraint(QAGen):
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         pi = np.pi
         theta_radian = (theta_val * pi) / 180
-        ans_val = m_val*g_val*np.cos(theta_radian)
-        ans_String = m + '*' + g + '*' + 'cos(' + theta + ')'
+        ans_val = m_val*g_val*np.sin(theta_radian)
+        ans_String = m + '*' + g + '*' + 'sin(' + theta + ')'
         answer_1 = seqg('The tension in the string is ', Eq(ans_String, ans_val), ' (N).')
         answer_2 = seqg(ans_val)
         answer_3 = seqg(Eq(ans_String, ans_val))

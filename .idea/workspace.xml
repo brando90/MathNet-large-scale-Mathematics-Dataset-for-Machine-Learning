@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< Updated upstream
     <list default="true" id="79b26a56-2cf1-43b0-93e6-5f64641d0642" name="Default" comment="">
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Hanging_mass.py" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_acceleration" afterPath="" />
@@ -9,6 +10,9 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_max_theta.py" afterPath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_max_theta.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_force.py" afterPath="$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_force.py" />
     </list>
+=======
+    <list default="true" id="79b26a56-2cf1-43b0-93e6-5f64641d0642" name="Default" comment="" />
+>>>>>>> Stashed changes
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,6 +26,7 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+<<<<<<< Updated upstream
       <file leaf-file-name="Hanging_mass.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Hanging_mass.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -35,6 +40,9 @@
         </entry>
       </file>
       <file leaf-file-name="Block_on_plane_NormalF.py" pinned="false" current-in-tab="false">
+=======
+      <file leaf-file-name="Block_on_plane_NormalF.py" pinned="false" current-in-tab="true">
+>>>>>>> Stashed changes
         <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_NormalF.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="270">
@@ -91,7 +99,11 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
+<<<<<<< Updated upstream
     <option name="x" value="-101" />
+=======
+    <option name="x" value="41" />
+>>>>>>> Stashed changes
     <option name="y" value="23" />
     <option name="width" value="1280" />
     <option name="height" value="712" />
@@ -382,7 +394,11 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
+<<<<<<< Updated upstream
     <frame x="-101" y="23" width="1280" height="712" extended-state="0" />
+=======
+    <frame x="41" y="23" width="1280" height="712" extended-state="0" />
+>>>>>>> Stashed changes
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29388404" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -582,6 +598,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="98" column="82" lean-forward="false" selection-start-line="98" selection-start-column="82" selection-end-line="98" selection-end-column="82" />
+<<<<<<< Updated upstream
+=======
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main_proj_lib/qagen/qagen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
@@ -603,6 +629,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1080">
           <caret line="72" column="45" lean-forward="false" selection-start-line="72" selection-start-column="45" selection-end-line="72" selection-end-column="45" />
+<<<<<<< Updated upstream
         </state>
       </provider>
     </entry>
@@ -611,6 +638,8 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-105">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+=======
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
@@ -636,18 +665,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/calc_acceleration.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="15">
           <caret line="95" column="4" lean-forward="false" selection-start-line="95" selection-start-column="4" selection-end-line="95" selection-end-column="4" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
+=======
+        <state relative-caret-position="59">
+          <caret line="4" column="16" lean-forward="false" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/math_taxonomy/physics/classical_mechanics/Block_on_plane_friction.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="630">
           <caret line="98" column="0" lean-forward="false" selection-start-line="98" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
+=======
+        <state relative-caret-position="270">
+          <caret line="116" column="43" lean-forward="true" selection-start-line="115" selection-start-column="8" selection-end-line="116" selection-end-column="43" />
+>>>>>>> Stashed changes
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
