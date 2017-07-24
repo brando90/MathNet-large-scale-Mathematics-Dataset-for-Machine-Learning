@@ -16,13 +16,10 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'Elaheh Ahmadi' #TODO your full name
-        self.description = 'A block sits on a plane that is inclined at an angle theta. Assume that the friction force is ' \
-                           'large enough to keep the block at rest. What is the maximum sum of horizontal components ' \
-                           'of friction and normal forces?'
-
-
+        self.description = 'A mass m, held up by two strings, hangs from a ceiling. The strings ' \
+                           'form a right angle. If the right String makes an angle theta with the ceiling, what is the tension in right string? '
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['Plane', 'Block', 'Friction', 'Force', 'Normal Force', 'maximum', 'theta', 'horizontal force'] #TODO keywords to search type of question
+        self.keywords = ['Physics', 'Classical Mechanics', 'Mass', 'Strings', 'Tension'] #TODO keywords to search type of question
         self.use_latex = True
 
     def seed_all(self,seed):
@@ -34,6 +31,7 @@ class QA_constraint(QAGen):
         '''
         random.seed(seed)
         np.random.seed(seed)
+        # TODO write more seeding libraries that you are using
 
     def init_consistent_qa_variables(self):
         """
@@ -49,10 +47,10 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            g, theta, m = symbols('g', chr(952),'m')
+            g, theta, m, T_wanted = symbols('g', chr(952), 'm', 'T_right')
         else:
-            g, theta, m = self.get_symbols(3)
-        return g, theta, m
+            g, theta, m, T_wanted = self.get_symbols(4)
+        return g, theta, m, T_wanted
 
     def init_qa_variables(self):
         '''
@@ -70,92 +68,65 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            g_val, m_val = 10, 1
+            g_val, m_val, theta_val = 10, 1, 30
         else:
             g_val = random.choice([10, 9.8, 9.81, 9.807])
-
+            theta_val = np.random.randint(0,89)
             m_val = np.random.randint(1,100000,1)/10
-        return g_val, m_val
 
-    def Q(s, g_val, m_val , g, theta, m): #TODO change the signature of the function according to your question
+        return g_val, m_val, theta_val
+
+    def Q(s, g_val, m_val, theta_val, g, theta, m, T_wanted): #TODO change the signature of the function according to your question
         '''
-        A block sits on a plane that is inclined at an angle theta. Assume that the friction force is large enough to
-        keep the block at rest. What is the horizontal components of the friction.
+        A mass m, held up by two strings, hangs from a ceiling. The strings form a right angle.
+        If the right/left string makes an angle theta with the ceiling what is the tension of this String.
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
+        # TODO
+        question_1 = seqg('A mass ', Eq(m, m_val), ' held up by two strings, hangs from a ceiling. The two strings form' \
+                                                    ' a right angle. If the right string makes an angle ', Eq(theta, theta_val), ' with the' \
+                                                    ' ceiling what is the tension in this string. The gravitational acceleration is,', Eq(g, g_val), ' (m/s^2).')
+        question_2 = seqg('A mass ', Eq(m, m_val), ' held up by two strings, hangs from a ceiling. The two strings form' \
+                                                    ' a right angle. If the left string makes an angle theta with the' \
+                                                    ' ceiling what is the tension in this string. The gravitational acceleration is,', Eq(g, g_val), ' (m/s^2).')
+        question_3 = seqg('A mass ', Eq(m, m_val), ' held up by two strings, hangs from a ceiling. The two strings form' \
+                                                    ' a right angle. If the left string makes an angle theta with the' \
+                                                    ' ceiling what is the tension in this string if the gravitational acceleration is,', Eq(g, g_val), ' (m/s^2).')
 
-        friction_force = m*g*np.sin()
-        question_1 = seqg('A block sits on a plane that is inclined at an angle', theta,'. Assume '
-        'that the friction force is large enough to keep the block at rest. In what ', theta,
-                          'the sum of horizontal components of friction force and normal force are maximum?'
-                          'The object mass is ', Eq(m, m_val), ' (kg) and the gravitational acceleration is,'
-                          , Eq(g, g_val), ' (m/s^2).')
-        question_2 = seqg('An object with ', Eq(m, m_val), ' (kg) is sited on a plane that is inclined at an angle', theta,'.'
-                          ' We know that the the friction force is large enough to keep the block at rest. '
-                          'In what ', theta, ' the sum of horizontal components of friction force and normal force are maximum.'
-                                                  ' The gravitational acceleration is ', Eq(g, g_val), ' (m/s^2).')
-        question_3 = seqg('There is an object in rest on a plane that is inclined at an angle', theta,'. The mass of the object is'
-                          ' ', Eq(m, m_val), ' (kg) What should be the angle of the plane so that the sum of horizontal'
-                                             ' components of friction force and normal force maximum. The gravitational '
-                                             'acceleration is ,', Eq(g, g_val), ' (m/s^2).')
-
+        # choices, try providing a few
+        # these van include variations that are hard to encode with permg or variable substitution
+        # example, NL variations or equaiton variations
         q = choiceg(question_1, question_2, question_3)
         return q
 
-    def A(s, g_val, m_val, g, theta, m): #TODO change the signature of the function according to your answer
+    def A(s, g_val, m_val, theta_val, g, theta, m, T_wanted):
         '''
-        F_total = m*g*cos(theta)*sin(theta) + m*g*sin(theta)*cos(theta) =  m*g*(sin(2*theta))/2
-        For theta = pi/2 the horizontal force would reach its maximum value.
+        T_wanted = m*g*cos(theta)
+
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         pi = np.pi
-        char_pi = chr(960)
-        theta_val_rad = round(pi/2,2)
-        theta_val_degree = 45.0
-        theta_val_char = char_pi+'/2'
-        friction_force = round(m_val*g_val*np.sin(theta_val_rad),2)
-        friction_force_horizontal = round(friction_force * np.cos(theta_val_rad), 2)
-        normal_force = round(m_val*g_val*np.cos(theta_val_rad),2)
-        normal_force_horizontal = round(normal_force * np.sin(theta_val_rad),2)
-
-        #### WORK ON THE ANSWERSSSSSSSSSSSSS ######## 
-        answer_1 = seqg('The ', theta ,'in which sum of horizontal component of friction force and normal force is '
-                                            'maximum is', char_pi,'/2.')
-        answer_2 = seqg('The ', theta, ' in which sum of horizontal component of friction force and normal force is '
-                                            'maximum is 45 degree.')
-        answer_3 = seqg('The horizontal component of the friction force is m*g*cos(',theta,')*sin(',theta,
-                        ') and the horizontal component of normal force is also m*g*cos(',theta,')*sin(',theta,
-                        '). The sum of these two forces is equal to m*g*(sin(2*',theta,'))/2. Thus, in order to maximize this force the'
-                        , theta,' must be 45 degree.')
-        answer_4 = seqg('The horizontal component of the friction force is m*g*cos(', theta, ')*sin(', theta,
-                        ') and the horizontal component of normal force is also m*g*cos(', theta, ')*sin(',
-                        theta, '). The sum of these two forces is equal to m*g*(sin(2*', theta,
-                        '))/2. Thus, in order to maximize this force the', theta, ' must be ', char_pi,'/2.')
-        answer_5 = seqg('Normal force is equal to the projection of the weight perpendicular to the plane which is m*g*cos('
-                        ,theta,') and its horizontal component is m*g*cos(',theta,')*sin(',theta,
-                        '). The friction force is equal to the projection of the weight in the direction of the plane which is m*g*sin('
-                        ,theta,') and its horizontal component is m*g*cos(',theta,')*sin(',theta,
-                        '). The sum of these two forces is equal to m*g*(sin(2*',theta,
-                        '))/2. Thus, in order to maximize this force the', theta,' must be 45 degree.')
-        answer_6 = seqg('The friction force is equal to the projection of the weight in the direction of the plane which is m*g*sin('
-            , theta, ') and its horizontal component is m*g*cos(', theta, ')*sin(', theta,
-            '). Normal force is equal to the projection of the weight perpendicular to the plane which is m*g*cos('
-            , theta, ') and its horizontal component is m*g*cos(', theta, ')*sin(', theta,
-            '). The sum of these two forces is equal to m*g*(sin(2*', theta,
-            '))/2. Thus, in order to maximize this force the', theta, ' must be 45 degree.')
-
-
+        theta_radian = (theta_val * pi) / 180
+        ans_val = m_val*g_val*np.cos(theta_radian)
+        ans_String = m + '*' + g + '*' + 'cos(' + theta + ')'
+        answer_1 = seqg('The tenstion in the string is ', Eq(ans_String, ans_val), ' (N).')
+        answer_2 = seqg(ans_val)
+        answer_3 = seqg(Eq(ans_String, ans_val))
+        answer_4 = seqg('In order to find the tension in the string we need to follow newton law. Because the mass is at'
+                        ' rest then the net of forces in y and x direction must be equal to zero. After doing the '
+                        'calculation the tension in the string could be calculated by this formula ', ans_String,
+                        ' which with the given would be equal to ', ans_val, ' (N).')
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        a = choiceg( answer_1, answer_2, answer_3, answer_4, answer_5, answer_6)
+        a = choiceg(answer_1, answer_2, answer_3, answer_4)
         return a
 
     ##
