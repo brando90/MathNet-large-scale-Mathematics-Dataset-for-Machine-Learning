@@ -90,11 +90,18 @@ def get_classes(question):
 
     return classes
 
-def get_alt_coords():
+def get_alt_coords(n):
     '''
     Returns a list of symbols to represent a coordinate system.
     '''
-    alt_coords = ['x', 'y', 'z', 'x_1', 'y_1', 'z_1', 'x_2', 'y_2', 'z_2', 'x_3', 'y_3', 'z_3']
+    alt_coords = []
+    symbols = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+
+    symbol = random.choice(symbols)
+
+    for i in range(1, n+1):
+        char = symbol + '_' + str(i)
+        alt_coords.append(char)
 
     return alt_coords
 
