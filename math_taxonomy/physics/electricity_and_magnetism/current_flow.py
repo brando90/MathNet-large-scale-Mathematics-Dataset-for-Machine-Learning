@@ -262,8 +262,11 @@ class QA_constraint(QAGen):
         emf = choiceg(emf1, emf2)
 
         I = symbols('I')
-        current1 = Eq(I, (e - d_flux)/r)
-        current2 = Eq((e - d_flux)/r, I)
+        I_1 = e/r
+        I_induced = -d_flux/r
+        currentI = I_1 + I_induced
+        current1 = Eq(I, currentI)
+        current2 = Eq(currentI, I)
         current = choiceg(current1, current2)
 
 
