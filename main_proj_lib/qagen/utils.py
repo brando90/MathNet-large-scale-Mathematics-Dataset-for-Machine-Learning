@@ -90,14 +90,6 @@ def get_classes(question):
 
     return classes
 
-def get_alt_coords():
-    '''
-    Returns a list of symbols to represent a coordinate system.
-    '''
-    alt_coords = ['x', 'y', 'z', 'x_1', 'y_1', 'z_1', 'x_2', 'y_2', 'z_2', 'x_3', 'y_3', 'z_3']
-
-    return alt_coords
-
 def display_latex(q_str,a_str):
     '''
     Displays strings with latex if arguments are in latex format
