@@ -51,6 +51,11 @@ class QA_constraint(QAGen):
             m, a = self.get_symbols(2)
         return m, a
 
+    def _to_hashable_(self, variables):
+        m, a = variables
+        flattener = lambda x: x if isinstance(x, Symbol) else tuple(x)
+        return list(map(flattener, (a))) + m
+
     def init_qa_variables(self):
         '''
         Defines and returns all the variables that can vary between a
@@ -98,31 +103,9 @@ class QA_constraint(QAGen):
                       'and mathematicians on the spaceship. They calculate the total mass of the ship to be ',
                       Eq(m, m_val), "(kg), and its acceleration in the world to be, ", Eq(a, a_val),
                       "(m/s^2). Help the captain to control the ship by finding the total force applied to the ship.")
-        # question_6 = (
-        # 'Find the force applied to a mass with the mass ', Eq(m, m_val), " (Lb) with acceleration ", Eq(a, a_val),
-        # " (mile/s^2).")
-        # question_7 = ('There is a mass floating in a multi dimensional world with the mass ', Eq(m, m_val),
-        #               "(Lb). We observed that its acceleration is, ", Eq(a, a_val),
-        #               " (mile/s^2). Find the total force applied to it given these information.")
-        # question_8 = (
-        # 'What is the total force applied to a mass with acceleration ', Eq(a, a_val), " (mile/s^2) and the mass of",
-        # Eq(m, m_val), " (Lb).")
-        # question_9 = (
-        # 'Given the fact that total force applied to a mass is its acceleration times its mass, find the total forced'
-        # ' applied to a mass with mass', Eq(m, m_val), "(Lb), and acceleration ", Eq(a, a_val), " (mile/s^2).")
-        # question_10 = (
-        # 'A spaceship is wondering around in a multi dimensional world. The captain wants to know to total mass that is'
-        # ' beeing applied to the spaceship to be able to control it. There are a lot physicist and mathematicians on the'
-        # ' spaceship. They calculate the total mass of the ship to be ',
-        # Eq(m, m_val), "(Lb), and its acceleration in the world to be, ", Eq(a, a_val),
-        # "(mile/s^2). Help the captain with contrlong the ship by finding the total mass applied to the ship.")
 
-        # choices, try providing a few
-        # these van include variations that are hard to encode with permg or variable substitution
-        # example, NL variations or equaiton variations
         q = choiceg(question_1, question_2, question_3, question_4, question_5)
-        # , question_6, question_7, question_8,
-        #         question_9, question_10)
+
         return q
 
     def A(s,m_val, a_val, m, a): #TODO change the signature of the function according to your answer
