@@ -1,5 +1,5 @@
-#Completed
-# Debbug Status: tRun Time Error
+# Completed
+# Debug Status: RunTime error
 
 from sympy import *
 import random
@@ -18,13 +18,13 @@ class QA_constraint(QAGen):
         Initializer for your QA question.
         '''
         super().__init__()
-        self.author = 'Elaheh Ahmadi' #TODO your full name
-        self.description = 'A block sits on a plane that is inclined at an angle theta. Assume that the friction force is ' \
-                           'large enough to keep the block at rest. For what theta horizontal components of friction and normal forces are maximum?'
-
-
+        self.author = 'Elaheh Ahmadi'
+        self.description = 'A book of mass M is positioned against a vertical wall. The coefficient of friction between ' \
+                           'the book and the wall is μ. You wish to keep the book from falling by pushing on it with a ' \
+                           'force F applied at an angle theta with respect to the horizontal. For a given theta, what is ' \
+                           'the minimum F required?'
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['Plane', 'Block', 'Friction', 'Force', 'Normal Force', 'maximum', 'theta', 'horizontal force'] #TODO keywords to search type of question
+        self.keywords = ['Physics', 'Classical Mechanics', 'Mass', 'Wall', 'Friction', 'Force']
         self.use_latex = True
 
     def seed_all(self,seed):
@@ -36,7 +36,7 @@ class QA_constraint(QAGen):
         '''
         random.seed(seed)
         np.random.seed(seed)
-        # TODO write more seeding libraries that you are using
+
 
     def init_consistent_qa_variables(self):
         """
@@ -52,11 +52,12 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            g, m = symbols('g m')
-            theta = symbols(chr(952))
+           mu = symbols(chr(956))
+           m, g = symbols('m g')
+           theta = symbols(chr(952))
         else:
-            g, theta, m = self.get_symbols(3)
-        return g, theta, m
+            mu, m, g, theta = self.get_symbols(4)
+        return mu, m, g, theta
 
     def init_qa_variables(self):
         '''
@@ -73,80 +74,90 @@ class QA_constraint(QAGen):
         Note: debug flag can be used to deterministically output a QA that has
         simple numbers to check the correctness of your QA.
         '''
-        if self.debug:
-            g_val, m_val = 10, 1
-        else:
-            g_val = random.choice([10, 9.8, 9.81, 9.807])
-            m_val = np.random.randint(1,100000)/10
-        return g_val, m_val
 
-    def Q(s, g_val, m_val , g, theta, m): #TODO change the signature of the function according to your question
+        if self.debug:
+            mu_val, m_val, g_val, theta_val = 1, 1, 10, 30
+        else:
+            mu_val = np.random.randint(0,1000)
+            m_val = np.random.randint(1,10000)/10
+            g_val = random.choice([10, 9.8, 9.81, 9.807])
+            theta_val = np.random.randint(0, 89)
+
+        return mu_val, m_val, g_val, theta_val
+
+    def Q(s, mu_val, m_val, g_val, theta_val, mu, m, g, theta): #TODO change the signature of the function according to your question
         '''
-        A block sits on a plane that is inclined at an angle theta. Assume that the friction force is large enough to
-        keep the block at rest. What is the horizontal components of the friction.
+        A book of mass M is positioned against a vertical wall. The coefficient of friction between
+        the book and the wall is μ. You wish to keep the book from falling by pushing on it with a
+        force F applied at an angle theta with respect to the horizontal. For a given theta, what is
+        the minimum F required?
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        question_1 = seqg('A block sits on a plane that is inclined at an angle', theta,'. Assume '
-        'that the friction force is large enough to keep the block at rest. In what ', theta,
-                          'the sum of horizontal components of friction force and normal force are maximum?'
-                          'The object mass is ', Eq(m, m_val), ' (kg) and the gravitational acceleration is,'
-                          , Eq(g, g_val), ' (m/s^2).')
-        question_2 = seqg('An object with ', Eq(m, m_val), ' (kg) is sited on a plane that is inclined at an angle', theta,'.'
-                          ' We know that the the friction force is large enough to keep the block at rest. '
-                          'In what ', theta, ' the sum of horizontal components of friction force and normal force are maximum.'
-                                                  ' The gravitational acceleration is ', Eq(g, g_val), ' (m/s^2).')
-        question_3 = seqg('There is an object in rest on a plane that is inclined at an angle', theta,'. The mass of the object is'
-                          ' ', Eq(m, m_val), ' (kg) What should be the angle of the plane so that the sum of horizontal'
-                                             ' components of friction force and normal force maximum. The gravitational '
-                                             'acceleration is ,', Eq(g, g_val), ' (m/s^2).')
+        info_V1 = seqg('A book of mass {0} = {1} (kg) is positioned against a vertical wall. The coefficient of friction between'
+        'the book and the wall is {2} = {3}. You wish to keep the book from falling by pushing on it with a'
+        'force F applied at an angle {4} = {5} degree with respect to the horizontal.'.format(m, m_val, mu, mu_val, theta, theta_val))
+        info_V2 = seqg(
+            'There is a box with mass {0} = {1} (kg) that is positioned against a vertical wall. The coefficient of friction between'
+            'the book and the wall is {2} = {3}. You insert a force F to the book at an angle {4} = {5} degree with respect '
+            'to the horizontal.'.format(m, m_val, mu, mu_val, theta, theta_val))
+        wanted_V1 = seqg(' For this given {0}, what is the minimum force required to keep the object from falling? The gravitational acceleration is'
+                         ' {1} = {2} (m/s^2).'.format(theta, g, g_val))
+        wanted_V2 = seqg(' Calculate the minimum force to keep the book up for this given {0}. '
+                         'The gravitational acceleration is {1} = {2} (m/s^2).'.format(theta, g, g_val))
+        wanted_V3 = seqg(' Based on given information find the minimum force to keep the object up. The gravitational acceleration is'
+                         ' {0} = {1} (m/s^2).'.format(g, g_val))
+        wanted_V4 = seqg(' Calculate the minimum force to keep the box up for this given {0}. '
+                         'The gravitational acceleration is {1} = {2} (m/s^2).'.format(theta, g, g_val))
 
-        q = choiceg(question_1, question_2, question_3)
+        question_1 = seqg(info_V1, wanted_V1)
+        question_2 = seqg(info_V1, wanted_V2)
+        question_3 = seqg(info_V1, wanted_V3)
+        question_4 = seqg(info_V2, wanted_V1)
+        question_5 = seqg(info_V2, wanted_V3)
+        question_6 = seqg(info_V2, wanted_V4)
+        q = choiceg(question_1, question_2, question_3, question_4, question_5, question_6)
         return q
 
-    def A(s, g_val, m_val , g, theta, m): #TODO change the signature of the function according to your answer
+    def A(s, mu_val, m_val, g_val, theta_val, mu, m, g, theta): #TODO change the signature of the function according to your answer
         '''
-        F_total = m*g*cos(theta)*sin(theta) + m*g*sin(theta)*cos(theta) =  m*g*(sin(2*theta))/2
-        For theta = pi/2 the horizontal force would reach its maximum value.
+        forces in y direction: Fs + F*sin(theta) = mg
+        forces in x direction: F*cos(theta) = N
+        Fs = mu*N = mu*F*cos(theta)
+        F = mg/(sin(theta) + mu*cos(theta))
+
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
-        #define some short cuts
+
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         pi = np.pi
-        char_pi = chr(960)
-        answer_1 = seqg('The ', theta ,'in which sum of horizontal component of friction force and normal force is '
-                                            'maximum is', char_pi,'/2.')
-        answer_2 = seqg('The ', theta, ' in which sum of horizontal component of friction force and normal force is '
-                                            'maximum is 45 degree.')
-        answer_3 = seqg('The horizontal component of the friction force is m*g*cos(',theta,')*sin(',theta,
-                        ') and the horizontal component of normal force is also m*g*cos(',theta,')*sin(',theta,
-                        '). The sum of these two forces is equal to m*g*(sin(2*',theta,'))/2. Thus, in order to maximize this force the'
-                        , theta,' must be 45 degree.')
-        answer_4 = seqg('The horizontal component of the friction force is m*g*cos(', theta, ')*sin(', theta,
-                        ') and the horizontal component of normal force is also m*g*cos(', theta, ')*sin(',
-                        theta, '). The sum of these two forces is equal to m*g*(sin(2*', theta,
-                        '))/2. Thus, in order to maximize this force the', theta, ' must be ', char_pi,'/2.')
-        answer_5 = seqg('Normal force is equal to the projection of the weight perpendicular to the plane which is m*g*cos('
-                        ,theta,') and its horizontal component is m*g*cos(',theta,')*sin(',theta,
-                        '). The friction force is equal to the projection of the weight in the direction of the plane which is m*g*sin('
-                        ,theta,') and its horizontal component is m*g*cos(',theta,')*sin(',theta,
-                        '). The sum of these two forces is equal to m*g*(sin(2*',theta,
-                        '))/2. Thus, in order to maximize this force the', theta,' must be 45 degree.')
-        answer_6 = seqg('The friction force is equal to the projection of the weight in the direction of the plane which is m*g*sin('
-            , theta, ') and its horizontal component is m*g*cos(', theta, ')*sin(', theta,
-            '). Normal force is equal to the projection of the weight perpendicular to the plane which is m*g*cos('
-            , theta, ') and its horizontal component is m*g*cos(', theta, ')*sin(', theta,
-            '). The sum of these two forces is equal to m*g*(sin(2*', theta,
-            '))/2. Thus, in order to maximize this force the', theta, ' must be 45 degree.')
+        theta_radian = (theta_val * pi) / 180
+        F_min_val = m_val*g_val/(np.sin(theta_radian) + mu_val*np.cos(theta_radian))
+        F_min = seqg('{0}*{1}/(sin({2})+{3}*cos({4}))'.format(m, g, theta, mu, theta))
+        F_y = seqg('Fs + F*sin({0}) - m*g = 0'.format(theta))
+        F_x = seqg('N - F*cos(0) = 0'.format(theta))
+        F_s = seqg('Fs <= {0}*N'.format(mu))
+        answer_1 = seqg('{0} (N)'.format(F_min_val))
+        answer_2 = seqg('The minimum force can be calculated by this equation: {0}')
+        answer_3 = seqg('The minimum force is {0} = {1} (N)'.format(F_min, F_min_val))
+        explanation_init = seqg('In order to find the minimum force that keep the object on the wall we need to follow'
+                                ' Newton laws. Because the object will is at rest the sum of the forces in each direction must be zero.')
+        explanation_force_y = seqg(' The Newton equation in y direction is ', F_y)
+        explanation_force_x = seqg(' The Newton equation in x direction is ', F_x)
+        explanation_friction_force = seqg(' The general equation for friction force is ', F_s)
+        conclusion = seqg(' After solving these three equations we can calculate the minimum force.')
+        answer_4 = seqg(explanation_init, perg(explanation_force_x, explanation_force_y, explanation_friction_force),
+                        conclusion, 'So the minimum force is ',answer_1)
+        answer_5 = seqg(explanation_init, perg(explanation_force_x, explanation_force_y, explanation_friction_force),
+                        conclusion, answer_2)
+        answer_6 = seqg(explanation_init, perg(explanation_force_x, explanation_force_y, explanation_friction_force),
+                        conclusion, answer_3)
 
 
-        # choices, try providing a few
-        # these van include variations that are hard to encode with permg or variable substitution
-        # example, NL variations or equaiton variations
         a = choiceg( answer_1, answer_2, answer_3, answer_4, answer_5, answer_6)
         return a
 

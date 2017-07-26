@@ -1,144 +1,114 @@
-# Completed
-# Debugg status: Sympy error
-
 from sympy import *
 import random
 import numpy as np
+import pdb
 
 from qagen.qagen import *
 from qagen import utils
 from qagen import unit_test_for_user as user_test
 
-# TODO: You can also put your quesiton example here
 
 class QA_constraint(QAGen):
 
     def __init__(self):
-        '''
+        """
         Initializer for your QA question.
-        '''
+        """
+
         super().__init__()
-        self.author = 'Elaheh Ahmadi' #TODO your full name
-        self.description = "Calculating a mass of an object given the total force applied to it and its acceleration"  #TODO example string of your question
+        self.author = 'Ivan Jutamulia'
+        self.description = '''Let a (1, 2, 3), b (3, 3, 5), and c (4, 8, 1) be points in space. Find the area of the region as defined by a, b, and c.'''
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['physics' ,'classical mechanics','force', 'mass', 'acceleration'] #TODO keywords to search type of question
+        self.keywords = ['multivariable calculus']
         self.use_latex = True
 
-    def seed_all(self,seed):
-        '''
+    def seed_all(self, seed):
+        """
         Write the seeding functions of the libraries that you are using.
         Its important to seed all the libraries you are using because the
         framework will assume it can seed stuff for you. It needs this for
         the library to work.
-        '''
+        """
         random.seed(seed)
         np.random.seed(seed)
-        # TODO write more seeding libraries that you are using
+        self.fake.random.seed(seed)
 
     def init_consistent_qa_variables(self):
         """
         Defines and returns all the variables that need to be consistent
         between a question and an answer. Usually only names and variable/symbol
         names.
-
         Example: when generating MC questions the non consistent variables will
         be used to generate other options. However, the names, symbols, etc
         should remain consistent otherwise some answers will be obviously fake.
-
         Note: debug flag can be used to deterministically output a QA that has
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            force, a = symbols('m a')
+            a, b, c = symbols('a b c')
         else:
-            force, a = self.get_symbols(2)
-        return force, a
-
-    def _to_hashable_(self, variables):
-        force, a = variables
-        flattener = lambda x: x if isinstance(x, Symbol) else tuple(x);
-        return list(map(flattener, (force, a)))
+            a, b, c = self.get_symbols(3)
+        return a, b, c
 
     def init_qa_variables(self):
-        '''
+        """
         Defines and returns all the variables that can vary between a
         question and an answer. Good examples are numerical values that might
         make the answers not obviously wrong.
-
         Example: when generating MC questions the non consistent variables will
         be used to generate other options. However, the names, symbols, etc
         should remain consistent otherwise some answers will be obviously fake.
         Numerical values that have been fully evaluated are a good example of
         how multiple choice answers can be generated.
-
         Note: debug flag can be used to deterministically output a QA that has
         simple numbers to check the correctness of your QA.
-        '''
+        """
         if self.debug:
-            force_val, a_val = 1, 2
+            d, e, f, g, h, i, j, k, l = 1, 2, 3, 3, 3, 5, 4, 8, 1
         else:
-            dim = np.random.randint(1,100)
-            force_val, a_val =  np.random.randint(-1000000,1000000, dim) , np.random.randint(-1000000, 1000000, dim)
-        return force_val, a_val
+            d, e, f, g, h, i, j, k, l = np.random.randint(-100, 100, [9])
+        return d, e, f, g, h, i, j, k, l
 
-    def Q(s, force_val, a_val, force, a): #TODO change the signature of the function according to your question
-        '''
-        Finding the mass of an object given the total force applied to it and acceleration.
-
+    def Q(s, d, e, f, g, h, i, j, k, l, a, b, c):
+        """
+        Small question description.
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
-        '''
-        #define some short cuts
+        """
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-
-        question_1 =  ('Find the mass of an object given the force applied to ', Eq(force, force_val), " (N) and its acceleration ",
-                       Eq(a, a_val), " (m/s^2).")
-        question_2 = ('There is a mass floating in a multi dimensional world. We know that the total force applied to it is ',
-                      Eq(force, force_val), "(N). Also, we observed that its acceleration is, ", Eq(a, a_val),
-                      " (m/s^2). Find the mass of this object given these information.")
-        question_3 = ('What is the total mass of an object with acceleration ', Eq(a, a_val),
-                      " (m/s^2) if the total force applied to it is ", Eq(force, force_val), " (N).")
-        question_4 = ('Given the fact that total force applied to a mass is its acceleration times its mass,'
-                      ' find the mass of an object when we know the total forced applied to it is ', Eq(force, force_val), "(N), and its acceleration is ",
-                      Eq(a, a_val), " (m/s^2).")
-        question_5 = ('A spaceship is wondering around in a multi dimensional world. The captain wants to know the'
-                      ' mass of the spaceship be able to control it. There are a three physicists '
-                      'and mathematicians on the spaceship. They calculated that the total force on the ship is ',
-                      Eq(force, force_val), "(N), and its acceleration in the world is, ", Eq(a, a_val),
-                      "(m/s^2). Help the captain to control the ship by finding the total mass of the ship.")
-
-        q = choiceg(question_1, question_2, question_3, question_4, question_5)
-
+        given = seqg('Let {0} ({1}, {2}, {3}), {4} ({5}, {6}, {7}), and {8} ({9}, {10}, {11}) be points in space.'.format(a, d, e, f, b, g, h, i, c, j, k, l))
+        calc = seqg('Find the area of the region as defined by {0}, {1}, and {2}.'.format(a, b, c))
+        ask = seqg('What is the area of the region as defined by {0}, {1}, and {2}?'.format(a, b, c))
+        question1 = seqg(given, calc)
+        question2 = seqg(given, ask)
+        q = choiceg(question1, question2)
         return q
 
-    def A(s, force_val, a_val, force, a): #TODO change the signature of the function according to your answer
-        '''
-        The answer is m = |F|/|a|
-
+    def A(s, d, e, f, g, h, i, j, k, l, a, b, c):
+        """
+        Small answer description.
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
-        '''
-        #define some short cuts
+        """
+        # define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        force_magnitude = np.sqrt(np.dot(force_val, force_val))
-        a_magnitude = np.sqrt(np.dot(a_val, a_val))
-        ans_val = force_magnitude / a_magnitude
-        answer_1 = seqg("The mass of the object is ", ans_val," (kg).")
-        answer_2 = seqg("After dividing the magnitude of the total force over the magnitude of the acceleration, "
-                        "the mass of the object is equal to ", ans_val,"(kg).")
-
-        # choices, try providing a few
-        # these van include variations that are hard to encode with permg or variable substitution
-        # example, NL variations or equaiton variations
-        a = choiceg(answer_1, answer_2)
+        v, u = (g - d, h - e, i - f), (j - d, k - e, l - f)
+        ans1 = v[1] * u[2] - v[2] * u[1]
+        ans2 = v[2] * u[0] - v[0] * u[2]
+        ans3 = v[0] * u[1] - v[1] * u[0]
+        mag = sqrt(ans1**2 + ans2**2 + ans3**2)
+        answer = 1/2 * mag
+        answer1 = seqg('The area of the region defined is {0}.'.format(answer))
+        answer2 = seqg('{0} is the area of the region defined.'.format(answer))
+        a = choiceg(answer1, answer2)
         return a
 
     ##
 
     def get_qa(self,seed):
-        '''
+        """
         Example of how Q,A are formed in general.
-        '''
+        """
         # set seed
         self.seed_all(seed)
         # get variables for qa and register them for the current q,a
@@ -148,9 +118,9 @@ class QA_constraint(QAGen):
         a_str = self.A(*variables,*variables_consistent)
         return q_str, a_str
 
-## Some helper functions to check the formats are coming out correctly
 
-##
+# Some helper functions to check the formats are coming out correctly
+
 
 def check_single_question_debug(qagenerator):
     '''
@@ -162,6 +132,7 @@ def check_single_question_debug(qagenerator):
     print('q: ', q)
     print('a: ', a)
 
+
 def check_single_question(qagenerator):
     '''
     Checks by printing a single quesiton on debug mode
@@ -170,6 +141,7 @@ def check_single_question(qagenerator):
     print('qagenerator.debug = ', qagenerator.debug)
     print('q: ', q)
     print('a: ', a)
+
 
 def check_mc(qagenerator):
     '''
@@ -184,6 +156,7 @@ def check_mc(qagenerator):
         print('-answers:')
         print("\n".join(ans_list))
 
+
 def check_many_to_many(qagenerator):
     for seed in range(3):
         q,a = qagenerator.generate_many_to_many(nb_questions=4,nb_answers=3,seed=seed)
@@ -191,6 +164,7 @@ def check_many_to_many(qagenerator):
         print("\n".join(q))
         print('-answers:')
         print("\n".join(a))
+
 
 def check_many_to_one_consis(qagenerator):
     for seed in range(3):
@@ -200,6 +174,7 @@ def check_many_to_one_consis(qagenerator):
         print('a: ', a)
         #print("\n".join(a))
 
+
 def check_many_to_one_consistent_format(qagenerator):
     nb_qa_pairs,nb_questions = 10,3
     qa_pair_list = qagenerator.generate_many_to_one_consistent_format(nb_qa_pairs,nb_questions)
@@ -208,13 +183,10 @@ def check_many_to_one_consistent_format(qagenerator):
         print("\n".join(q_list))
         print('a: ', a_consistent_format)
 
+
 if __name__ == '__main__':
     qagenerator = QA_constraint()
-    check_single_question(qagenerator)
-    ## uncomment the following to check formats:
-    #check_mc(qagenerator)
-    #check_many_to_one(qagenerator)
-    #check_one_to_many(qagenerator)
-    #check_many_to_one_consistent_format(qagenerator)
-    ## run unit test given by framework
-    user_test.run_unit_test_for_user(QA_constraint)
+    check_single_question_debug(qagenerator)
+    # user_test.run_unit_test_for_user(QA_constraint)
+
+

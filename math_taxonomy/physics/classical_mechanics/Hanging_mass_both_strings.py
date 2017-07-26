@@ -1,5 +1,5 @@
 # Completed
-# Debugg status: Sympy error
+# Debug Status: RunTime
 
 from sympy import *
 import random
@@ -19,9 +19,10 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'Elaheh Ahmadi' #TODO your full name
-        self.description = "Calculating a mass of an object given the total force applied to it and its acceleration"  #TODO example string of your question
+        self.description = 'A mass m, held up by two strings, hangs from a ceiling. The strings ' \
+                           'form a right angle. If the right string makes an angle theta with the ceiling, what is the tension in the strings? '
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['physics' ,'classical mechanics','force', 'mass', 'acceleration'] #TODO keywords to search type of question
+        self.keywords = ['Physics', 'Classical Mechanics', 'Mass', 'Strings', 'Tension'] #TODO keywords to search type of question
         self.use_latex = True
 
     def seed_all(self,seed):
@@ -49,15 +50,13 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            force, a = symbols('m a')
-        else:
-            force, a = self.get_symbols(2)
-        return force, a
 
-    def _to_hashable_(self, variables):
-        force, a = variables
-        flattener = lambda x: x if isinstance(x, Symbol) else tuple(x);
-        return list(map(flattener, (force, a)))
+            g, m, T_right, T_left = symbols('g  m T_right T_left')
+            theta = symbols (chr(952))
+        else:
+            g, theta, m, T_right, T_left = self.get_symbols(5)
+
+        return g, theta, m, T_left, T_right
 
     def init_qa_variables(self):
         '''
@@ -75,62 +74,78 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            force_val, a_val = 1, 2
+            g_val, m_val, theta_val = 10, 1, 30
         else:
-            dim = np.random.randint(1,100)
-            force_val, a_val =  np.random.randint(-1000000,1000000, dim) , np.random.randint(-1000000, 1000000, dim)
-        return force_val, a_val
+            g_val = random.choice([10, 9.8, 9.81, 9.807])
+            theta_val = np.random.randint(0,89)
+            m_val = np.random.randint(1,100000)/10
 
-    def Q(s, force_val, a_val, force, a): #TODO change the signature of the function according to your question
+        return g_val, m_val, theta_val
+
+    def Q(s, g_val, m_val, theta_val, g, theta, m, T_right, T_left): #TODO change the signature of the function according to your question
         '''
-        Finding the mass of an object given the total force applied to it and acceleration.
+        A mass m, held up by two strings, hangs from a ceiling. The strings form a right angle.
+        If the right/left string makes an angle theta with the ceiling what is the tension of this String.
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
+        # TODO
+        question_1 = seqg('A mass ', Eq(m, m_val), ' held up by two strings, hangs from a ceiling. The two strings form' \
+                                                    ' a right angle. If the right string makes an angle ', Eq(theta, theta_val), ' with the' \
+                                                    ' ceiling what is the tension in the strings. The gravitational acceleration is,', Eq(g, g_val), ' (m/s^2).')
+        question_2 = seqg('There is a mass ', Eq(m, m_val), ' attached to two strings. The other end of the strings are attached to the ceiling. We know that the the two strings form' \
+                                                    ' a right angle. If the left string makes an angle theta with the' \
+                                                    ' ceiling what is the tension in the strings. The gravitational acceleration is,', Eq(g, g_val), ' (m/s^2).')
+        question_3 = seqg('A mass ', Eq(m, m_val), ' held up by two strings, hangs from a ceiling. The two strings form' \
+                                                    ' a right angle. If the right string makes an angle theta with the' \
+                                                    ' ceiling what is the tension in the strings if the gravitational acceleration is,', Eq(g, g_val), ' (m/s^2).')
 
-        question_1 =  ('Find the mass of an object given the force applied to ', Eq(force, force_val), " (N) and its acceleration ",
-                       Eq(a, a_val), " (m/s^2).")
-        question_2 = ('There is a mass floating in a multi dimensional world. We know that the total force applied to it is ',
-                      Eq(force, force_val), "(N). Also, we observed that its acceleration is, ", Eq(a, a_val),
-                      " (m/s^2). Find the mass of this object given these information.")
-        question_3 = ('What is the total mass of an object with acceleration ', Eq(a, a_val),
-                      " (m/s^2) if the total force applied to it is ", Eq(force, force_val), " (N).")
-        question_4 = ('Given the fact that total force applied to a mass is its acceleration times its mass,'
-                      ' find the mass of an object when we know the total forced applied to it is ', Eq(force, force_val), "(N), and its acceleration is ",
-                      Eq(a, a_val), " (m/s^2).")
-        question_5 = ('A spaceship is wondering around in a multi dimensional world. The captain wants to know the'
-                      ' mass of the spaceship be able to control it. There are a three physicists '
-                      'and mathematicians on the spaceship. They calculated that the total force on the ship is ',
-                      Eq(force, force_val), "(N), and its acceleration in the world is, ", Eq(a, a_val),
-                      "(m/s^2). Help the captain to control the ship by finding the total mass of the ship.")
-
-        q = choiceg(question_1, question_2, question_3, question_4, question_5)
-
-        return q
-
-    def A(s, force_val, a_val, force, a): #TODO change the signature of the function according to your answer
-        '''
-        The answer is m = |F|/|a|
-
-        Important Note: first variables are the not consistent variables followed
-        by the consistent ones. See sample QA example if you need too.
-        '''
-        #define some short cuts
-        seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        force_magnitude = np.sqrt(np.dot(force_val, force_val))
-        a_magnitude = np.sqrt(np.dot(a_val, a_val))
-        ans_val = force_magnitude / a_magnitude
-        answer_1 = seqg("The mass of the object is ", ans_val," (kg).")
-        answer_2 = seqg("After dividing the magnitude of the total force over the magnitude of the acceleration, "
-                        "the mass of the object is equal to ", ans_val,"(kg).")
 
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        a = choiceg(answer_1, answer_2)
+        q = choiceg(question_1, question_2, question_3)
+        return q
+
+    def A(s, g_val, m_val, theta_val, g, theta, m,  T_right, T_left):
+        '''
+        T_wanted = m*g*sin(theta)
+
+        Important Note: first variables are the not consistent variables followed
+        by the consistent ones. See sample QA example if you need too.
+        '''
+        #define some short cuts
+        seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
+        pi = np.pi
+        theta_radian = (theta_val * pi) / 180
+        T_left_val = m_val*g_val*np.sin(theta_radian)
+        T_right_val = m_val*g_val*np.cos(theta_radian)
+        T_right_ans_String = m , '*' , g , '*' , 'cos(' , theta , ')'
+        T_left_ans_String = m , '*' , g , '*' , 'sin(' , theta , ')'
+        sentence_11 = 'The tension in the right string is ', Eq(T_right, T_right_val)
+        sentence_12 = 'The tension in the left string is ', Eq(T_left, T_left_val)
+        answer_1 = seqg(perg(sentence_11, sentence_12))
+        sentence_21 = 'The tension in the right string could be calculated by this formula, ' , T_right , ' = ' \
+                      , T_right_ans_String , '. If we use the given values then ' , Eq(T_right, T_right_val) , ' (N).'
+        sentence_22 = 'The tension in the left string could be calculated by this formula, ' , T_left , ' = ' \
+                      , T_left_ans_String , '. If we use the given values then ' , Eq(T_left, T_left_val) , ' (N).'
+        answer_2 = seqg(perg(sentence_21, sentence_22))
+        formula_y = T_right , '*' ,'sin(' , theta , ')' , '+' , T_left , '*' ,'cos(' , theta , ')' , '=' , m , '*' , g
+        formula_x = T_right , '*' ,'cos(' , theta , ')' , '=' , T_left , '*' ,'sin(' , theta , ')'
+        answer_3 = seqg('In order to find the tension in the string we need to follow newton law. Because the mass is at'
+                        ' rest then the net of forces in y and x direction must be equal to zero. So we can write that , After doing the '
+                        'calculation the tension in the string could be calculated by these formulas ', perg(formula_y, formula_x), '. Thus ', perg(sentence_22, sentence_21),'.')
+        answer_4 = seqg('In order to find the tension in the string we need to follow newton law. Because the mass is at'
+                        ' rest then the net of forces in y and x direction must be equal to zero. So we can write that , After doing the '
+                        'calculation the tension in the string could be calculated by these formulas ', perg(formula_y, formula_x), '. Thus ', perg(sentence_11, sentence_12),'.')
+
+        # choices, try providing a few
+        # these van include variations that are hard to encode with permg or variable substitution
+        # example, NL variations or equaiton variations
+        a = choiceg(answer_1, answer_2, answer_3, answer_4)
         return a
 
     ##

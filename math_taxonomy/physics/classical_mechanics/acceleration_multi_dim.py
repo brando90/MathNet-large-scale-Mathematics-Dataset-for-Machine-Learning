@@ -1,4 +1,6 @@
-# an error that I dont know what is it about
+# Completed
+# Debugg status: only works in 1 dim gets sympy.core.sympify.SympifyError: SympifyError in multi dim
+
 from sympy import *
 import random
 import numpy as np
@@ -52,6 +54,11 @@ class QA_constraint(QAGen):
              v0, v1, t0, t1, dim = self.get_symbols(5)
         return  v0, v1, t0, t1, dim
 
+    def _to_hashable_(self, variables):
+        v0, v1, t0, t1, dim = variables
+        flattener = lambda x: x if isinstance(x, Symbol) else tuple(x);
+        return list(map(flattener, (v0,v1))) + [t0, t1, dim]
+
     def init_qa_variables(self):
         '''
         Defines and returns all the variables that can vary between a
@@ -68,7 +75,7 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            v0_val, v1_val, t0_val, t1_val, dim_val = [1], [2], 3, 4, 1
+            v0_val, v1_val, t0_val, t1_val, dim_val = 1, 2, 3, 4, 1
         else:
             dim_val = np.random.randint(1,100)
             v0_val = np.random.randint(-1000,1000,dim_val)
@@ -78,7 +85,7 @@ class QA_constraint(QAGen):
 
         return v0_val, v1_val, t0_val, t1_val, dim_val
 
-    def Q(s,v0, v1, t0, t1, dim, v0_val, v1_val, t0_val, t1_val, dim_val): #TODO change the signature of the function according to your question
+    def Q(s,v0, v1, t0, t1, dim, v0_val, v1_val, t0_val, t1_val, dim_val):
         '''
         Finding the acceleration of an object bassed on having its velocity at two different times
 
@@ -87,11 +94,14 @@ class QA_constraint(QAGen):
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        question1 = seqg('Find acceleration of an object that moves in', Eq(dim, dim_val),' dimensional world given that we know its velocity changes from ', Eq(v0, v0_val), '(m/s) to ', Eq(v1, v1_val), '(m/s) in time frame of ', Eq(t0, t0_val), '(s) to ', Eq(t1, t1_val), '(s).')
+        question1 = seqg('Find acceleration of an object that moves in', Eq(dim, dim_val),
+                         ' dimensional world given that we know its velocity changes from '
+                         , Eq(v0, v0_val), '(m/s) to ', Eq(v1, v1_val), '(m/s) in time frame of ',
+                         Eq(t0, t0_val), '(s) to ', Eq(t1, t1_val), '(s).')
         q = choiceg(question1)
         return q
 
-    def A(s,v0_val, v1_val, t0_val, t1_val, dim_val, v0, v1, t0, t1, dim): #TODO change the signature of the function according to your answer
+    def A(s,v0_val, v1_val, t0_val, t1_val, dim_val, v0, v1, t0, t1, dim):  
         '''
         We use this equationto find the acceleration a = (v1_val - v0_val)/(t1_val - t0_val).
 

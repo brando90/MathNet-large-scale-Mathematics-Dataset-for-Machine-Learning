@@ -47,7 +47,7 @@ class QA_constraint(QAGen):
         if self.debug:
             x, y, z = symbols('x y z')
         else:
-            x, y, z = symbols('x y z')
+            x, y, z = self.get_symbols(3)
         return x, y, z
 
     def init_qa_variables(self):
@@ -66,7 +66,7 @@ class QA_constraint(QAGen):
         if self.debug:
             a, b, c, d, e, f, g, h, i = 1, 1, 1, 0, 0, 2, 3, 0, 0
         else:
-            a, b, c, d, e, f, g, h, i = np.random.randint(-10, 10, [9])
+            a, b, c, d, e, f, g, h, i = np.random.randint(-100, 100, [9])
         return a, b, c, d, e, f, g, h, i
 
     def Q(s, a, b, c, d, e, f, g, h, i, x, y, z):
@@ -187,7 +187,7 @@ def check_many_to_one_consistent_format(qagenerator):
 
 if __name__ == '__main__':
     qagenerator = QA_constraint()
-    check_single_question_debug(qagenerator)
-    # user_test.run_unit_test_for_user(QA_constraint)
+    # check_single_question_debug(qagenerator)
+    user_test.run_unit_test_for_user(QA_constraint)
 
 
