@@ -1,3 +1,6 @@
+# Completed
+# Debug Status: Run time error
+
 from sympy import *
 import random
 import numpy as np
@@ -73,7 +76,7 @@ class QA_constraint(QAGen):
         else:
             g_val = random.choice([10, 9.8, 9.81, 9.807])
             theta_val = np.random.randint(0,89)
-            m_val = np.random.randint(1,100000,1)/10
+            m_val = np.random.randint(1,100000)/10
 
         return g_val, m_val, theta_val
 
@@ -120,13 +123,13 @@ class QA_constraint(QAGen):
         pi = np.pi
         theta_radian = (theta_val * pi) / 180
         ans_val = m_val*g_val*np.cos(theta_radian)
-        ans_String = m + '*' + g + '*' + 'cos(' + theta + ')'
-        answer_1 = seqg('The tension in the string is ', Eq(ans_String, ans_val), ' (N).')
+        ans_String = str(m) + '*' + str(g) + '*' + 'cos(' + str(theta) + ')'
+        answer_1 = seqg('The tension in the string is ', m, '*', g, '*cos(', theta, ') = ', ans_val, ' (N).')
         answer_2 = seqg(ans_val)
-        answer_3 = seqg(Eq(ans_String, ans_val))
+        answer_3 = seqg(m, '*', g, '*cos(', theta, ') = ', ans_val, ' (N)')
         answer_4 = seqg('In order to find the tension in the string we need to follow newton law. Because the mass is at'
                         ' rest then the net of forces in y and x direction must be equal to zero. After doing the '
-                        'calculation the tension in the string could be calculated by this formula ', ans_String,
+                        'calculation the tension in the string could be calculated by this formula ', m, '*', g, '*cos(', theta, ')'
                         ' which with the given would be equal to ', ans_val, ' (N).')
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution

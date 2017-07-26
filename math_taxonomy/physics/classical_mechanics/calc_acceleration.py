@@ -1,5 +1,5 @@
 # Completed
-# Debugg status: 'Symbol' object is not iterable
+# Debugg status: sympy error
 
 from sympy import *
 import random
@@ -55,9 +55,10 @@ class QA_constraint(QAGen):
         return m, force
 
     def _to_hashable_(self, variables):
-        force, m = variables
-        flattener = lambda x: x if isinstance(x, Symbol) else tuple(x);
-        return list(map(flattener, force)) + [m]
+        m, force = variables
+        flattener = lambda x: x if isinstance(x, Symbol) else tuple(x)
+        return flattener(force) , m
+
 
     def init_qa_variables(self):
         '''
@@ -81,7 +82,7 @@ class QA_constraint(QAGen):
             m_val, force_val = np.random.randint(1,1000000) , np.random.randint(-1000000, 1000000, dim)
         return m_val, force_val
 
-    def Q(s, m_val, force_val, m, force): #TODO change the signature of the function according to your question
+    def Q(s, m_val, force_val, m, force):
         '''
         Finding the acceleration of an object given its total force and mass.
 

@@ -1,3 +1,6 @@
+# Completed
+# Debug Status: RunTime
+
 from sympy import *
 import random
 import numpy as np
@@ -75,7 +78,7 @@ class QA_constraint(QAGen):
         else:
             g_val = random.choice([10, 9.8, 9.81, 9.807])
             theta_val = np.random.randint(0,89)
-            m_val = np.random.randint(1,100000,1)/10
+            m_val = np.random.randint(1,100000)/10
 
         return g_val, m_val, theta_val
 
@@ -120,18 +123,18 @@ class QA_constraint(QAGen):
         theta_radian = (theta_val * pi) / 180
         T_left_val = m_val*g_val*np.sin(theta_radian)
         T_right_val = m_val*g_val*np.cos(theta_radian)
-        T_right_ans_String = m + '*' + g + '*' + 'cos(' + theta + ')'
-        T_left_ans_String = m + '*' + g + '*' + 'sin(' + theta + ')'
-        sentence_11 = 'The tension in the right string is '+ Eq(T_right, T_right_val)
-        sentence_12 = 'The tension in the left string is '+ Eq(T_left, T_left_val)
+        T_right_ans_String = m , '*' , g , '*' , 'cos(' , theta , ')'
+        T_left_ans_String = m , '*' , g , '*' , 'sin(' , theta , ')'
+        sentence_11 = 'The tension in the right string is ', Eq(T_right, T_right_val)
+        sentence_12 = 'The tension in the left string is ', Eq(T_left, T_left_val)
         answer_1 = seqg(perg(sentence_11, sentence_12))
-        sentence_21 = 'The tension in the right string could be calculated by this formula, ' + T_right + ' = ' \
-                      + T_right_ans_String + '. If we use the given values then ' + Eq(T_right, T_right_val) + ' (N).'
-        sentence_22 = 'The tension in the left string could be calculated by this formula, ' + T_left + ' = ' \
-                      + T_left_ans_String + '. If we use the given values then ' + Eq(T_left, T_left_val) + ' (N).'
+        sentence_21 = 'The tension in the right string could be calculated by this formula, ' , T_right , ' = ' \
+                      , T_right_ans_String , '. If we use the given values then ' , Eq(T_right, T_right_val) , ' (N).'
+        sentence_22 = 'The tension in the left string could be calculated by this formula, ' , T_left , ' = ' \
+                      , T_left_ans_String , '. If we use the given values then ' , Eq(T_left, T_left_val) , ' (N).'
         answer_2 = seqg(perg(sentence_21, sentence_22))
-        formula_y = T_right + '*' +'sin(' + theta + ')' + '+' + T_left + '*' +'cos(' + theta + ')' + '=' + m + '*' + g
-        formula_x = T_right + '*' +'cos(' + theta + ')' + '=' + T_left + '*' +'sin(' + theta + ')'
+        formula_y = T_right , '*' ,'sin(' , theta , ')' , '+' , T_left , '*' ,'cos(' , theta , ')' , '=' , m , '*' , g
+        formula_x = T_right , '*' ,'cos(' , theta , ')' , '=' , T_left , '*' ,'sin(' , theta , ')'
         answer_3 = seqg('In order to find the tension in the string we need to follow newton law. Because the mass is at'
                         ' rest then the net of forces in y and x direction must be equal to zero. So we can write that , After doing the '
                         'calculation the tension in the string could be calculated by these formulas ', perg(formula_y, formula_x), '. Thus ', perg(sentence_22, sentence_21),'.')

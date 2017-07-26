@@ -1,3 +1,6 @@
+# Completed
+# Debugg status: Sympy error
+
 from sympy import *
 import random
 import numpy as np
@@ -50,6 +53,11 @@ class QA_constraint(QAGen):
         else:
             force, a = self.get_symbols(2)
         return force, a
+
+    def _to_hashable_(self, variables):
+        force, a = variables
+        flattener = lambda x: x if isinstance(x, Symbol) else tuple(x);
+        return list(map(flattener, (force, a)))
 
     def init_qa_variables(self):
         '''
