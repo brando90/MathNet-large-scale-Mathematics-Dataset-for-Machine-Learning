@@ -16,8 +16,8 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'Elaheh Ahmadi'
-        self.description = 'A rope with length L and mass density Ω per unit length is suspended vertically from one' \
-                           ' end. Find the tension as a function of height along the rope.'
+        self.description = 'A rope with length L and mass M is suspended vertically from one' \
+                           ' end. Find the tension in height y.'
 
         self.keywords = ['Physics', 'Classical Mechanics', 'Mass', 'Rope', 'Tension', 'Density']
         self.use_latex = True
@@ -47,11 +47,11 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            L, y, g = symbols('L y g')
-            ru = symbols(chr(956))
+            L, y, g, m = symbols('L y g m')
+
         else:
-            L, y, ru, g = self.get_symbols(4)
-        return L, y, ru, g
+            L, y, m, g = self.get_symbols(4)
+        return L, y, m, g
 
     def init_qa_variables(self):
         '''
@@ -69,16 +69,17 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            L_val, ru_val, g_val = 1, 1, 10
+            L_val, m_val, g_val = 1, 1, 10
         else:
-            L_val, ru_val = np.random.randint(.01,1000,2)
+            L_val, m_val = np.random.randint(.01,1000,2)
             g_val = random.choice([10, 9.8, 9.81, 9.807])
-        return L_val, ru_val, g_val
+            y_val = np.random.randint(0,L_val)
+        return L_val, m_val, g_val, y_val
 
-    def Q(s, L_val, ru_val, g_val, L, y, ru, g): #TODO change the signature of the function according to your question
+    def Q(s, L_val, m_val, g_val, y_val, L, y, m, g): #TODO change the signature of the function according to your question
         '''
-        A rope with length L and mass density Ω per unit length is suspended vertically from one end.
-        Find the tension as a function of height along the rope.
+        A rope with length L and mass m is suspended vertically from one end.
+        Find the tension in given height.
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
@@ -86,10 +87,10 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         # TODO
-        info_V1 = seqg('A rope with length {0} = {1} (m) and mass density {2} = {3] (kg/m) per unit length is suspended'
-                       ' vertically from one end.'.format(L, L_val, ru, ru_val))
-        wanted_V1 = seqg(' Find the tension of the rope as the function of height ({0}).'.format(y))
-        wanted_V2 = seqg(' Find the equation for the tension of the rope as the function of {0}.')
+        info_V1 = seqg('A rope with length {0} = {1} (m) and mass {2} = {3] (kg/m) is suspended'
+                       ' vertically from one end.'.format(L, L_val, m, m_val))
+        wanted_V1 = seqg(' Find the tension of the rope in height {0} = {1} (m) .'.format(y, y_val))
+        wanted_V2 = seqg(' Find the equation for the tension of the rope in height {0} = {1} (m).'.format(y, y_val))
         g_sentence_V1 = seqg(' Assume the gravitational acceleration is {0} = {1} (m/s^2).'.format(g, g_val))
         g_sentence_V2 = seqg(' Gravitational Acceleration is {0} = {1} (m/s^2).')
         question_1 = seqg(info_V1, wanted_V1, g_sentence_V1)
@@ -99,26 +100,28 @@ class QA_constraint(QAGen):
         q = choiceg(question_1, question_2, question_3, question_4)
         return q
 
-    def A(s, L_val, ru_val, g_val, L, y, ru, g): #TODO change the signature of the function according to your answer
+    def A(s, L_val, m_val, g_val, y_val, L, y, m, g): #TODO change the signature of the function according to your answer
         '''
-        T(y) = ru*g*y
+        T(y) = m*g*y/L
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        ru_g = ru_val*g_val
-        answer_value = seqg('{0}*{1}'.format(ru_g, y))
-        answer_symbol = seqg('{0}*{1}*{2}'.format(ru, g, y))
+        ans = m_val * g_val * y_val/L_val
+        answer_value = seqg('{0} (N)'.format(ans))
+        answer_symbol = seqg('{0}*{1}*{2}/{3}'.format(m, g, y, L))
         info_V1 = seqg('The tension as a function of height can be calculate by this function. ')
         info_V2 = seqg('The tension as a function of height is: ')
-        answer_1 = seqg(info_V1, answer_symbol)
-        answer_2 = seqg(info_V1, answer_value)
-        answer_3 = seqg(info_V2, answer_symbol)
-        answer_4 = seqg(info_V2, answer_value)
+        conclusion_V1 = seqg('Given the values in question the tension in height {0} is '.format(y, ans))
+        conclusion_V2 = seqg('After including the given values for {0}, {1}, {2}, and {3}, a the tension is '.format(m, g, y, L))
+        answer_1 = seqg(info_V1, answer_symbol, conclusion_V1, answer_value)
+        answer_2 = seqg(info_V1, answer_symbol, conclusion_V2, answer_value)
+        answer_3 = seqg(info_V2, answer_symbol, conclusion_V1, answer_value)
+        answer_4 = seqg(info_V2, answer_symbol, conclusion_V2, answer_value)
         answer_5 = seqg(answer_value)
-        answer_6 = seqg(answer_symbol)
+        answer_6 = seqg(answer_symbol, ' = ', answer_value)
         a = choiceg(answer_1, answer_2, answer_3, answer_4, answer_5, answer_6)
         return a
 
