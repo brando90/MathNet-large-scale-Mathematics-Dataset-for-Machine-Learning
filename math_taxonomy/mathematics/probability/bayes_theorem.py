@@ -1,12 +1,12 @@
 from sympy import *
 import random
 import numpy as np
+import pdb
 
+from qagen.qagen import *
 from qagen import *
 from qagen import utils
 from qagen import unit_test_for_user as user_test
-
-# TODO: You can also put your question example here
 
 class QA_constraint(QAGen):
 
@@ -33,7 +33,7 @@ class QA_constraint(QAGen):
         '''
         random.seed(seed)
         np.random.seed(seed)
-        fake.random.seed(seed)
+        self.fake.random.seed(seed)
 
     def init_consistent_qa_variables(self):
         """
@@ -146,7 +146,7 @@ class QA_constraint(QAGen):
 
 def check_single_question_debug(qagenerator):
     '''
-    Checks by printing a single quesiton on debug mode
+    Checks by printing a single question on debug mode
     '''
     qagenerator.debug = True
     q,a = qagenerator.get_qa(seed=1)
@@ -156,7 +156,7 @@ def check_single_question_debug(qagenerator):
 
 def check_single_question(qagenerator):
     '''
-    Checks by printing a single quesiton on debug mode
+    Checks by printing a single question on debug mode
     '''
     q,a = qagenerator.get_qa(seed=random.randint(0,1000))
     print('qagenerator.debug = ', qagenerator.debug)
@@ -204,7 +204,7 @@ if __name__ == '__main__':
     qagenerator = QA_constraint()
     check_single_question(qagenerator)
     ## uncomment the following to check formats:
-    #check_mc(qagenerator)
+    check_mc(qagenerator)
     #check_many_to_one(qagenerator)
     #check_one_to_many(qagenerator)
     #check_many_to_one_consistent_format(qagenerator)
