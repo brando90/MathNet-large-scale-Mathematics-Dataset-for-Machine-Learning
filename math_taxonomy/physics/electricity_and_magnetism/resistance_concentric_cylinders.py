@@ -14,7 +14,7 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'Max Augustine'
-        self.description = 'An oceanographer studies how the ion concentration in seawater depends on depth. The oceanographer does this by lowering into the water (until completely submerged) a pair of concentric metallic cylinders at the end of a cable and taking data to determine the resistance between these electrodes as a function of depth. The water between the two cylinders forms a cylindrical shell of inner radius a = 1, outer radius b = 2, and length l much larger than 2. The oceanographer applies a potential difference Δv between the inner and outer surfaces of the cylinders, producing an outward radial current i. Let p represent the resistivity of the water. Calculate the resistance of the water between the cylinders in terms of l, a = 1, b = 2, and p'
+        self.description = 'An oceanographer studies how the ion concentration in seawater depends on depth. The oceanographer does this by lowering into the water (until completely submerged) a pair of concentric metallic cylinders at the end of a cable and taking data to determine the resistance between these electrodes as a function of depth. The water between the two cylinders forms a cylindrical shell of inner radius a = 1, outer radius b = 2, and length l much larger than 2. The oceanographer applies a potential difference Δv between the inner and outer surfaces of the cylinders, producing an outward radial current i. Let p represent the resistivity of the water. Calculate the resistance of the water between the cylinders in terms of l, a = 1, b = 2, and p.'
 
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['Physics', 'Electricity and Magnetism', 'E&M', 'resistance']
@@ -158,10 +158,10 @@ class QA_constraint(QAGen):
         e_part = choiceg(e0, e1, e2, e3, e4)
 
 
-        ord1 = seqg(perg(seqg(str(l) + ','), seqg(a,'= ' +str(a_val)+','),seqg(b,'= '+str(b_val)+',')), seqg('and', p))
+        ord1 = seqg(perg(seqg(str(l) + ','), seqg(a,'= ' +str(a_val)+','),seqg(b,'= '+str(b_val)+',')), seqg('and', str(p) + '.'))
         ord2 = seqg(perg(seqg(str(l) + ','), seqg(str(p) + ','), seqg(b, '= ' + str(b_val) + ',')),seqg('and', a, '= ' + str(a_val)+'.'))
         ord3 = seqg(perg(seqg(str(l) + ','), seqg(str(p) + ','), seqg(a, '= ' + str(a_val) + ',')),seqg('and', b, '= ' + str(b_val) + '.'))
-        ord4 = seqg(perg(seqg(str(p) + ','), seqg(a, '= ' + str(a_val) + ','), seqg(b, '= ' + str(b_val) + ',')),seqg('and', l))
+        ord4 = seqg(perg(seqg(str(p) + ','), seqg(a, '= ' + str(a_val) + ','), seqg(b, '= ' + str(b_val) + ',')),seqg('and', str(l)+'.'))
         order = choiceg(ord1, ord2, ord3, ord4)
 
         calc = choiceg('Calculate', 'Find', 'Compute', 'Derive an equation for', 'Derive an expression for')
@@ -199,9 +199,25 @@ class QA_constraint(QAGen):
         resist = symbols('R')
         resistance = dl*ln(b_val/a_val)
 
-        answer1 = seqg('The resistance is', resistance)
+        ord1 = seqg(perg(seqg(str(l) + ','), seqg(a, '= ' + str(a_val) + ','), seqg(b, '= ' + str(b_val) + ',')),seqg('and', str(p) + ','))
+        ord2 = seqg(perg(seqg(str(l) + ','), seqg(str(p) + ','), seqg(b, '= ' + str(b_val) + ',')),seqg('and', a, '= ' + str(a_val) +','))
+        ord3 = seqg(perg(seqg(str(l) + ','), seqg(str(p) + ','), seqg(a, '= ' + str(a_val) + ',')),seqg('and', b, '= ' + str(b_val)+','))
+        ord4 = seqg(perg(seqg(str(p) + ','), seqg(a, '= ' + str(a_val) + ','), seqg(b, '= ' + str(b_val) + ',')),seqg('and', str(l)+','))
+        order = choiceg(ord1, ord2, ord3, ord4)
 
-        a = choiceg(answer1)
+        cylinders = choiceg('cylinders', 'concentric cylinders', 'coaxial cylinders', 'two cylinders')
+
+        a1 = seqg('The resistance is', resistance)
+        a2 = seqg('The resistance of the water is',resistance)
+        a3 = seqg(resistance, 'is the resistance of the water.')
+        a4 = seqg('In terms of',order,'the resistance of the water is',resistance)
+        a5 = seqg('The resistance of the water between the', cylinders, 'is',resistance)
+        a6 = seqg(resistance, 'is the resistance of the water between the', cylinders)
+        a7 = seqg(resistance, 'is the resistance of the water in terms of', order,'in the region between the',cylinders)
+        a8 = seqg('The resistance of the water between the',cylinders,'in terms of',order,'is', resistance)
+
+
+        a = choiceg(a1, a2, a3, a4, a5, a6,a7,a8)
         return a
 
     ##
