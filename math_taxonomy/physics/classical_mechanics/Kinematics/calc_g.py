@@ -15,10 +15,11 @@ class QA_constraint(QAGen):
         Initializer for your QA question.
         '''
         super().__init__()
-        self.author = 'Your username' #TODO your full name
-        self.description = '''''' #TODO example string of your question
+        self.author = 'Elaheh Ahmadi'
+        self.description = 'We are trying to find g. So we project an object upward and measure the time that it ' \
+                           'takes to pass two given points in both direction.'
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = [''] #TODO keywords to search type of question
+        self.keywords = ['Physics', 'Kinematics', 'Classical mechanics', 'Gravitational Acceleration', 'Time', 'Object']
         self.use_latex = True
 
     def seed_all(self,seed):
@@ -30,8 +31,6 @@ class QA_constraint(QAGen):
         '''
         random.seed(seed)
         np.random.seed(seed)
-        fake.random.seed(seed)
-        # TODO write more seeding libraries that you are using
 
     def init_consistent_qa_variables(self):
         """
@@ -47,10 +46,10 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            #TODO
+            A, B, T_A, T_B, h, g = symbols('A B T_A T_B h g')
         else:
-            #TODO
-        return
+            A, B, T_A, T_B, h, g = self.get_symbols(6)
+        return A, B, T_A, T_B, h, g
 
     def init_qa_variables(self):
         '''
@@ -68,48 +67,66 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            #TODO
+            T_B_val, T_A_val, h_val = 1, 2, 1
         else:
-            #TODO
-        return
+            T_B_val = np.random.randint(0, 1000)
+            T_A_val = np.random.randint(T_B_val, 10000)
+            h_val = np.random.randint(1, 10000)
+        return T_B_val, T_A_val, h_val
 
-    def Q(s,not_consistent,consistent): #TODO change the signature of the function according to your question
+    def Q(s, A, B, T_A, T_B, h, g, T_B_val, T_A_val, h_val): #TODO change the signature of the function according to your question
         '''
-        Small question description.
+        'We are trying to find g. So we project an object upward and measure the time that it takes to pass two given
+        points in both direction.'
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        # TODO
-        #q_format1
-        #q_format2
-        #...
-        # choices, try providing a few
-        # these van include variations that are hard to encode with permg or variable substitution
-        # example, NL variations or equaiton variations
-        q = choiceg()
+        info_V1 = seqg('We project an object upward and measure the time it takes to pass two points {0} and {1} in both'
+                       ' directions. ')
+        info_V2 = seqg('We throw an object upward and measure the time it takes to pass two points {0} and {1} in both'
+                       ' directions. ')
+        given_V1 = seqg('It takes {0} = {1} (s) to pass point {2} and {2} = {3} (s) to pass point {4}. Also we know that'
+                        ' points are positioned {5} = {6} (m) from each other.'.format(T_A, T_A_val, A, T_B, T_B_val,
+                                                                                       B, h, h_val))
+        given_V2 = seqg('It takes {0} = {1} (s) to pass point {2} and {2} = {3} (s) to pass point {4}. Also we know that'
+                        ' points are positioned {5} = {6} (m) from each other.'.format(T_B, T_B_val, B, T_A, T_A_val,
+                                                                                       A, h, h_val))
+        wanted_V1 = seqg('Based on these information calculate the gravitational acceleration {0}'.format(g))
+        wanted_V2 = seqg('Calculate gravitational acceleration {0}'.format(g))
+        question_V1 = seqg(info_V1, given_V1, wanted_V1)
+        question_V2 = seqg(info_V1, given_V1, wanted_V2)
+        question_V3 = seqg(info_V1, given_V2, wanted_V1)
+        question_V4 = seqg(info_V1, given_V2, wanted_V2)
+        question_V5 = seqg(info_V2, given_V1, wanted_V1)
+        question_V6 = seqg(info_V2, given_V1, wanted_V2)
+        question_V7 = seqg(info_V2, given_V2, wanted_V1)
+        question_V8 = seqg(info_V2, given_V2, wanted_V2)
+        q = choiceg(question_V1, question_V2, question_V3, question_V4, question_V5, question_V6, question_V7,
+                    question_V8)
         return q
 
-    def A(s,not_consistent,consistent): #TODO change the signature of the function according to your answer
+    def A(s, A, B, T_A, T_B, h, g, T_B_val, T_A_val, h_val):
         '''
-        Small answer description.
+        g = 8*h / (T_A^2 - T_B^2)
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
-        #define some short cuts
+
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        # TODO
-        #ans_sympy
-        #ans_numerical
-        #ans_vnl_vsympy1
-        #ans_vnl_vsympy2
-        # choices, try providing a few
-        # these van include variations that are hard to encode with permg or variable substitution
-        # example, NL variations or equaiton variations
-        a = choiceg()
+        g_val = 8*h_val/ (T_A_val*T_A_val - T_B_val*T_B_val)
+        g_eq = seqg('8*{}/({}^2 - {}^2)'.format(h,T_A, T_B))
+        info_V1 = seqg('The gravitational acceleration can be found via this equation, ', g_eq, '. Given the values '
+                                                                                                '{0} = {1} (m/s^2).'
+                       .format(g, g_val))
+        info_V2 = seqg('{0} = ', g_eq, ' = {1} (m/s^2).'.format(g, g_val))
+        question_V1 = g_val
+        question_V2 = seqg(info_V1)
+        question_V3 = seqg(info_V2)
+        a = choiceg(question_V1, question_V2, question_V3)
         return a
 
     ##
