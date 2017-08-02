@@ -14,7 +14,7 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'Max Augustine'
-        self.description = '''A cylindrical glass rod is heated with a torch until it conducts enough current to cause a light bulb to glow. The rod has a length l = 0.02 m, a diameter d = 0.005 m, and its ends, plated with material of infinite conductivity, are connected to the rest of the circuit. When red hot, the rod's conductivity varies with position x measured from the center of the rod as y(x) = z*L^2/x^2, with z = 0.04 (Ωm)^-1. What is the resistance of the glass rod? Express your answer in terms of l, d, and any given constants.'''
+        self.description = '''A cylindrical glass rod is heated with a torch until it conducts enough current to cause a light bulb to glow. The rod has a length l = 0.02 m, a diameter d = 0.005 m, and its ends, plated with material of infinite conductivity, are connected to the rest of the circuit. When red hot, the rod's conductivity varies with position x measured from the center of the rod as y(x) = z*L^2/x^2, with z = 0.04 (Ωm)^-1. What is the resistance of the glass rod? Express your answer using l = 0.02 m, d = 0.005 m, and z = 0.04 (Ωm)^-1'''
 
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['Physics', 'Electricity and Magnetism', 'E&M', 'resistance', 'conductivity']
@@ -127,6 +127,9 @@ class QA_constraint(QAGen):
         l_str = str(l)
         d_str = str(d)
         y_str = str(y)
+        lv = str(l_val)
+        dv = str(d_val)
+        zv = str(z_val)
         red = choiceg('red', 'white','extremely','really','very', '')
         hot = choiceg('the rod becomes {0}'.format(red), 'the rod is {0}'.format(red))
         conductive = choiceg('''rod's conductivity''', 'conductivity of the rod')
@@ -144,14 +147,20 @@ class QA_constraint(QAGen):
         calculate = choiceg('calculate','find','compute','derive a formula','derive an equation','derive an expression')
         Whats = choiceg('What is', '''What's''')
         Calculate = choiceg('Calculate', 'Find', 'Compute', 'Derive a formula', 'Derive an equation','Derive an expression')
-        l_d = choiceg(seqg(l_str+',',d_str+','), seqg(d_str+',',l_str+','))
+        l_d1 = seqg(l_str + ' = ' + lv + ' m,', d_str + ' = ' + dv + ' m, and', z_str + ' = ' + zv+' (Ωm)^-1')
+        l_d2 = seqg(d_str + ' = ' + dv + ' m,', l_str + ' = ' + lv + ' m, and', z_str + ' = ' + zv + ' (Ωm)^-1')
+        l_d3 = seqg(z_str + ' = ' + zv + ' (Ωm)^-1,', d_str + ' = ' + dv + ' m, and', l_str + ' = ' + lv+' m')
+        l_d4 = seqg(l_str + ' = ' + lv + ' m,', z_str + ' = ' + zv + ' (Ωm)^-1, and', d_str + ' = ' + dv +' m')
+        l_d5 = seqg(d_str + ' = ' + dv + ' m,', z_str + ' = ' + zv + ' (Ωm)^-1, and', l_str + ' = ' + lv+' m')
+        l_d6 = seqg(z_str + ' = ' + zv + ' (Ωm)^-1,', l_str + ' = ' + lv + ' m, and', d_str + ' = ' + dv+ ' m')
+        l_d = choiceg(l_d1,l_d2,l_d3,l_d4,l_d5,l_d6)
 
-        d0 = seqg('What is the resistance of the glass rod? Express your answer in terms of',l_d,'and any given constants.')
-        d1 = seqg('What is the resistance of the glass rod? Express your answer in terms of {0} and any given constants.'.format(l_d))
-        d2 = seqg('In terms of {0} and any given constants, {1} the resistance of the glass rod?'.format(l_d, whats))
-        d3 = seqg('In terms of {0} and any given constants, {1} the resistance of the glass rod.'.format(l_d, calculate))
-        d4 = seqg('{0} the resistance of the glass rod in terms of {1} and any given constants.'.format(Calculate, l_d))
-        d5 = seqg('{0} the resistance of the glass rod in terms of {1} and any given constants.'.format(Whats, l_d))
+        d0 = seqg('What is the resistance of the glass rod? Express your answer using',l_d)
+        d1 = seqg('What is the resistance of the glass rod? Express your answer using {0}.'.format(l_d))
+        d2 = seqg('Using {0}, {1} the resistance of the glass rod?'.format(l_d, whats))
+        d3 = seqg('Using {0}, {1} the resistance of the glass rod.'.format(l_d, calculate))
+        d4 = seqg('{0} the resistance of the glass rod using {1}.'.format(Calculate, l_d))
+        d5 = seqg('{0} the resistance of the glass rod using {1}.'.format(Whats, l_d))
         d_part = choiceg(d0,d1,d2,d3,d4,d5)
 
         q = seqg(a_part, b_part, c_part, d_part)
