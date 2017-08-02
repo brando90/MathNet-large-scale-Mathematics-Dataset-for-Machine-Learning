@@ -21,7 +21,6 @@ class QA_constraint(QAGen):
         self.description = '''Mary had  x = 2 , y = 3 , z = 4 , goats, lambs, dogs  respectively. Each was decreased by d = 1 by the wolf named Gary.'''
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['basic algebra']
-        self.use_latex = True
 
     def seed_all(self,seed):
         '''

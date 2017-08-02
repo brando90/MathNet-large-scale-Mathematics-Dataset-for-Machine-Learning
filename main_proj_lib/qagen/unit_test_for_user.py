@@ -220,8 +220,8 @@ class Test_user_does_not_set_latex_flag_in_Q_or_A(unittest.TestCase):
     def runTest (self):
         # TODO how do I stop hardcoding the tests here, just go over your
         print()
-        qag = self.qa_constructor()
-        seed = 0 # random.randint(0,500)
+        qagenerator = self.qa_constructor()
+        self.assertIsNone(qagenerator.latex_visualize)
 
 ###
 
