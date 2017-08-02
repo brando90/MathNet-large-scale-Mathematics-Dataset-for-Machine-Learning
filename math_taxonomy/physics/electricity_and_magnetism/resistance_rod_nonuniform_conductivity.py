@@ -170,13 +170,13 @@ class QA_constraint(QAGen):
         dx = symbols('dx')
 
         if diameter == 'radius':
-            A = pi*((d_val*2)**2)
+            A = pi*((d*2)**2)
         else:
-            A = pi*(d_val**2)
+            A = pi*(d**2)
 
-        dR = 4 * (x ** 2) * dx / (y * (l ** 2) * A)
-        resistance1 = Eq(R, l/(3*A*y))
-        resistance2 = Eq(l/(3 * A * y), R)
+        dR = 4 * (x ** 2) * dx / (z * (l ** 2) * A)
+        resistance1 = Eq(R, l/(3*A*z))
+        resistance2 = Eq(l/(3 * A * z), R)
         resistance = choiceg(resistance1, resistance2)
 
         iis = choiceg('is', 'is equal to', 'equals')
