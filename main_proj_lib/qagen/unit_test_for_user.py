@@ -15,13 +15,16 @@ def run_unit_test_for_user(qa_constructor,*args,user_defined_unit_test=None,**kw
     #
     test_suite = unittest.TestSuite()
     # add tests
-    # TODO: change this horrible code, we dont need to add tests like this
+    # TODO: is it possible to not have to add tests individually like this but
+    # instead just have one single class with the test rather than having to make
+    # multiple classes for each test?
     test_suite.addTest( Test_author_and_description_and_keywords(qa_constructor,arg,kwargs) )
     test_suite.addTest( Test_basic_user_test(qa_constructor,arg,kwargs) )
     test_suite.addTest( Test_basic_uses_generators(qa_constructor,arg,kwargs) )
     test_suite.addTest( Test_seed_all_provides_variation(qa_constructor,arg,kwargs) )
     test_suite.addTest( Test_all_funcs_with_seed_are_deterministic(qa_constructor,arg,kwargs) )
     test_suite.addTest( Test_user_does_not_set_latex_flag_in_Q_or_A(qa_constructor,arg,kwargs) )
+    test_suite.addTest( Test_user_has_random_np_faker_seeded(qa_constructor,arg,kwargs) )
     runner.run(test_suite)
 
 class Test_author_and_description_and_keywords(unittest.TestCase):
@@ -36,7 +39,6 @@ class Test_author_and_description_and_keywords(unittest.TestCase):
         self.kwargs = kwargs
 
     def runTest (self):
-        # TODO how do I stop hardcoding the tests here, just go over your
         # test cases and run them
         self.test_author_and_description_and_keywords()
 
@@ -60,7 +62,6 @@ class Test_basic_user_test(unittest.TestCase):
         self.kwargs = kwargs
 
     def runTest (self):
-        # TODO how do I stop hardcoding the tests here, just go over your
         qagenerator = self.qa_constructor()
         qagenerator.debug = True
         q,a = qagenerator.get_single_qa(seed=1)
@@ -85,7 +86,6 @@ class Test_basic_uses_generators(unittest.TestCase):
         self.kwargs = kwargs
 
     def runTest (self):
-        # TODO how do I stop hardcoding the tests here, just go over your
         qagenerator = self.qa_constructor()
         qagenerator.debug = False
         qagenerator.generator_unit_test = True
@@ -109,7 +109,6 @@ class Test_basic_uses_generators(unittest.TestCase):
         q,a = qagenerator.get_single_qa(seed=1)
         qs = q()
         self.assertEqual(qs,qagenerator.description)
-
 
 class Test_seed_all_provides_variation(unittest.TestCase):
     '''
@@ -137,7 +136,6 @@ class Test_seed_all_provides_variation(unittest.TestCase):
             self.assertNotEqual( q,q_original )
             self.assertNotEqual( a,a_original )
 
-
 class Test_all_funcs_with_seed_are_deterministic(unittest.TestCase):
     '''
     Checks that given a seed the framework and your code indeed behave deterministically.
@@ -152,8 +150,36 @@ class Test_all_funcs_with_seed_are_deterministic(unittest.TestCase):
         self.kwargs = kwargs
 
     def runTest (self):
-        # TODO how do I stop hardcoding the tests here, just go over your
         print()
+        # given the same seed that it always does the same thing if its deterministic
+        for seed in range(5):
+            qagenerator = self.qa_constructor()
+            q_original,a_original = qagenerator.get_single_qa(seed=seed)
+            for i in range(100):
+                # set the same seed as the original
+                qagenerator.seed_all(seed)
+                # get variables for qa and register them for the current q,a
+                variables, variables_consistent = qagenerator._create_all_variables()
+                # get concrete qa strings
+                q = qagenerator.Q(*variables,*variables_consistent)
+                a = qagenerator.A(*variables,*variables_consistent)
+                # should be the same as the original because it should be deterministic
+                self.assertEqual( q,q_original )
+                self.assertEqual( a,a_original )
+
+class Test_user_does_not_set_latex_flag_in_Q_or_A(unittest.TestCase):
+    '''
+    Checks that the user is not artificially setting the latex flag within their
+    implementation of Q or A.
+    '''
+
+    def __init__(self,qa_constructor,args,kwargs):
+        super().__init__()
+        self.qa_constructor = qa_constructor
+        self.args = args
+        self.kwargs = kwargs
+
+    def runTest (self):
         qagenerator = self.qa_constructor()
         #
         seed = 0 # random.randint()
@@ -176,39 +202,9 @@ class Test_all_funcs_with_seed_are_deterministic(unittest.TestCase):
         # the latex flag should still be as original
         self.assertEqual(original_latex_flag,qagenerator.use_latex)
 
-
-    # def runTest (self):
-    #     # TODO how do I stop hardcoding the tests here, just go over your
-    #     qagenerator = self.qa_constructor()
-    #     seed = 0 # random.randint(0,500)
-    #     q_original,a_original = qagenerator.get_single_qa(seed=seed)
-    #     for i in range(500):
-    #         # set seed
-    #         qagenerator.seed_all(seed)
-    #         # get variables for qa and register them for the current q,a
-    #         variables, variables_consistent = qagenerator._create_all_variables()
-    #         # get concrete qa strings
-    #         q = qagenerator.Q(*variables,*variables_consistent)
-    #         a = qagenerator.A(*variables,*variables_consistent)
-    #         #
-    #         print()
-    #         print('q_original: ',q_original)
-    #         print('q: ',q)
-    #         #
-    #         self.assertEqual( q,q_original )
-    #         self.assertEqual( a,a_original )
-
-    #
-    # def test_keywords(self):
-    # TODO
-    #     self.assertTrue(len(self.QAFormat.keywords) > 0)
-
-#Test_user_does_not_set_latex_flag_in_Q_or_A
-
-class Test_user_does_not_set_latex_flag_in_Q_or_A(unittest.TestCase):
+class Test_user_has_random_np_faker_seeded(unittest.TestCase):
     '''
-    Checks that the user is not artificially setting the latex flag within their
-    implementation of Q or A.
+    Checks that the user is seeding random, faker and numpy.
     '''
 
     def __init__(self,qa_constructor,args,kwargs):
@@ -218,10 +214,31 @@ class Test_user_does_not_set_latex_flag_in_Q_or_A(unittest.TestCase):
         self.kwargs = kwargs
 
     def runTest (self):
-        # TODO how do I stop hardcoding the tests here, just go over your
-        print()
+        # TODO write test for random and numpy.
+        qagenerator = self.qa_constructor()
+        # check that the symbols that are extracted are indeed different
         qag = self.qa_constructor()
-        seed = 0 # random.randint(0,500)
+        seed = 0
+        qag.seed_all(seed)
+        a1,b1 = qag.get_symbols(2)
+        qag.seed_all(seed)
+        qag.sympy_vars = [] # you need this because the qa stores things to avoid duplicates, so you need to clean it
+        a2,b2 = qag.get_symbols(2)
+        # since the seeding function should work, it should act deterministically
+        self.assertEqual(a1,a2)
+        self.assertEqual(b1,b2)
+        # check
+        qag = self.qa_constructor()
+        seed = 0
+        qag.seed_all(seed)
+        original_nameA1,original_nameB1 = qag.get_names(2)
+        qag.seed_all(seed)
+        qag.names = [] # you need this because the qa stores things to avoid duplicates, so you need to clean it
+        original_nameA2,original_nameB2 = qag.get_names(2)
+        # since the seeding function should work, it should act deterministically
+        self.assertEqual(original_nameA1,original_nameA2)
+        self.assertEqual(original_nameB1,original_nameB2)
+
 
 ###
 
