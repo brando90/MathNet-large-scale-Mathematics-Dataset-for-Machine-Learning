@@ -70,12 +70,12 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            R_val, alpha_val = 2, 1
+            R_val, a_val = 2, 1
         else:
-            R_val, alpha_val = np.random.randint(1, 100000, 2)/10
-        return R_val, alpha_val
+            R_val, a_val = np.random.randint(1, 100000, 2)/10
+        return R_val, a_val
 
-    def Q(s,R_val, alpha_val, R, a, alpha): #TODO change the signature of the function according to your question
+    def Q(s, R_val, a_val, R, a, alpha): #TODO change the signature of the function according to your question
         '''
         A drum of radius R rolls down a slope without slipping. Its angular acceleration is  α.
         What is the acceleration of its axis?
@@ -85,17 +85,17 @@ class QA_constraint(QAGen):
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        info_V1 = seqg(' A drum of radius {0} = {1} (m) rolls down a slope without slipping. Its angular acceleration'
-                       ' is  {2} = {3} (1/s^2). '.format(R, R_val, alpha, alpha_val))
-        info_V2 = seqg('A circle is rolling without slipping with angular acceleration {0} = {1} (1/s^2) and radius {2} = '
-                       '{3} (m). '.format(alpha, alpha_val, R, R_val))
-        info_V3 = seqg('A wheel is rolling without slipping with angular acceleration {0} = {1} (1/s^2) and radius {2} = '
-                       '{3} (m). '.format(alpha, alpha_val, R, R_val))
-        info_V4 = seqg('A wheel is rolling without slipping with  and radius {0} = {1} (m) and angular acceleration {2}'
-                       ' = {3} (1/s^2). '.format(R, R_val, alpha, alpha_val))
-        wanted_V1 = seqg('Find the axis acceleration {0} along the slope.'.format(a))
-        wanted_V2 = seqg('Calculate the axis acceleration {0} along the slope.'.format(a))
-        wanted_V3 = seqg('What is the object linear acceleration {0}.'.format(a))
+        info_V1 = seqg(' A drum of radius {0} = {1} (m) rolls down a slope without slipping. Its axis has acceleration'
+                       ' {2} = {3} (1/s^2). '.format(R, R_val, alpha, a_val))
+        info_V2 = seqg('A circle is rolling without slipping with linear acceleration {0} = {1} (1/s^2) and radius {2} = '
+                       '{3} (m). '.format(alpha, a_val, R, R_val))
+        info_V3 = seqg('A wheel is rolling without slipping with linear acceleration {0} = {1} (1/s^2) and radius {2} = '
+                       '{3} (m). '.format(alpha, a_val, R, R_val))
+        info_V4 = seqg('A wheel is rolling without slipping with  and radius {0} = {1} (m) and linear acceleration {2}'
+                       ' = {3} (1/s^2). '.format(R, R_val, alpha, a_val))
+        wanted_V1 = seqg('Find the angular acceleration {0} along the slope.'.format(a))
+        wanted_V2 = seqg('Calculate the angular acceleration {0} along the slope.'.format(a))
+        wanted_V3 = seqg('What is the object angular acceleration {0}.'.format(a))
         question_V1 = seqg(info_V1, wanted_V1)
         question_V2 = seqg(info_V1, wanted_V2)
         question_V3 = seqg(info_V1, wanted_V3)
@@ -112,7 +112,7 @@ class QA_constraint(QAGen):
                     question_V8, question_V9, question_V10, question_V11, question_V12)
         return q
 
-    def A(s,R_val, alpha_val, R, a, alpha): #TODO change the signature of the function according to your answer
+    def A(s, R_val, a_val, R, a, alpha): #TODO change the signature of the function according to your answer
         '''
         a = R*alpha
 
@@ -121,12 +121,12 @@ class QA_constraint(QAGen):
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        a_val = R_val * alpha_val
-        a_val_eq = seqg('{0}*{1}'.format(R, alpha))
-        answer_V1 = a_val
-        answer_V2 = seqg('{0} = {1} = {2} (m/s^2)'.format(a, a_val_eq, a_val))
+        alpha_val =  a_val/ R_val
+        alpha_val_eq = seqg('{0}/{1}'.format(a, R))
+        answer_V1 = alpha_val
+        answer_V2 = seqg('{0} = {1} = {2} (m/s^2)'.format(alpha, alpha_val_eq, alpha_val))
         answer_V3 = seqg('We can find the linear acceleration via {0} = {1} na after using the given values {0} = {2} '
-                         '(m/s^2)'.format(a, a_val_eq, a_val))
+                         '(m/s^2)'.format(alpha, alpha_val_eq, alpha_val))
         a = choiceg(answer_V1, answer_V2, answer_V3)
         return a
 
