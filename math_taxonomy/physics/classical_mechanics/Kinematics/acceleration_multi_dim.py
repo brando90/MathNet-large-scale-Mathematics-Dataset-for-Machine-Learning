@@ -51,7 +51,7 @@ class QA_constraint(QAGen):
         if self.debug:
              v0, v1, t0, t1, dim = symbols('v0 v1 t0 t1 dim')
         else:
-             v0, v1, t0, t1, dim = self.get_symbols(5)
+            v0, v1, t0, t1, dim = symbols('v0 v1 t0 t1 dim')
         return  v0, v1, t0, t1, dim
 
     def _to_hashable_(self, variables):

@@ -1,6 +1,3 @@
-# Completed
-# Debugg status: sympy error
-
 from sympy import *
 import random
 import numpy as np
@@ -18,10 +15,12 @@ class QA_constraint(QAGen):
         Initializer for your QA question.
         '''
         super().__init__()
-        self.author = 'Elaheh Ahmadi' #TODO your full name
-        self.description = "Calculating acceleration of an object given the total force applied to it and its mass"  #TODO example string of your question
+        self.author = 'Elaheh Ahmadi'
+        self.description = 'We project an object upward and measure the time that it ' \
+                           'takes to pass two given points in both direction. Based on having gravitational acceleration' \
+                           ' we aim to find one of the times. '
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['physics' ,'classical mechanics' ,'force', 'mass', 'acceleration'] #TODO keywords to search type of question
+        self.keywords = ['Physics', 'Kinematics', 'Classical mechanics', 'Gravitational Acceleration', 'Time', 'Object']
         self.use_latex = True
 
     def seed_all(self,seed):
@@ -33,7 +32,6 @@ class QA_constraint(QAGen):
         '''
         random.seed(seed)
         np.random.seed(seed)
-        # TODO write more seeding libraries that you are using
 
     def init_consistent_qa_variables(self):
         """
@@ -49,16 +47,10 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            m, force = symbols('m force')
+            A, B, T_A, T_B, h, g = symbols('A B T_A T_B h g')
         else:
-            m, force = symbols('m force')
-        return m, force
-
-    def _to_hashable_(self, variables):
-        m, force = variables
-        flattener = lambda x: x if isinstance(x, Symbol) else tuple(x)
-        return flattener(force) , m
-
+            A, B, T_A, T_B, h, g = self.get_symbols(6)
+        return A, B, T_A, T_B, h, g
 
     def init_qa_variables(self):
         '''
@@ -76,63 +68,67 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            m_val, force_val = 1, 2
+            T_B_val, h_val, g_val = 1, 2, 10
         else:
-            dim = np.random.randint(1,100)
-            m_val, force_val = np.random.randint(1,1000000) , np.random.randint(-1000000, 1000000, dim)
-        return m_val, force_val
+            T_B_val = np.random.randint(0, 1000)
+            h_val = np.random.randint(0, 10000)
+            g_val = random.choice([10, 9.8, 9.81, 9.807])
+        return T_B_val, h_val, g_val
 
-    def Q(s, m_val, force_val, m, force):
+    def Q(s, A, B, T_A, T_B, h, g, T_B_val, h_val, g_val): #TODO change the signature of the function according to your question
         '''
-        Finding the acceleration of an object given its total force and mass.
+        'We are trying to find g. So we project an object upward and measure the time that it takes to pass two given
+        points in both direction.'
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        question_1 =  seqg('Find the acceleration of an object with the mass ', Eq(m, m_val),
-                       " (kg) given that the total force applied to it is ", Eq(force, force_val), " (N).")
-        question_2 = seqg('There is an object floating in a multi dimensional world with the mass ',
-                      Eq(m, m_val), "(kg). We observed that the total force on it is, ", Eq(force, force_val),
-                      " (N). Find the objects acceleration given these information.")
-        question_3 = seqg('What is the acceleration of a mass if the total force applied on it is ', Eq(force, force_val),
-                      " (N) and its mass is ", Eq(m, m_val), " (kg).")
-        question_4 = seqg('Given the fact that total force applied to a mass is its acceleration times its mass,'
-                      ' find the acceleration of an object if the total force applied to it is', Eq(force, force_val),
-                      ' (N) and its mass is', Eq(m, m_val), '(kg).')
-        question_5 = seqg('A spaceship is wondering around in a multi dimensional world. The captain wants to know the '
-                      'acceleration of the spaceship to be able to control it. There are there physicists '
-                      'and mathematicians on the spaceship. They calculated the total mass and the total force on the ship ',
-                      'and it is equal to ', Eq(m, m_val), '(kg), and ', Eq(force, force_val),
-                      '(N). Help the captain to control the ship by finding the acceleration of the ship.')
-
-        # choices, try providing a few
-        # these van include variations that are hard to encode with permg or variable substitution
-        # example, NL variations or equaiton variations
-        q = choiceg(question_1, question_2, question_3, question_4, question_5)
-        # , question_6, question_7, question_8,
-        #         question_9, question_10)
+        info_V1 = seqg('We project an object upward and measure the time it takes to pass two points {0} and {1} in both'
+                       ' directions. ')
+        info_V2 = seqg('We throw an object upward and measure the time it takes to pass two points {0} and {1} in both'
+                       ' directions. ')
+        given_V1 = seqg('It takes {0} = {1} (s) to pass point {2} and we know that'
+                        ' gravitational acceleration is {3} = {4} (m/s^2) and that point {5} is positioned {6} = {7} (m)'
+                        ' above point {8}.'.format(T_B, T_B_val, B, g, g_val, B, h, h_val, A))
+        given_V2 = seqg('It takes {0} = {1} (s) to pass point {2} and we know that'
+                        'point {2} is positioned {3} = {4} (m) above point {5}. Also, gravitational acceleration is {6}'
+                        ' = {7} (m/s^2).'.format(T_B, T_B_val, B, h, h_val, A, g, g_val))
+        wanted_V1 = seqg('Based on these information calculate the {0}, the time that it takes to pass point {1} in '
+                         'both directions '.format(T_A, A))
+        wanted_V2 = seqg('Calculate the time it takes for the object to pass point {0} in both direction, {1}.'.format(A, T_A))
+        question_V1 = seqg(info_V1, given_V1, wanted_V1)
+        question_V2 = seqg(info_V1, given_V1, wanted_V2)
+        question_V3 = seqg(info_V1, given_V2, wanted_V1)
+        question_V4 = seqg(info_V1, given_V2, wanted_V2)
+        question_V5 = seqg(info_V2, given_V1, wanted_V1)
+        question_V6 = seqg(info_V2, given_V1, wanted_V2)
+        question_V7 = seqg(info_V2, given_V2, wanted_V1)
+        question_V8 = seqg(info_V2, given_V2, wanted_V2)
+        q = choiceg(question_V1, question_V2, question_V3, question_V4, question_V5, question_V6, question_V7,
+                    question_V8)
         return q
 
-    def A(s, m_val, force_val, m, force): #TODO change the signature of the function according to your answer
+    def A(s, A, B, T_A, T_B, h, g, T_B_val, h_val, g_val):
         '''
-        The answer is a = F/m
+        T_A= sqrt(8*h/g + T_B^2)
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
-        #define some short cuts
+
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        ans_val = force_val/m_val
-        answer_1 = seqg("The acceleration is", ans_val," (m/s^2).")
-        answer_2 = seqg("After dividing the total force over the objects mass the acceleration is equal to ", ans_val,"(m/s^2).")
-         
-        # choices, try providing a few
-        # these van include variations that are hard to encode with permg or variable substitution
-        # example, NL variations or equaiton variations
-        force = choiceg(answer_1, answer_2)
-        return force
+        T_A_val = np.sqrt((8 * h_val / g_val )+ T_B_val ^ 2)
+        T_A_eq = seqg('((8*{0}/{1}) + {2}^2)^1/2'.format(h, g, T_B))
+        info_V1 = seqg('The {0} can be found via this equation, ', T_A_eq, '. Given the values {0} = {1} (m/s^2).'
+                       .format(T_A, T_A_val))
+        info_V2 = seqg('{0} = ', T_A_eq, ' = {1} (m/s^2).'.format(T_A, T_A_val))
+        answer_V1 = T_A_val
+        answer_V2 = seqg(info_V1)
+        answer_V3 = seqg(info_V2)
+        a = choiceg(answer_V1, answer_V2, answer_V3)
+        return a
 
     ##
 

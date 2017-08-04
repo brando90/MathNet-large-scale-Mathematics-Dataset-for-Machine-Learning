@@ -49,9 +49,9 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            force, a = symbols('m a')
+            force, a = symbols('force a')
         else:
-            force, a = self.get_symbols(2)
+            force, a = symbols('force a')
         return force, a
 
     def _to_hashable_(self, variables):

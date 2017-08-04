@@ -51,7 +51,7 @@ class QA_constraint(QAGen):
         if self.debug:
             m, a = symbols('m a')
         else:
-            m, a = self.get_symbols(2)
+            m, a = symbols('m a')
         return m, a
 
     def _to_hashable_(self, variables):

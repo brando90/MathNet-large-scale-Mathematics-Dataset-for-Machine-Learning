@@ -118,15 +118,15 @@ class QA_constraint(QAGen):
 
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         g_val = 8*h_val/ (T_A_val*T_A_val - T_B_val*T_B_val)
-        g_eq = seqg('8*{}/({}^2 - {}^2)'.format(h,T_A, T_B))
+        g_eq = seqg('8*{0}/({1}^2 - {2}^2)'.format(h,T_A, T_B))
         info_V1 = seqg('The gravitational acceleration can be found via this equation, ', g_eq, '. Given the values '
                                                                                                 '{0} = {1} (m/s^2).'
                        .format(g, g_val))
         info_V2 = seqg('{0} = ', g_eq, ' = {1} (m/s^2).'.format(g, g_val))
-        question_V1 = g_val
-        question_V2 = seqg(info_V1)
-        question_V3 = seqg(info_V2)
-        a = choiceg(question_V1, question_V2, question_V3)
+        answer_V1 = g_val
+        answer_V2 = seqg(info_V1)
+        answer_V3 = seqg(info_V2)
+        a = choiceg(answer_V1, answer_V2, answer_V3)
         return a
 
     ##
