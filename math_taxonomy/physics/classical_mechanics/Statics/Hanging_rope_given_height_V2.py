@@ -50,7 +50,7 @@ class QA_constraint(QAGen):
             L, y, g, m = symbols('L y g m')
 
         else:
-            L, y, m, g = self.get_symbols(4)
+            L, y, g, m = symbols('L y g m')
         return L, y, m, g
 
     def init_qa_variables(self):

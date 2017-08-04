@@ -54,7 +54,8 @@ class QA_constraint(QAGen):
             g, m, T_right, T_left = symbols('g  m T_right T_left')
             theta = symbols (chr(952))
         else:
-            g, theta, m, T_right, T_left = self.get_symbols(5)
+            g, m, T_right, T_left = symbols('g  m T_right T_left')
+            theta = symbols(chr(952))
 
         return g, theta, m, T_left, T_right
 

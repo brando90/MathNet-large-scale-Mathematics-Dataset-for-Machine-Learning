@@ -54,7 +54,7 @@ class QA_constraint(QAGen):
         if self.debug:
             g, theta, m = symbols('g theta m')
         else:
-            g, theta, m = self.get_symbols(3)
+            g, theta, m = symbols('g theta m')
         return g, theta, m
 
     def init_qa_variables(self):

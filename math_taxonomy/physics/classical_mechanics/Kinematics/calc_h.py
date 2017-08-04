@@ -49,7 +49,7 @@ class QA_constraint(QAGen):
         if self.debug:
             A, B, T_A, T_B, h, g = symbols('A B T_A T_B h g')
         else:
-            A, B, T_A, T_B, h, g = self.get_symbols(6)
+            A, B, T_A, T_B, h, g = symbols('A B T_A T_B h g')
         return A, B, T_A, T_B, h, g
 
     def init_qa_variables(self):

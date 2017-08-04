@@ -55,7 +55,8 @@ class QA_constraint(QAGen):
             g, m = symbols('g m')
             theta = symbols(chr(952))
         else:
-            g, theta, m = self.get_symbols(3)
+            g, m = symbols('g m')
+            theta = symbols(chr(952))
         return g, theta, m
 
 
