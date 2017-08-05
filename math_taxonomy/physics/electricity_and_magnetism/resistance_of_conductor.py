@@ -14,7 +14,7 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'Max Augustine'
-        self.description = 'Consider a cable that is l = 3000000 m long. The conductor in this cable consists of x = 10 copper wires, each of diameter d = 0.001 m, bundled together and surrounded by an insulating sheath. The resistivity of copper is p = 3.0 \\cdot 10^{-8} Ωm. Calculate the resistance of the conductor.'
+        self.description = 'Consider a cable that is l = 3000000 m long. The conductor in this cable consists of x = 10 copper wires, each of diameter d = 0.001 m, bundled together and surrounded by an insulating sheath. The resistivity of copper is p = 3.0 \\cdot 10^{-8} Ωm. Calculate the resistance of the conductor in terms of l, d, p, and x'
 
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['Physics', 'Electricity and Magnetism', 'E&M', 'resistance']
@@ -130,12 +130,28 @@ class QA_constraint(QAGen):
         c7 = seqg('Use',p_eq, '''Ωm as the copper's resistivity.''')
         c_part = choiceg(c0,c1,c2,c3,c4,c5,c6,c7)
 
-        calculate = choiceg('Calculate', 'Compute', 'Find', 'Find a numerical answer for')
+        Calculate = choiceg('Calculate', 'Compute', 'Find', 'Find a numerical answer for')
+        calculate = choiceg('calculate', 'compute', 'find', 'find a numerical answer for')
 
-        d0 = seqg(calculate,'the resistance of the conductor.')
-        d1 = seqg(calculate,'''the conductor's resistance.''')
-        d2 = seqg(calculate,'the resistance of the conductor in the cable.')
-        d_part = choiceg(d0,d1,d2)
+        ll = str(l)
+        xx = str(x)
+        dd = str(d)
+        pp = str(p)
+
+        terms1 = seqg(perg(ll + ',', dd + ',', pp + ','), 'and', xx)
+        terms2 = seqg(perg(ll + ',', dd + ',', xx + ','), 'and', pp)
+        terms3 = seqg(perg(ll + ',', xx + ',', pp + ','), 'and', dd)
+        terms4 = seqg(perg(xx + ',', dd + ',', pp + ','), 'and', ll)
+        terms = choiceg(terms1, terms2, terms3, terms4)
+
+        d0 = seqg(Calculate,'the resistance of the conductor in terms of', terms)
+        d1 = seqg('''{0} the conductor's resistance in terms of {1}.'''.format(Calculate, terms))
+        d2 = seqg('{0} the resistance of the conductor in the cable in terms of {1}.'.format(Calculate,terms))
+        d3 = seqg('In terms of {0} {1} the resistance of the conductor.'.format(terms, calculate))
+        d4 = seqg('''In terms of {0} {1} the conductor's resistance.'''.format(terms, calculate))
+        d5 = seqg('In terms of {0} {1} the resistance of the conductor in the cable.'.format(terms,calculate))
+
+        d_part = choiceg(d0,d1,d2,d3,d4,d5)
 
         q = seqg(a_part, b_part, c_part, d_part)
 
@@ -151,27 +167,40 @@ class QA_constraint(QAGen):
         R = symbols('R')
         pi = np.pi
         if diameter == 'diameter':
-            A = pi*((d_val/2)**2)
+            A = pi*((d/2)**2)
         else:
-            A = pi*(d_val**2)
+            A = pi*(d**2)
 
         Eq(1/R, x*A/(p*l))
-        res1 = Eq(R, (p_val*l_val)/(x_val*A))
-        res2 = Eq((p_val*l_val)/(x_val*A), R)
+        res1 = Eq(R, (p*l)/(x*A))
+        res2 = Eq((p*l)/(x*A), R)
         resistance = choiceg(res1,res2)
 
         iis = choiceg('is', 'is equal to', 'equals')
         eq_resist = choiceg('', 'equivalent resistance', 'resistance')
 
-        a0 = seqg(resistance, 'is the',eq_resist,'of the conductor.')
-        a1 = seqg('''{0} is the conductor's {1}.'''.format(resistance, eq_resist))
-        a2 = seqg(resistance, 'is the',eq_resist,'of the conductor in the cable.')
+        ll = str(l)
+        xx = str(x)
+        dd = str(d)
+        pp = str(p)
+        
+        terms1 = seqg(perg(ll + ',', dd + ',', pp + ','), 'and', xx)
+        terms2 = seqg(perg(ll + ',', dd + ',', xx + ','), 'and', pp)
+        terms3 = seqg(perg(ll + ',', xx + ',', pp + ','), 'and', dd)
+        terms4 = seqg(perg(xx + ',', dd + ',', pp + ','), 'and', ll)
+        terms = choiceg(terms1, terms2, terms3, terms4)
+
+        a0 = seqg(resistance, 'is the',eq_resist,'of the conductor in terms of', terms)
+        a1 = seqg('''{0} is the conductor's {1} in terms of {2}.'''.format(resistance, eq_resist, terms))
+        a2 = seqg(resistance, 'is the',eq_resist,'of the conductor in the cable in terms of',terms)
         a3 = seqg('The',eq_resist,'of the conductor', iis, resistance)
         a4 = seqg('''The conductor's''',eq_resist,iis, resistance)
         a5 = seqg('The', eq_resist,'of the conductor in the cable',iis, resistance)
+        a6 = seqg('In terms of',terms,'the',eq_resist,'of the conductor',iis,resistance)
+        a7 = seqg('In terms of',terms,resistance,iis,'the',eq_resist,'of the conductor.')
 
 
-        a = choiceg(a0, a1, a2, a3, a4, a5)
+        a = choiceg(a0, a1, a2, a3, a4, a5,a6,a7)
         return a
 
     ##
