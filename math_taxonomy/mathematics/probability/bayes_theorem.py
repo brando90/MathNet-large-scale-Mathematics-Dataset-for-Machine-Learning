@@ -16,18 +16,19 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'Erick Rodriguez'
-        self.description = 'A patient takes a test to see if they have Cancer.'
-        self.description+= 'A person has Cancer with probability 0.05, and does not have Cancer with probability 0.95.'
-        self.description+= 'The test reads a true positive with probability 0.85.'
-        self.description+= 'The test incorrectly reads positive with probability 0.10.'
+        self.description = 'A patient takes a test to see if they have Cancer .'
+        self.description+= 'A person has Cancer with probability p = 0.05 , and does not have Cancer with probability n = 0.95 .'
+        self.description+= 'The test reads a true positive with probability t = 0.85 .'
+        self.description+= 'The test incorrectly reads positive with probability f = 0.15 .'
         self.description+= 'What is the probability of the patient having Cancer if the test reads positive?'
         self.keywords = ['Bayes Theorem', 'probability', 'mathematics', 'Bayes Rule']
         self.use_latex = True
+        self.debug = True
 
     def seed_all(self,seed):
         '''
         Write the seeding functions of the libraries that you are using.
-        Its important to seed all the libraries you are using because the
+        Its important tdo seed all the libraries you are using because the
         framework will assume it can seed stuff for you. It needs this for
         the library to work.
         '''
@@ -48,10 +49,12 @@ class QA_constraint(QAGen):
         """
         if self.debug:
             Cancer = 'Cancer'
+            t,f,p,n = symbols('t f p n')
         else:
+            t,f,p,n = self.get_symbols(4)
             diseases = utils.get_diseases()
             Cancer = self.get_names(1, names_list=diseases)
-        return Cancer
+        return t,f,p,n,Cancer
 
     def init_qa_variables(self):
         '''
@@ -67,18 +70,18 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            true_pos = 0.85
-            false_pos = 0.10
-            cancer_prob = 0.05
-            no_cancer = 1-cancer_prob
+            t_value = 0.85
+            f_value = 0.15
+            p_value = 0.05
+            n_value = 1-p_value
         else:
-            true_pos = np.random.randint(60,95)*0.01
-            false_pos = np.random.randint(1,20)*0.01
-            cancer_prob = np.random.randint(1,20)*0.01
-            no_cancer = 1-cancer_prob
-        return true_pos,false_pos,cancer_prob,no_cancer
+            t_value = np.random.randint(60,95)*0.01
+            f_value = np.random.randint(1,20)*0.01
+            p_value = np.random.randint(1,20)*0.01
+            n_value = 1-p_value
+        return t_value,f_value,p_value,n_value
 
-    def Q(s,true_pos,false_pos,cancer_prob,no_cancer,Cancer):
+    def Q(s,t_value,f_value,p_value,n_value,t,f,p,n,Cancer):
         '''
         Small question description.
         Important Note: first variables are the not consistent variables followed
@@ -87,16 +90,16 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         # TODO
-        q_start = seqg('A patient takes a test to see if they have '+Cancer+'. ')
-        perm1 = seqg('A person has'+Cancer+' with probability '+cancer_prob+', and does not have Cancer with probability '+no_cancer+'. ')
-        perm2 = seqg('The test reads a true positive with probability '+true_pos+'. ')
-        perm3 = seqg('The test incorrectly reads positive with probability '+false_pos+'. ')
-        perm4 = seqg('The test reads a false positive with probabiliy '+false_pos+'. ')
-        q_end = seqg('What is the probability of the patient having '+Cancer+'if the test reads positive?')
-        q_end2 - seqg(' If the test comes back positive, What is the likelihood the patient actually has '+Cancer+'? ')
+        q_start = seqg('A patient takes a test to see if they have',Cancer,'. ')
+        perm1 = seqg('A person has',Cancer,'with probability', Eq(p,p_value), ', and does not have Cancer with probability',Eq(n,n_value), '. ')
+        perm2 = seqg('The test reads a true positive with probability', seqg(Eq(t,t_value), '. '))
+        perm3 = seqg('The test incorrectly reads positive with probability', seqg(Eq(f,f_value), '. '))
+        perm4 = seqg('The test reads a false positive with probabiliy', seqg(Eq(f,f_value), '. '))
+        q_end = seqg('What is the probability of the patient having',Cancer,'if the test reads positive?')
+        q_end2 = seqg(' If the test comes back positive, What is the likelihood the patient actually has',Cancer,'? ')
         false_pos_perm = choiceg(perm3,perm4)
         end_perm = choiceg(q_end,q_end2)
-        permutable_part= perg(perm1,perm2,false_pos_perm)
+        permutable_part = perg(perm1,perm2,false_pos_perm)
         q_format1 = seqg(q_start,permutable_part,end_perm)
         #q_format2
         #...
@@ -106,7 +109,7 @@ class QA_constraint(QAGen):
         q = choiceg(q_format1)
         return q
 
-    def A(s,true_pos,false_pos,cancer_prob,no_cancer,Cancer):
+    def A(s,t_value,f_value,p_value,n_value,t,f,p,n,Cancer):
         '''
         Small answer description.
         Important Note: first variables are the not consistent variables followed
@@ -116,13 +119,13 @@ class QA_constraint(QAGen):
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         # TODO
         #ans_sympy
-        ans_numerical = (true_pos*cancer_prob)/(true_pos*cancer_prob+false_pos*no_cancer)
-        ans_vnl_vsympy1 = seqg("If the test reads positive, the probability of the patient having "+Cancer+" is {0}.".format(str(ans_numerical)))
-        ans_vnl_vsympy2 = seqg("The probability of "+Cancer+" is {0}.".format(str(ans_numerical)))
+        ans_numerical = (t_value*p_value)/(t_value*p_value+f_value*n_value)
+        ans_vnl_vsympy1 = seqg("If the test reads positive, the probability of the patient having",Cancer,"is {0}.".format(str(ans_numerical)))
+        ans_vnl_vsympy2 = seqg("The probability of",Cancer,"is {0}.".format(str(ans_numerical)))
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        a = choiceg(ans_vnl_vsympy1)
+        a = choiceg(ans_vnl_vsympy1,ans_vnl_vsympy2)
         return a
 
     ##
@@ -204,9 +207,11 @@ if __name__ == '__main__':
     qagenerator = QA_constraint()
     check_single_question(qagenerator)
     ## uncomment the following to check formats:
-    check_mc(qagenerator)
+    #check_mc(qagenerator)
     #check_many_to_one(qagenerator)
     #check_one_to_many(qagenerator)
     #check_many_to_one_consistent_format(qagenerator)
+    q,a = qagenerator.get_single_qa(seed=0)
+    utils.display_latex(q,a)
     ## run unit test given by framework
 user_test.run_unit_test_for_user(QA_constraint)
