@@ -23,7 +23,7 @@ class QA_constraint(QAGen):
         self.description+= 'What is the probability of the patient having Cancer if the test reads positive?'
         self.keywords = ['Bayes Theorem', 'probability', 'mathematics', 'Bayes Rule']
         self.use_latex = True
-        self.debug = True
+        self.debug = False
 
     def seed_all(self,seed):
         '''
@@ -53,7 +53,7 @@ class QA_constraint(QAGen):
         else:
             t,f,p,n = self.get_symbols(4)
             diseases = utils.get_diseases()
-            Cancer = self.get_names(1, names_list=diseases)
+            Cancer = self.get_names(1, names_list=diseases)[0]
         return t,f,p,n,Cancer
 
     def init_qa_variables(self):
@@ -91,7 +91,7 @@ class QA_constraint(QAGen):
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         # TODO
         q_start = seqg('A patient takes a test to see if they have',Cancer,'. ')
-        perm1 = seqg('A person has',Cancer,'with probability', Eq(p,p_value), ', and does not have Cancer with probability',Eq(n,n_value), '. ')
+        perm1 = seqg('A person has',Cancer,'with probability', Eq(p,p_value), ', and does not have',Cancer,'with probability',Eq(n,n_value), '. ')
         perm2 = seqg('The test reads a true positive with probability', seqg(Eq(t,t_value), '. '))
         perm3 = seqg('The test incorrectly reads positive with probability', seqg(Eq(f,f_value), '. '))
         perm4 = seqg('The test reads a false positive with probabiliy', seqg(Eq(f,f_value), '. '))
@@ -203,15 +203,25 @@ def check_many_to_one_consistent_format(qagenerator):
         print("\n".join(q_list))
         print('a: ', a_consistent_format)
 
+def check_get_symbol(qagenerator):
+    seed = 1
+    seed = 2
+    qagenerator.seed_all(1)
+    symbol1 = qagenerator.get_symbol()
+    qagenerator.seed_all(1)
+    symbol2 = qagenerator.get_symbol()
+    print(symbol1)
+    print(symbol2)
+
 if __name__ == '__main__':
     qagenerator = QA_constraint()
-    check_single_question(qagenerator)
-    ## uncomment the following to check formats:
+    # uncomment the following to check formats:
     #check_mc(qagenerator)
-    #check_many_to_one(qagenerator)
-    #check_one_to_many(qagenerator)
+    check_many_to_many(qagenerator)
     #check_many_to_one_consistent_format(qagenerator)
-    q,a = qagenerator.get_single_qa(seed=0)
-    utils.display_latex(q,a)
+    #check_get_symbol(qagenerator)
+    # Latex diplay
+    #q,a = qagenerator.get_single_qa(seed=0)
+    #utils.display_latex(q,a)
     ## run unit test given by framework
-user_test.run_unit_test_for_user(QA_constraint)
+    user_test.run_unit_test_for_user(QA_constraint)
