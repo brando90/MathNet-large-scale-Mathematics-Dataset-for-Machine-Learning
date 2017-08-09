@@ -134,7 +134,7 @@ class QA_constraint(QAGen):
                     question_V22, question_V23, question_V24)
         return q
 
-    def A(s,m_val, g_val, m, theta, l, g): #TODO change the signature of the function according to your answer
+    def A(s,m_val, g_val, l_val, m, theta, l, g):
         '''
         theta = 45
 
@@ -154,8 +154,13 @@ class QA_constraint(QAGen):
                               'direction is therefore {1} = {2}. Our goal is to maximize ax. By taking the '
                               'derivative, or by noting that sinμcosμ = (sin2μ)/2. So,'
                               .format(g_sin_, a_x, a_x_val))
-        description_V2 = seqg()
-        a = choiceg()
+        conclusion_sentence_V1 = seqg('The {0} in which the object will passes {1} = {2} (m) in the minimum time is '
+                                      .format(theta, l, l_val))
+        answer_V1 = seqg(description_V1, conclusion_sentence_V1, ans_val, ' degree')
+        answer_V2 = seqg(description_V1, conclusion_sentence_V1, ans_val_radian, ' radian')
+        answer_V3 = seqg(description_V1, conclusion_sentence_V1, ans_symbol)
+        answer_V4 = seqg(description_V1, conclusion_sentence_V1, ans_symbol_rad)
+        a = choiceg(answer_V1, answer_V2, answer_V3, answer_V4)
         return a
 
     ##
