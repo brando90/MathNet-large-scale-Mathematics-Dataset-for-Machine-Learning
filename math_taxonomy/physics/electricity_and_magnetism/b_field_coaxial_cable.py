@@ -202,9 +202,9 @@ class QA_constraint(QAGen):
         mu_0 = 4 * pi * 10**-7
         zero = choiceg('0', 'zero')
 
-        Eq(E*2*pi*r*l, Q/mu_0)
-        bfield1 = Eq(B, Q/(2*pi*r*l*mu_0))
-        bfield2 = Eq(Q/(2*pi*r*l*mu_0), B)
+        Eq(B*2*pi*r, I*mu_0)
+        bfield1 = Eq(B, I*mu_0/(2*pi*r))
+        bfield2 = Eq(I*mu_0/(2*pi*r), B)
         bfield = choiceg(bfield1, bfield2)
 
         r_a = choiceg(seqg(r,'<',a), seqg(a,'>',r))
