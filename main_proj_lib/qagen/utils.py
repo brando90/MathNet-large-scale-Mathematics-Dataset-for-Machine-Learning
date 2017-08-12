@@ -38,6 +38,13 @@ def get_diseases():
     'Dermatitis']
     return diseases
 
+def get_items():
+    '''
+    Returns a list of terms for an object
+    '''
+    items = ['products','items','widgets','items','devices','objects']
+    return items
+    
 def get_team_sports():
     '''
     Returns a list of team sports
