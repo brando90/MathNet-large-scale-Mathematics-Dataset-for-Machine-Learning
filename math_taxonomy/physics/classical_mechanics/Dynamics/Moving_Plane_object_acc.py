@@ -18,7 +18,7 @@ class QA_constraint(QAGen):
         self.author = 'Elaheh Ahmadi'
         self.description = 'A block of mass m is held motionless on a frictionless plane of mass M and angle of' \
                            ' inclination μ. The plane rests on a frictionless horizontal surface. ' \
-                           'The block is released. What is the horizontal acceleration of the plane?'
+                           'The block is released. What is the acceleration of the object relative to the plane?'
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['Physics' ,'Classical Mechanics' ,'Block', 'Mass', 'Slide', 'Friction', 'Plane',
                          'Moving Plane', 'Acceleration']
@@ -48,76 +48,11 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            m, M, g, theta, A_x = symbols('m M g theta A_x')
+            m, M, g, theta, a = symbols('m M g theta a')
         else:
-            m, M, g, A_x = symbols('m M g A_x')
+            m, M, g, a = symbols('m M g a')
             theta = symbols(chr(952))
-        return m, M, g, theta, A_x
-
-    def init_qa_variables(self):
-        '''
-        Defines and returns all the variables that can vary between a
-        question and an answer. Good examples are numerical values that might
-        make the answers not obviously wrong.
-
-        Example: when generating MC questions the non consistent variables will
-        be used to generate other options. However, the names, symbols, etc
-        should remain consistent otherwise some answers will be obviously fake.
-        Numerical values that have been fully evaluated are a good example of
-        how multiple choice answers can be generated.
-
-        Note: debug flag can be used to deterministically output a QA that has
-        simple numbers to check the correctness of your QA.
-        '''
-        if self.debug:
-            m_val, M_val, g_val, theta_val = 1, 2, 10, 30
-        else:
-            m_val, M_val = np.random.randint(1, 10000, 2) / 10
-            g_val = random.choice([10, 9.8, 9.81, 9.807])
-            theta_val = np.random.randint(0,90)
-    return m_v    def __init__(self):
-        '''
-        Initializer for your QA question.
-        '''
-        super().__init__()
-        self.author = 'Elaheh Ahmadi'
-        self.description = 'A block of mass m is held motionless on a frictionless plane of mass M and angle of' \
-                           ' inclination μ. The plane rests on a frictionless horizontal surface. ' \
-                           'The block is released. What is the horizontal acceleration of the plane?'
-        # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['Physics' ,'Classical Mechanics' ,'Block', 'Mass', 'Slide', 'Friction', 'Plane',
-                         'Moving Plane', 'Acceleration']
-        self.use_latex = True
-
-    def seed_all(self,seed):
-        '''
-        Write the seeding functions of the libraries that you are using.
-        Its important to seed all the libraries you are using because the
-        framework will assume it can seed stuff for you. It needs this for
-        the library to work.
-        '''
-        random.seed(seed)
-        np.random.seed(seed)
-
-    def init_consistent_qa_variables(self):
-        """
-        Defines and returns all the variables that need to be consistent
-        between a question and an answer. Usually only names and variable/symbol
-        names.
-
-        Example: when generating MC questions the non consistent variables will
-        be used to generate other options. However, the names, symbols, etc
-        should remain consistent otherwise some answers will be obviously fake.
-
-        Note: debug flag can be used to deterministically output a QA that has
-        simple numbers to check the correctness of your QA.
-        """
-        if self.debug:
-            m, M, g, theta, A_x = symbols('m M g theta A_x')
-        else:
-            m, M, g, A_x = symbols('m M g A_x')
-            theta = symbols(chr(952))
-        return m, M, g, theta, A_x
+        return m, M, g, theta, a
 
     def init_qa_variables(self):
         '''
@@ -142,7 +77,8 @@ class QA_constraint(QAGen):
             theta_val = np.random.randint(0,90)
         return m_val, M_val, g_val, theta_val
 
-    def Q(s, m_val, M_val, g_val, theta_val, m, M, g, theta, A_x):
+
+    def Q(s, m_val, M_val, g_val, theta_val, m, M, g, theta, a):
         '''
         A block of mass m is held motionless on a frictionless plane of mass M and angle of inclination μ.
         The plane rests on a frictionless horizontal surface. The block is released. What is the horizontal
@@ -159,10 +95,10 @@ class QA_constraint(QAGen):
         info_V2 = seqg('A block with mass {0} = {1} (kg) is positioned on a frictionless plane with mass {2} = {3} (kg).'
                        ' The plane is inclined at angle {4} = {5} degree. The plane is placed on a frictionless'
                        ' horizontal surface. The block is released. '.format(m, m_val, M, M_val, theta, theta_val))
-        wanted_V1 = seqg('What is the horizontal acceleration {0} of the plane.'.format(A_x))
-        wanted_V2 = seqg('Find the horizontal acceleration of the plane {0}.'.format(A_x))
-        wanted_V3 = seqg('Calculate the horizontal acceleration of the plane {0}.'.format(A_x))
-        wanted_V4 = seqg('Based on given information, find the horizontal acceleration of the plane {0}.'.format(A_x))
+        wanted_V1 = seqg('What is the acceleration {0} of the object relative to the plane.'.format(a))
+        wanted_V2 = seqg('Find the acceleration of the object, {0}, relative to the plane.'.format(a))
+        wanted_V3 = seqg('Calculate the acceleration of the object, {0}, relative to the plane.'.format(a))
+        wanted_V4 = seqg('Based on given information, find the acceleration of the object, {0}, relative to the plane.'.format(a))
         g_sentence_V1 = seqg('Assume that gravitational acceleration is {0} = {1} (m/s^2)'.format(g, g_val))
         g_sentence_V2 = seqg('We know that gravitational acceleration is {0} = {1} (m/s^2)'.format(g, g_val))
         question_V1 = seqg(info_V1, g_sentence_V1, wanted_V1)
@@ -205,6 +141,8 @@ class QA_constraint(QAGen):
                     question_V29, question_V30, question_V31, question_V32)
         return q
 
+
+ ## edit answer
     def A(s,m_val, M_val, g_val, theta_val, m, M, g, theta, A_x):
         '''
         A_x = mgsin(theta)cos(theta)/(M+msin^2(theta))
