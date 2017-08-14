@@ -143,9 +143,9 @@ class QA_constraint(QAGen):
 
 
  ## edit answer
-    def A(s,m_val, M_val, g_val, theta_val, m, M, g, theta, A_x):
+    def A(s,m_val, M_val, g_val, theta_val, m, M, g, theta, a):
         '''
-        A_x = mgsin(theta)cos(theta)/(M+msin^2(theta))
+        A =  g*sin(theta)*(1+m*cos(theta)/(M+m*sin^2(theta)))
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
@@ -153,13 +153,13 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         theta_val_rad = theta_val * np.pi/ 180
-        A_x_val = (m_val * g_val * np.sin(theta_val_rad) * np.cos(theta_val_rad))/(M_val + (m_val * np.sin(theta_val_rad)**2))
-        A_x_symbol = seqg('({0}*{1}*sin({2})*cos({2}))/({3} + ({0}*sin^2({2})))'.format(m, g, theta, M))
-        answer_V1 = seqg('{0} = {1} = {2} (m/s^2)'.format(A_x, A_x_symbol, A_x_val))
-        answer_V2 = seqg('The horizontal acceleration can be found via this equation ', A_x_symbol, '. Given the values '
+        a_val = g_val * np.sin(theta_val_rad) * (1 + m_val*np.cos(theta_val_rad)/(M_val + m_val * np.sin(theta_val_rad)**2))
+        a_symbol = seqg('({0}*sin({1})*(1+{2}*cos({1})/({3}+{2}*sin^2({1})))'.format(g, theta, m, M))
+        answer_V1 = seqg('{0} = {1} = {2} (m/s^2)'.format(A_x, a_symbol, a_val))
+        answer_V2 = seqg('The horizontal acceleration can be found via this equation ', a_symbol, '. Given the values '
                                                                                                     'in the question '
                                                                                                     '{0} = {1} (m/s^2)'
-                         .format(A_x, A_x_val))
+                         .format(a, a_val))
         a = choiceg(answer_V1, answer_V2)
         return a
 

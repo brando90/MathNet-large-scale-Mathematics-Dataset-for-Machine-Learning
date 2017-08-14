@@ -141,10 +141,9 @@ class QA_constraint(QAGen):
                     question_V29, question_V30, question_V31, question_V32)
         return q
 
- ### Edit answer
-    def A(s,m_val, M_val, g_val, theta_val, m, M, g, theta, A_x):
+    def A(s,m_val, M_val, g_val, theta_val, m, M, g, theta, a):
         '''
-        A_x = mgsin(theta)cos(theta)/(M+msin^2(theta))
+        A = g * [(sin(theta)*i + cos(theta)j)/(cos(theta) + sin(theta)tan(theta)(1 + m/M)) - j]
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
@@ -152,13 +151,16 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         theta_val_rad = theta_val * np.pi/ 180
-        A_x_val = (m_val * g_val * np.sin(theta_val_rad) * np.cos(theta_val_rad))/(M_val + (m_val * np.sin(theta_val_rad)**2))
-        A_x_symbol = seqg('({0}*{1}*sin({2})*cos({2}))/({3} + ({0}*sin^2({2})))'.format(m, g, theta, M))
-        answer_V1 = seqg('{0} = {1} = {2} (m/s^2)'.format(A_x, A_x_symbol, A_x_val))
-        answer_V2 = seqg('The horizontal acceleration can be found via this equation ', A_x_symbol, '. Given the values '
+        a_val_x =  g_val * (np.sin(theta_val_rad)/(np.cos(theta_val_rad)+np.sin(theta_val_rad)*np.tan(theta_val_rad)*(1+m_val/M_val)))
+        a_val_y = g_val * (-1 + np.cos(theta_val_rad)/(np.cos(theta_val_rad) + np.sin(theta_val_rad)*np.tan(theta_val_rad)*(1+m_val/M_val)))
+        a_vector_symbols = seqg('{0} * [(sin({1}i + cos({1}j/(cos({1}+sin({1})tan({1})(1+{2}/{3})))) - j)]'.format(g,
+                                                                                                               theta,
+                                                                                                               m, M))
+        answer_V1 = seqg('{0} = ({1}i + {2}j) (m/s^2)'.format(a, a_val_x, a_val_y))
+        answer_V2 = seqg('The acceleration vector of the object can be found via this equation ', a_vector_symbols, '. Given the values '
                                                                                                     'in the question '
-                                                                                                    '{0} = {1} (m/s^2)'
-                         .format(A_x, A_x_val))
+                                                                                                    '{0} = ({1}i + {2}j) (m/s^2)'
+                         .format(a, a_val_x, a_val_y))
         a = choiceg(answer_V1, answer_V2)
         return a
 
