@@ -17,7 +17,7 @@ class QA_constraint(QAGen):
         super().__init__()
         self.author = 'Elaheh Ahmadi'
         self.description = 'A massless pulley hangs from a fixed support. A massless string connecting two masses,' \
-                           ' m1 and m2, hangs over the pulley. Find the acceleration of the mass m1?'
+                           ' m1 and m2, hangs over the pulley. Find the acceleration of the mass m2?'
 
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['Physics' ,'Classical Mechanics' ,'Block', 'Mass', 'Slide', 'Friction', 'Plane',
@@ -33,8 +33,6 @@ class QA_constraint(QAGen):
         '''
         random.seed(seed)
         np.random.seed(seed)
-        fake.random.seed(seed)
-        # TODO write more seeding libraries that you are using
 
     def init_consistent_qa_variables(self):
         """
@@ -50,10 +48,10 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            #TODO
+            m1, m2, g, a2 = symbols('m1 m2 g a2')
         else:
-            #TODO
-        return
+            m1, m2, g, a2 = symbols('m1 m2 g a2')
+        return m1, m2, g, a2
 
     def init_qa_variables(self):
         '''
@@ -71,48 +69,88 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            #TODO
+            m1_val, m2_val, g_val = 1, 2, 10
         else:
-            #TODO
-        return
+            m1_val, m2_val = np.random.randint(1, 100000, 2)/10
+            g_val = random.choice([10, 9.8, 9.81, 9.807])
+        return m1_val, m2_val, g_val
 
-    def Q(s,not_consistent,consistent): #TODO change the signature of the function according to your question
+    def Q(s, m1_val, m2_val, g_val, m1, m2, g, a2):
         '''
-        Small question description.
+        A massless pulley hangs from a fixed support. A massless string connecting two masses,
+        m1 and m2, hangs over the pulley. Find the acceleration of the mass m1?
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        # TODO
-        #q_format1
-        #q_format2
-        #...
-        # choices, try providing a few
-        # these van include variations that are hard to encode with permg or variable substitution
-        # example, NL variations or equaiton variations
-        q = choiceg()
+        info_V1 = seqg('A massless pulley hangs from a fixed support. A massless string connecting two masses,'
+                        '{0} = {1} (kg) and {2} = {3} (kg), hangs over the pulley.'.format(m1, m1_val, m2, m2_val))
+        info_V2 = seqg('A massless pulley hangs from a fixed support. A massless string connecting two masses,'
+                       '0} = {1} (kg) and {2} = {3} (kg), hangs over the pulley.'.format(m1, m1_val, m2, m2_val))
+        wanted_V1 = seqg('Find the acceleration {0} of the mass {1}.'.format(a2, m2))
+        wanted_V2 = seqg('Calculate the acceleration {0} of the mass {1}.'.format(a2, m2))
+        wanted_V3 = seqg('What is the acceleration {0} of the mass {1}'.format(a2, m2))
+        wanted_V4 = seqg('Based on given informations what is the acceleration {0} of the mass {1}.'.format(a2, m2))
+        g_sentence_V1 = seqg('Assume that gravitational acceleration is {0} = {1} (m/s^2)'.format(g, g_val))
+        g_sentence_V2 = seqg('We know that gravitational acceleration is {0} = {1} (m/s^2)'.format(g, g_val))
+        question_V1 = seqg(info_V1, g_sentence_V1, wanted_V1)
+        question_V2 = seqg(info_V1, g_sentence_V1, wanted_V2)
+        question_V3 = seqg(info_V1, g_sentence_V1, wanted_V3)
+        question_V4 = seqg(info_V1, wanted_V1, g_sentence_V1)
+        question_V5 = seqg(info_V1, wanted_V2, g_sentence_V1)
+        question_V6 = seqg(info_V1, wanted_V3, g_sentence_V1)
+        question_V7 = seqg(info_V1, g_sentence_V2, wanted_V1)
+        question_V8 = seqg(info_V1, g_sentence_V2, wanted_V2)
+        question_V9 = seqg(info_V1, g_sentence_V2, wanted_V3)
+        question_V10 = seqg(info_V1, wanted_V1, g_sentence_V2)
+        question_V11 = seqg(info_V1, wanted_V2, g_sentence_V2)
+        question_V13 = seqg(info_V1, wanted_V3, g_sentence_V2)
+        question_V14 = seqg(info_V2, g_sentence_V1, wanted_V1)
+        question_V15 = seqg(info_V2, g_sentence_V1, wanted_V2)
+        question_V16 = seqg(info_V2, g_sentence_V1, wanted_V3)
+        question_V17 = seqg(info_V2, wanted_V1, g_sentence_V1)
+        question_V18 = seqg(info_V2, wanted_V2, g_sentence_V1)
+        question_V19 = seqg(info_V2, wanted_V3, g_sentence_V1)
+        question_V20 = seqg(info_V2, g_sentence_V2, wanted_V1)
+        question_V21 = seqg(info_V2, g_sentence_V2, wanted_V2)
+        question_V22 = seqg(info_V2, g_sentence_V2, wanted_V3)
+        question_V23 = seqg(info_V2, wanted_V1, g_sentence_V2)
+        question_V24 = seqg(info_V2, wanted_V2, g_sentence_V2)
+        question_V12 = seqg(info_V2, wanted_V3, g_sentence_V2)
+        question_V25 = seqg(info_V1, g_sentence_V1, wanted_V4)
+        question_V26 = seqg(info_V1, wanted_V4, g_sentence_V1)
+        question_V27 = seqg(info_V1, g_sentence_V2, wanted_V4)
+        question_V28 = seqg(info_V1, wanted_V4, g_sentence_V2)
+        question_V29 = seqg(info_V2, g_sentence_V1, wanted_V4)
+        question_V30 = seqg(info_V2, wanted_V4, g_sentence_V1)
+        question_V31 = seqg(info_V2, g_sentence_V2, wanted_V4)
+        question_V32 = seqg(info_V2, wanted_V4, g_sentence_V2)
+
+        q = choiceg(question_V1, question_V2, question_V3, question_V4, question_V5, question_V6, question_V7,
+                    question_V8, question_V9, question_V10, question_V11, question_V12, question_V13, question_V14,
+                    question_V15, question_V16, question_V17, question_V18, question_V19, question_V20, question_V21,
+                    question_V22, question_V23, question_V24, question_V25, question_V26, question_V27, question_V28,
+                    question_V29, question_V30, question_V31, question_V32)
         return q
 
-    def A(s,not_consistent,consistent): #TODO change the signature of the function according to your answer
+    def A(s, m1_val, m2_val, g_val, m1, m2, g, a2):
         '''
-        Small answer description.
+        a1 = (m1 - m2)g/m1
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        # TODO
-        #ans_sympy
-        #ans_numerical
-        #ans_vnl_vsympy1
-        #ans_vnl_vsympy2
-        # choices, try providing a few
-        # these van include variations that are hard to encode with permg or variable substitution
-        # example, NL variations or equaiton variations
-        a = choiceg()
+        a2_val = g_val*(m2_val - m1_val)/m2_val
+        a2_symbol = seqg('{0}*({1}-{2})/({1}-{2})'.format(g, m2, m1))
+        answer_V1 = seqg('{0} (m/s^2)'.format(a2_val))
+        answer_V2 = seqg('{0} = {1} = {2} (m/s^2)'.format(a2, a2_symbol, a2_val))
+        answer_V3 = seqg('The acceleration of the mass {0} can be found via the equation {1}. Given the values, '
+                         '{2} = {3} (m/s^2).'.format(m2, a2_symbol, a2, a2_val))
+        a = choiceg(answer_V1, answer_V2, answer_V3)
         return a
 
     ##

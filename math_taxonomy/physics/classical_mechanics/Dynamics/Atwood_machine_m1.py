@@ -33,8 +33,6 @@ class QA_constraint(QAGen):
         '''
         random.seed(seed)
         np.random.seed(seed)
-        fake.random.seed(seed)
-        # TODO write more seeding libraries that you are using
 
     def init_consistent_qa_variables(self):
         """
@@ -139,7 +137,7 @@ class QA_constraint(QAGen):
 
     def A(s, m1_val, m2_val, g_val, m1, m2, g, a1):
         '''
-        a1 = (m1 - m2)g/m1
+        a1 = (m1 - m2)g/(m1+m2)
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
@@ -147,7 +145,7 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         a1_val = g_val*(m1_val - m2_val)/m1_val
-        a1_symbol = seqg('{0}*({1}-{2})/{1}'.format(g, m1, m2))
+        a1_symbol = seqg('{0}*({1}-{2})/({1}+{2})'.format(g, m1, m2))
         answer_V1 = seqg('{0} (m/s^2)'.format(a1_val))
         answer_V2 = seqg('{0} = {1} = {2} (m/s^2)'.format(a1, a1_symbol, a1_val))
         answer_V3 = seqg('The acceleration of the mass {0} can be found via the equation {1}. Given the values, '
