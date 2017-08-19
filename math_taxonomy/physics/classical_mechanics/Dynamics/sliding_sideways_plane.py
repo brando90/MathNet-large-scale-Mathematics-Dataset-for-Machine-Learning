@@ -49,11 +49,13 @@ class QA_constraint(QAGen):
         Note: debug flag can be used to deterministically output a QA that has
         simple numbers to check the correctness of your QA.
         """
-        if self.debug:
-
+        if   self.debug:
+            theta, mu, V, g, Vf = symbols('theta mu V g Vf')
         else:
-             
-        return
+            mu = symbols(chr(956))
+            theta = symbols(chr(952))
+            V, g, Vf = symbols('V g Vf')
+        return theta, mu, V, g, Vf
 
     def init_qa_variables(self):
         '''
@@ -71,48 +73,54 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            #TODO
+            V_val, g_val, theta_val = 10, 10, 30
         else:
-            #TODO
-        return
+            g_val = random.choice([10, 9.8, 9.81, 9.807])
+            V_val = np.random.randint(1, 10000, 2)/10
+            theta_val = np.random.randint(0,90)
 
-    def Q(s,not_consistent,consistent): #TODO change the signature of the function according to your question
+        return V_val, g_val, theta_val
+
+    def Q(s, V_val, g_val, theta_val, theta, mu, V, g, Vf):
         '''
-        Small question description.
+        A block is placed on a plane inclined at angle μ. The coefficient of friction between the' \
+         block and the plane is μ = tanμ. The block is given a kick so that it initially moves with ' \
+        speed V horizontally along the plane (that is, in the direction perpendicular to the ' \
+        direction pointing straight down the plane). What is the speed of the block after a very' \
+        long time?
 
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        # TODO
-        #q_format1
-        #q_format2
-        #...
-        # choices, try providing a few
-        # these van include variations that are hard to encode with permg or variable substitution
-        # example, NL variations or equaiton variations
-        q = choiceg()
+        info_V1 = seqg('A block is placed on a plane inclined at angle {0} = {1} degree. The coefficient of friction between the' \
+         'block and the plane is {2} = tan({0}). The block is given a kick so that it initially moves with ' \
+        'speed {3} = {4} (m/s) horizontally along the plane (that is, in the direction perpendicular to the ' \
+        'direction pointing straight down the plane). '.format(theta, theta_val, mu, V, V_val))
+        wanted_V1 = seqg(' What is the speed of the block {0} after a very' \
+        'long time?'.format(Vf))
+        g_sentence_V1 = seqg('Assume that gravitational acceleration is {0} = {1} (m/s^2)'.format(g, g_val))
+        g_sentence_V2 = seqg('We know that gravitational acceleration is {0} = {1} (m/s^2)'.format(g, g_val))
+        question_V1 = seqg(info_V1, wanted_V1, g_sentence_V1)
+        question_V2 = seqg(info_V1, wanted_V1, g_sentence_V2)
+
+        q = choiceg(question_V1, question_V2)
         return q
 
-    def A(s,not_consistent,consistent): #TODO change the signature of the function according to your answer
+    def A(s, V_val, g_val, theta_val, theta, mu, V, g, Vf):
         '''
-        Small answer description.
-
+        Vf = V/2
         Important Note: first variables are the not consistent variables followed
         by the consistent ones. See sample QA example if you need too.
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
-        # TODO
-        #ans_sympy
-        #ans_numerical
-        #ans_vnl_vsympy1
-        #ans_vnl_vsympy2
-        # choices, try providing a few
-        # these van include variations that are hard to encode with permg or variable substitution
-        # example, NL variations or equaiton variations
-        a = choiceg()
+        Vf_val = V_val/2
+        Vf_symbol = seqg('{0} = {1}/2'.format(Vf, V))
+        answer_V1 = seqg('{0} (m/s)'.format(Vf_val))
+        answer_V2 = seqg('{0} = {1} = {2} (m/s)'.format(Vf, Vf_symbol, Vf_val))
+        a = choiceg(answer_V1, answer_V2)
         return a
 
     ##
