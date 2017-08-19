@@ -16,9 +16,10 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'Erick Rodriguez'
-        self.description = 'A factory has 500 old items available, and 1500 new items in stock.''
-        self.description += ' The problem is old items have o = 0.20 chance of being defective, '
-        self.description += 'and new items have n = 0.05 chance of being defective.'
+        self.description = 'A factory has a = 500 old items available, and b = 1500 new items in stock.'
+        self.description += 'Old items have o = 0.20 chance of being defective, '
+        self.description += 'New items have n = 0.05 chance of being defective.'
+        self.description += 'How many total items are likely to be defective?'
         # keywords about the question that could help to make this more searchable in the future
         self.keywords = ['dependent','changing sample size', 'defective']
         self.use_latex = True
@@ -32,7 +33,7 @@ class QA_constraint(QAGen):
         '''
         random.seed(seed)
         np.random.seed(seed)
-        fake.random.seed(seed)
+        self.fake.random.seed(seed)
         # TODO write more seeding libraries that you are using
 
     def init_consistent_qa_variables(self):
@@ -50,12 +51,12 @@ class QA_constraint(QAGen):
         """
         if self.debug:
             items = 'items'
-            n,o = symbols('n o')
+            a,b,n,o = symbols('a b n o')
         else:
-            n,o = self.get_symbols(2)
+            a,b,n,o = self.get_symbols(4)
             it = utils.get_items()
             items = self.get_names(1, names_list=it)[0]
-        return o,n,items
+        return a,b,n,o,items
 
     def init_qa_variables(self):
         '''
@@ -84,7 +85,7 @@ class QA_constraint(QAGen):
             n_value = np.random.randint(1,10)*0.01
         return old_count,new_count,o_value,n_value
 
-    def Q(s,old_count,new_count,o_value,n_value,o,n,items):
+    def Q(s,old_count,new_count,o_value,n_value,a,b,n,o,items):
         '''
         Small question description.
 
@@ -94,16 +95,24 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         # TODO
-        #q_format1
-        #q_format2
+        seq1 = seqg('A factory has',Eq(a,old_count),'old',items,'available, and',Eq(b,new_count),'new',items,'in stock.')
+        perm1 = seqg('Old',items,'have',Eq(o,o_value),'chance of being defective.')
+        perm1b = seqg('Old',items,'are defective with probability',Eq(o,o_value))
+        perm2 = seqg('New',items,'have',Eq(n,n_value),'chance of being defective.')
+        perm2b = seqg('New',items,'are defective with probability',Eq(n,n_value))
+        end =  seqg('How many total',items,'are likely to be defective?')
+        perm = perg(perm1,perm2)
+        permb = perg(perm1b,perm2b)
+        q_format1 = seqg(seq1,perm,end)
+        q_format2 = seqg(seq1,perm,end)
         #...
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        q = choiceg()
+        q = choiceg(q_format1,q_format2)
         return q
 
-    def A(s,not_consistent,consistent): #TODO change the signature of the function according to your answer
+    def A(s,old_count,new_count,o_value,n_value,a,b,n,o,items): #TODO change the signature of the function according to your answer
         '''
         Small answer description.
 
@@ -113,14 +122,14 @@ class QA_constraint(QAGen):
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
         # TODO
-        #ans_sympy
-        #ans_numerical
-        #ans_vnl_vsympy1
+        ans_sympy = Eq(a*o+b*n,old_count*o_value+new_count*n_value)
+        ans_numerical = old_count*o_value + new_count*n_value
+        ans_vnl_vsympy1 = seqg(ans_sympy,items,'are likely to be defective.')
         #ans_vnl_vsympy2
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        a = choiceg()
+        a = choiceg(ans_vnl_vsympy1)
         return a
 
     ##
