@@ -147,7 +147,7 @@ class QAOps:
 
     ##
     #TODO: Test cases for get_symbols
-    def get_symbols(self, num, symbols_str=None, symbols_list=None, uppercase=False, greek_letters=True):
+    def get_symbols(self, num, symbols_str=None, symbols_list=None, uppercase=False, greek_letters=True, integer=False):
         '''
         Gets n=num random symbols, either from given string of symbols separated by spaces (sympy format) or generates them randomly.
         '''
@@ -155,7 +155,7 @@ class QAOps:
         # TODO: we could eventually extend it to also have like x_1 x_2 x_3
         if symbols_str != None or symbols_list != None:
             if symbols_str != None:
-                symbols = sympy.symbols(symbols_str)
+                symbols = sympy.symbols(symbols_str, integer=integer)
             else:
                 symbols = symbols_list
             if set(symbols).issubset(set(self.sympy_vars)):
@@ -167,7 +167,7 @@ class QAOps:
                 letters = list(string.ascii_letters)
             else:
                 letters = list(string.ascii_lowercase)
-            symbols = sympy.symbols(" ".join(letters))
+            symbols = sympy.symbols(" ".join(letters), integer=integer)
         if set(symbols).issubset(self.sympy_vars):
             # TODO if this is true then library starts using x_1,x_2,...etc to avoid issue, note at this point
             # the user is relying on use so we can do whatever we want
