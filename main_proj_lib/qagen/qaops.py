@@ -25,11 +25,11 @@ class QAOps:
         self.latex_visualize = False
         self.generator_unit_test = False
         self.fake = Factory.create()
-    
+
     #register library, provide seeding func for library, provide state_getting for library
 
     #how to enforce usage only of libraries that are registered?
-    
+
     #seedall seeds all
 
     def seqg(self,*args):
@@ -203,9 +203,9 @@ class QAOps:
             names = random.sample(choices_for_names, num) # Return a k length list of unique elements chosen from the population sequence.
             self.names += (names)
         return tuple(names)
-    
+
     def get_name(self):
-        return self.get_names(1)[0] 
+        return self.get_names(1)[0]
 
     def get_symbol(self):
         return self.get_symbols(1)
