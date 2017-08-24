@@ -25,11 +25,12 @@ class QAOps:
         self.latex_visualize = False
         self.generator_unit_test = False
         self.fake = Factory.create()
-    
+        self.rng = random.Random()
+
     #register library, provide seeding func for library, provide state_getting for library
 
     #how to enforce usage only of libraries that are registered?
-    
+
     #seedall seeds all
 
     def seqg(self,*args):
@@ -61,7 +62,7 @@ class QAOps:
         # perg
         args = self._preprocess_args(args)
         if not self.debug:
-            args = random.sample( args, len(args) ) # Return a len(args) length list of unique elements chosen from args
+            args = self.rng.sample(args, len(args)) # Return a len(args) length list of unique elements chosen from args
         args = self.convert_to_list_of_string(args)
         return ' '.join(args)
 
@@ -76,7 +77,7 @@ class QAOps:
         # choiceg
         args = self._preprocess_args(args)
         if not self.debug:
-            args = random.sample(args,1) # samples a single element randomly from args
+            args = self.rng.sample(args,1) # samples a single element randomly from args
             return args[0]
         else:
             return args[0]
@@ -203,9 +204,9 @@ class QAOps:
             names = random.sample(choices_for_names, num) # Return a k length list of unique elements chosen from the population sequence.
             self.names += (names)
         return tuple(names)
-    
+
     def get_name(self):
-        return self.get_names(1)[0] 
+        return self.get_names(1)[0]
 
     def get_symbol(self):
         return self.get_symbols(1)
