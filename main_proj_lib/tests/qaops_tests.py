@@ -18,7 +18,7 @@ class Test_QAOps(unittest.TestCase):
         # check that seed_all(self,seed) works
         seed = 0 # random.randint(0,500)
         qag = utg.QA_unit_tester_example()
-        qag.seed_all(seed)
+        qag._seed_all(seed)
         name1,name2 = qag.get_names(2)
         for i in range(30):
             qag.seed_all(seed)
@@ -38,10 +38,10 @@ class Test_QAOps(unittest.TestCase):
         # check that seed_all(self,seed) works
         seed = 0 # random.randint(0,500)
         qag = utg.QA_unit_tester_example()
-        qag.seed_all(seed)
+        qag._seed_all(seed)
         symbol1,symbol2 = qag.get_symbols(2)
         for i in range(30):
-            qag.seed_all(seed)
+            qag._seed_all(seed)
             qag.reset_variables_states()
             new_symbol1,new_symbol2 = qag.get_symbols(2)
             self.assertEqual(new_symbol1,symbol1, msg='Symbols should be deterministic given seed')
@@ -56,13 +56,13 @@ class Test_QAOps(unittest.TestCase):
         args = ['Lorem ipsum', '1', 2, 3, expr1]
         kwargs = {}
         test1 = qag.seqg(*args)
-        self.assertEqual(test1(), 'Lorem ipsum 1 2 3 x = y', msg='seqg should return string') 
+        self.assertEqual(test1(), 'Lorem ipsum 1 2 3 x = y', msg='seqg should return string')
         self.assertEqual(str(test1), str((qag.seqg, tuple(args), kwargs)), msg='seqg DE object should have expected arguments')
 
     def test_perg(self):
         seed = 0
         qag = utg.QA_unit_tester_example()
-        qag.seed_all(seed)
+        qag._seed_all(seed)
         qag.generator_unit_test = True
         x, y, z = symbols('x y z')
         expr1 = Eq(x, y)
@@ -71,40 +71,40 @@ class Test_QAOps(unittest.TestCase):
         test1 = qag.perg(*args)
         self.assertEqual(str(test1), str((qag.perg, tuple(args), kwargs)), msg='Perg DE object should be as expected')
         test1_str = test1()
-        qag.seed_all(seed)
+        qag._seed_all(seed)
         test2_str = test1()
         self.assertEqual(test1_str, test2_str, msg='Perg should be deterministic given seed')
         permuted = False
         for n in range(100):
-            qag.seed_all(n)
+            qag._seed_all(n)
             test3_str = test1()
             if test3_str != test1_str: permuted = True
         self.assertTrue(permuted, msg='Seed should affect order chosen by perg')
-    
-    
+
+
     def test_choiceg(self):
         seed = 0
         qag = utg.QA_unit_tester_example()
-        qag.seed_all(seed)
+        qag._seed_all(seed)
         qag.generator_unit_test = True
         x, y, z = symbols('x y z')
         expr1 = Eq(x, y)
-        qag.seed_all(seed)
+        qag._seed_all(seed)
         args = ['Lorem ipsum', '1', 2, 3, expr1]
         kwargs = {}
         test1 = qag.choiceg(*args)
         self.assertEqual(str(test1), str((qag.choiceg, tuple(args), kwargs)), msg='Choiceg DE object should be as expected')
         test1_str = test1()
-        qag.seed_all(seed)
+        qag._seed_all(seed)
         test2_str = test1()
         self.assertEqual(test1_str, test2_str, msg='Choiceg should be deterministic given seed')
         permuted = False
         for n in range(100):
-            qag.seed_all(n)
+            qag._seed_all(n)
             test3_str = test1()
             if test3_str != test1_str: permuted = True
         self.assertTrue(permuted, msg='Seed should affect argument chosen by choiceg')
-    
+
 
     def test_preprocess_arg(self):
         qag = utg.QA_unit_tester_example()
@@ -121,8 +121,8 @@ class Test_QAOps(unittest.TestCase):
         self.assertEqual(qag._preprocess_arg(arg_str), arg_str, msg='Strings should not be changed')
         self.assertEqual(qag._preprocess_arg(arg_sym), arg_sym, msg='Symbols should not be changed')
         self.assertEqual(qag._preprocess_arg(arg_int), arg_int, msg='Integers should not be changed')
-        
-    
+
+
     def test_convert_to_list_of_string(self):
         seed = 0
         qag = utg.QA_unit_tester_example()
@@ -130,8 +130,8 @@ class Test_QAOps(unittest.TestCase):
         x, y, z = symbols('x y z')
         expr1 = Eq(x, y)
         args = ['Lorem ipsum', '1', 2, 3, expr1]
-        self.assertEqual(qag.convert_to_list_of_string(args), ['Lorem ipsum', '1', '2', '3', qag.sympy2text(expr1)], msg='Should convert to list of strings') 
-        
+        self.assertEqual(qag.convert_to_list_of_string(args), ['Lorem ipsum', '1', '2', '3', qag.sympy2text(expr1)], msg='Should convert to list of strings')
+
 
     def test_sympy2text(self):
         x, y, z = symbols('xray yankee zulu')
@@ -141,7 +141,7 @@ class Test_QAOps(unittest.TestCase):
         qag.use_latex = True
         self.assertEqual(qag.sympy2text(expr1), latex(expr1), msg='Should use latex output if latex flag is true')
         self.assertEqual(qag.sympy2text(x), latex(x), msg='Should use latex output if latex flag is true')
-        qag.use_latex = False   
+        qag.use_latex = False
         self.assertEqual(qag.sympy2text(expr1), str(expr1), msg='Should use symbolic output if latex flag is false')
         self.assertEqual(qag.sympy2text(x), 'xray', msg='Should use symbolic output if latex flag is false')
 
@@ -162,13 +162,13 @@ class Test_QAOps(unittest.TestCase):
         self.assertTrue((str(test3a) in list(string.ascii_lowercase) and str(test3b) in list(string.ascii_lowercase)), msg='Symbols generated from default lowercase set should be in default lowercase set')
         self.assertNotEqual(str(test4a), str(test4b), msg='Symbols generated from default uppercase set should not contain duplicates')
         self.assertTrue((str(test4a) in list(string.ascii_letters) and str(test4b) in list(string.ascii_letters)), msg='Symbols generated from default uppercase set should be in default uppercase set')
-        prev_choices = [] 
+        prev_choices = []
         qag = utg.QA_unit_tester_example()
         for n in range(10):
             sym = qag.get_symbols(1)
-            self.assertTrue(sym not in prev_choices, msg='Generated symbols should not contain duplicates') 
+            self.assertTrue(sym not in prev_choices, msg='Generated symbols should not contain duplicates')
             prev_choices.append(sym)
-         
+
 
     def test_get_names(self):
         seed = 0
@@ -181,7 +181,7 @@ class Test_QAOps(unittest.TestCase):
         self.assertTrue((' ' in test1a and ' ' in test1b), msg='If full_name flag is on, names should be full names')
         self.assertNotEqual(test2a, test2b, msg='Names generated from list should not contain duplicates')
         self.assertTrue((' ' not in test2a and ' ' not in test2b), msg='')
-        self.assertTrue(test3 in names_list, msg='If full_name flag is off, names should only be first names') 
+        self.assertTrue(test3 in names_list, msg='If full_name flag is off, names should only be first names')
         qag = utg.QA_unit_tester_example()
         prev_names = []
         for n in range(20):

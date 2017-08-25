@@ -131,7 +131,7 @@ class Test_seed_all_provides_variation(unittest.TestCase):
         q_original,a_original = qagenerator.get_single_qa(seed=seed)
         for i in range(1,501):
             seed = i
-            qagenerator.seed_all(seed)
+            qagenerator._seed_all(seed)
             q,a = qagenerator.get_single_qa(seed=seed)
             self.assertNotEqual( q,q_original )
             self.assertNotEqual( a,a_original )
@@ -157,7 +157,7 @@ class Test_all_funcs_with_seed_are_deterministic(unittest.TestCase):
             q_original,a_original = qagenerator.get_single_qa(seed=seed)
             for i in range(100):
                 # set the same seed as the original
-                qagenerator.seed_all(seed)
+                qagenerator._seed_all(seed)
                 # get variables for qa and register them for the current q,a
                 variables, variables_consistent = qagenerator._create_all_variables()
                 # get concrete qa strings
@@ -219,9 +219,9 @@ class Test_user_has_random_np_faker_seeded(unittest.TestCase):
         # check that the symbols that are extracted are indeed different
         qag = self.qa_constructor()
         seed = 0
-        qag.seed_all(seed)
+        qag._seed_all(seed)
         a1,b1 = qag.get_symbols(2)
-        qag.seed_all(seed)
+        qag._seed_all(seed)
         qag.sympy_vars = [] # you need this because the qa stores things to avoid duplicates, so you need to clean it
         a2,b2 = qag.get_symbols(2)
         # since the seeding function should work, it should act deterministically
@@ -230,9 +230,9 @@ class Test_user_has_random_np_faker_seeded(unittest.TestCase):
         # check
         qag = self.qa_constructor()
         seed = 0
-        qag.seed_all(seed)
+        qag._seed_all(seed)
         original_nameA1,original_nameB1 = qag.get_names(2)
-        qag.seed_all(seed)
+        qag._seed_all(seed)
         qag.names = [] # you need this because the qa stores things to avoid duplicates, so you need to clean it
         original_nameA2,original_nameB2 = qag.get_names(2)
         # since the seeding function should work, it should act deterministically
