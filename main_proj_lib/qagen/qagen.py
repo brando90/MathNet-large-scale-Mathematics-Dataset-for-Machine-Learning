@@ -34,11 +34,19 @@ class QA:
 
 class QAGen(QA,QAOps):
 
+    def __init__(self):
+        QA.__init__(self)
+        QAOps.__init__(self)
+
     def _to_hashable_(self, variables):
         '''
         Convert a set of variables to a format that can be hashed to check for duplicates
         '''
         return variables
+
+    def _seed_all(self, seed):
+        self.seed_all(seed)
+        self.rng.seed(seed)
 
     def _create_all_variables(self):
         '''
@@ -67,7 +75,7 @@ class QAGen(QA,QAOps):
         Note that "single" means that the variables for the question and answer
         are the same, just maybe the formats might be different.
         '''
-        self.seed_all(seed)
+        self._seed_all(seed)
         # get variables for qa and register them for the current q,a
         variables, variables_consistent = self._create_all_variables()
         # set q and correct a
@@ -77,7 +85,7 @@ class QAGen(QA,QAOps):
         ans_list = [correct_a_str]
         for i in range(nb_answers_choices-1):
             # note: its not neccessary to seed because the random number generators move their random states as their functions are used
-            #self.seed_all(seed)
+            #self._seed_all(seed)
             variables = self.init_qa_variables()
             a_str = self.A(*variables,*variables_consistent)
             ans_list.append(a_str)
@@ -96,7 +104,7 @@ class QAGen(QA,QAOps):
         Note that "single" means that the variables for the question and answer
         are the same, just maybe the formats might be different.
         '''
-        self.seed_all(seed)
+        self._seed_all(seed)
         # get variables for qa and register them for the current q,a
         variables, variables_consistent = self._create_all_variables()
         # set q and correct a
@@ -114,7 +122,7 @@ class QAGen(QA,QAOps):
         Note that "single" means that the variables for the question and answer
         are the same, just maybe the formats might be different.
         '''
-        self.seed_all(seed)
+        self._seed_all(seed)
         # get variables for qa and register them for the current q,a
         variables, variables_consistent = self._create_all_variables()
         # set q and correct a
@@ -132,7 +140,7 @@ class QAGen(QA,QAOps):
         Note that "single" means that the variables for the question and answer
         are the same, just maybe the formats might be different.
         '''
-        self.seed_all(seed)
+        self._seed_all(seed)
         # get variables for qa and register them for the current q,a
         variables, variables_consistent = self._create_all_variables()
         # set q and correct a
@@ -162,14 +170,14 @@ class QAGen(QA,QAOps):
             self.debug = False # Note this is a temporary hack to turn of randomness of choiceg,permg
             self.reset_variables_states()
             q_list = []
-            self.seed_all(seed_qa)
+            self._seed_all(seed_qa)
             # get variables for qa and register them for the current q,a
             variables, variables_consistent = self._create_all_variables()
             # now give NL variety to the qustions
             for seed_q in range(nb_questions):
                 q_str = self.Q(*variables,*variables_consistent)
                 q_list.append(q_str)
-            self.seed_all(seed_output_format) # TODO why doesn't it work with this?
+            self._seed_all(seed_output_format) # TODO why doesn't it work with this?
             #self.debug = True # Note this is a temporary hack to turn of randomness of choiceg,permg
             correct_a_str = self.A(*variables,*variables_consistent)
             qa_pair_list.append( (q_list,correct_a_str) )
@@ -188,7 +196,7 @@ class QAGen(QA,QAOps):
         Example of how Q,A are formed in general.
         '''
         # set seed
-        self.seed_all(seed)
+        self._seed_all(seed)
         # get variables for qa and register them for the current q,a
         variables, variables_consistent = self._create_all_variables()
         # get concrete qa strings
