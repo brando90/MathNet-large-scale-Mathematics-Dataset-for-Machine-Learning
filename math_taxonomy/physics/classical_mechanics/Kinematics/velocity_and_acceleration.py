@@ -95,7 +95,7 @@ class QA_constraint(QAGen):
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        question1 = seqg('What is the distance ', Hannah, ' traveles in ', Eq(t, t_val), ' seconds if her initial velocity is ', Eq(v, v_val), ' m/s and her acceleration is ', Eq(a, a_val), 'm/s^2?')
+        question1 = seqg('What is the distance ', Hannah, ' travels in ', Eq(t, t_val), ' seconds if their initial velocity is ', Eq(v, v_val), ' m/s and their acceleration is ', Eq(a, a_val), 'm/s^2?')
         q = choiceg(question1)
         return q
 
@@ -116,7 +116,7 @@ class QA_constraint(QAGen):
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        ans1= seqg(Hannah + ' travels ' + v_val*t_val+.5*a_val*t_val**2 + ' m in ' + Eq(t, t_val) + 'seconds') 
+        ans1= seqg(Hannah, ' travels ', v_val*t_val+.5*a_val*t_val**2, ' m in ', Eq(t, t_val), 'seconds') 
         ans2= seqg('In ', Eq(t, t_val), 'seconds, ', Hannah, ' travels ', v_val*t_val+.5*a_val*t_val**2,' m.')        
         a = choiceg(ans1, ans2)
         return a
@@ -200,9 +200,9 @@ if __name__ == '__main__':
     qagenerator = QA_constraint()
     check_single_question(qagenerator)
     ## uncomment the following to check formats:
-    #check_mc(qagenerator)
-    #check_many_to_one(qagenerator)
-    #check_one_to_many(qagenerator)
-    #check_many_to_one_consistent_format(qagenerator)
+    check_mc(qagenerator)
+    check_many_to_one(qagenerator)
+    check_one_to_many(qagenerator)
+    check_many_to_one_consistent_format(qagenerator)
     ## run unit test given by framework
-    #user_test.run_unit_test_for_user(QA_constraint)
+    user_test.run_unit_test_for_user(QA_constraint)

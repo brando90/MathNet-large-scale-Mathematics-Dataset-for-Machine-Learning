@@ -16,9 +16,9 @@ class QA_constraint(QAGen):
         '''
         super().__init__()
         self.author = 'Skylar Brooks' #TODO your full name
-        self.description = 'Find the box (without a top) with a fixed volume v=100' #TODO example string of your question
+        self.description = 'What is the distance Hannah traveles in t = 10 seconds if her initial velocity is v=3 m/s and her acceleration is a=2 m/s^2?' #TODO example string of your question
         # keywords about the question that could help to make this more searchable in the future
-        self.keywords = ['word problem', 'optimization'] #TODO keywords to search type of question
+        self.keywords = ['physics', 'word problem'] #TODO keywords to search type of question
         self.use_latex = True
 
     def seed_all(self,seed):
@@ -30,8 +30,7 @@ class QA_constraint(QAGen):
         '''
         random.seed(seed)
         np.random.seed(seed)
-        #fake.random.seed(seed)
-        # TODO write more seeding libraries that you are using
+
 
     def init_consistent_qa_variables(self):
         """
@@ -47,10 +46,12 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            v= symbols('v')
+            Hannah = 'Hannah'
+            t, v, a = symbols ('t v a')
         else:
-            v= self.get_symbols(1)
-        return v
+            Hannah = self.get_names(1)
+            t, v, a = self.get_symbols(3)
+        return Hannah,t,v,a
 
     def init_qa_variables(self):
         '''
@@ -68,12 +69,16 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         '''
         if self.debug:
-            v_val = 100
+            t_val = 10
+            v_val = 3
+            a_val = 2
         else:
-            v_val = np.random.randint(100)
-        return v_val
+            t_val = np.random.randint(100)
+            v_val = np.random.randint(10)
+            a_val = np.random.randint(10)
+        return t_val,v_val,a_val
 
-    def Q(s,v,v_val): #TODO change the signature of the function according to your question
+    def Q(s, t_val,v_val,a_val, Hannah,t,v,a): #TODO change the signature of the function according to your question
         '''
         Small question description.
 
@@ -82,6 +87,7 @@ class QA_constraint(QAGen):
         '''
         #define some short cuts
         seqg, perg, choiceg = s.seqg, s.perg, s.choiceg
+        s.use_latex = True
         # TODO
         #q_format1
         #q_format2
@@ -89,12 +95,11 @@ class QA_constraint(QAGen):
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        q1= seqg('Find the box (without a top) with the smallest surface area for a fixed volume ', Eq(v,v_val), '.')
-        q2= seqg('If you have a fixed volume ', Eq(v, v_val), ', then find the box with the smallest surface area.')
-        q = choiceg(q1, q2)
+        question1 = seqg('What is the distance ', Hannah, ' travels in ', Eq(t, t_val), ' seconds if their initial velocity is ', Eq(v, v_val), ' m/s and their acceleration is ', Eq(a, a_val), 'm/s^2?')
+        q = choiceg(question1)
         return q
 
-    def A(s,v, v_val): #TODO change the signature of the function according to your answer
+    def A(s, t_val,v_val,a_val, Hannah,t,v,a): #TODO change the signature of the function according to your answer
         '''
         Small answer description.
 
@@ -111,12 +116,9 @@ class QA_constraint(QAGen):
         # choices, try providing a few
         # these van include variations that are hard to encode with permg or variable substitution
         # example, NL variations or equaiton variations
-        length= 2**(1/3)*v_val**(1/3)
-        width= 2**(-2/3)*v_val**(1/3)
-        sa= 3*2**(2/3)*v_val**(2/3)
-        permutable_part=perg(seqg(' a length of ', length), seqg(' a width of ', width), seqg(' a surface area of ', sa))
-        a1= seqg('The optimal box has ', permutable_part, '.')
-        a = choiceg(a1)
+        ans1= seqg(Hannah, ' travels ', v_val*t_val+.5*a_val*t_val**2, ' m in ', Eq(t, t_val), 'seconds') 
+        ans2= seqg('In ', Eq(t, t_val), 'seconds, ', Hannah, ' travels ', v_val*t_val+.5*a_val*t_val**2,' m.')        
+        a = choiceg(ans1, ans2)
         return a
 
     ##

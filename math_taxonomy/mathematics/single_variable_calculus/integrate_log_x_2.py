@@ -30,7 +30,7 @@ class QA_constraint(QAGen):
         '''
         random.seed(seed)
         np.random.seed(seed)
-        fake.random.seed(seed)
+        self.fake.random.seed(seed)
         # TODO write more seeding libraries that you are using
 
     def init_consistent_qa_variables(self):
@@ -47,10 +47,10 @@ class QA_constraint(QAGen):
         simple numbers to check the correctness of your QA.
         """
         if self.debug:
-            x, a = symbols('x a')
+            x = symbols('x')
         else:
-            x, a = get_symbols(2)
-        return x, a
+            x = self.get_symbols(1)
+        return x
 
     def init_qa_variables(self):
         '''
@@ -91,10 +91,11 @@ class QA_constraint(QAGen):
         # example, NL variations or equaiton variations
         expression_q = log(a_val*x)**2
         question1 = seqg('Can you integrate this:', expression_q, '?')
-        q = choiceg(question1)
+        question2 = seqg('For this equation: ', expression_q, ' integrate with respect to ', x)
+        q = choiceg(question1, question2)
         return q
 
-    def A(s,a_val,x,a): #TODO change the signature of the function according to your answer
+    def A(s,a_val,x): #TODO change the signature of the function according to your answer
         '''
         Small answer description.
 
@@ -194,7 +195,7 @@ def check_many_to_one_consistent_format(qagenerator):
 
 if __name__ == '__main__':
     qagenerator = QA_constraint()
-    check_single_question(qagenerator)
+    #check_single_question(qagenerator)
     ## uncomment the following to check formats:
     #check_mc(qagenerator)
     #check_many_to_one(qagenerator)
