@@ -24,9 +24,7 @@ class QA_gcd(QAGen):
         # hold.
         self.description = (
             "Given integers a = 15 , b = 20 , find their greatest common divisor"
-            " which is the smallest positive"
-            " integer d for which there exist integers x , y such that"
-            " a x + b y = d .")
+            " d and integers x and y such that a x + b y = d .")
         # This problem falls under both algebra and number theory
         self.keywords = ['algebra', 'number theory']
 
@@ -109,11 +107,9 @@ class QA_gcd(QAGen):
         # the question in your description.
         q1 = seqg("Given integers"
                , permutable_part
-               , "find their greatest common divisor which is the smallest"
-               , "positive integer"
-               , d
-               , "for which there exist integers"
-               , x, ",", y
+               , "find their greatest common divisor", d
+               , "and integers"
+               , x, "and", y
                , "such that", sym.Eq(a*x + b*y, d), ".")
         q2 = seqg ("If", a, ",", b
                , "are integers then there exist"
