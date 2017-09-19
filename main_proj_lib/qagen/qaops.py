@@ -32,6 +32,19 @@ class QAOps:
     #how to enforce usage only of libraries that are registered?
 
     #seedall seeds all
+    def _permuteDict (self, dict, permutable):
+        out = dict.copy()
+        for perm in permutable:
+            permutation = zip(perm,
+                self.rng.sample(perm, len(perm)))
+            if not (self.debug):
+                for x, y in permutation:
+                    out[x] = dict[y]
+        return out
+
+    def interpolate(self, string, splices, permutations):
+        splices_p = self._permuteDict(splices, permutations)
+        return self._preprocess_arg(string) % self._preprocess_dict(splices_p)
 
     def seqg(self,*args):
         '''
@@ -93,6 +106,9 @@ class QAOps:
         #args = [self._preprocess_arg(arg) for arg in args]
         kwargs = {k: self._preprocess_arg(v) for k, v in kwargs.items()}
         return kwargs
+
+    def _preprocess_dict(self, dict):
+        return {k: self._preprocess_arg(v) for k, v in dict.items()}
 
     def _preprocess_arg(self, arg):
         '''
