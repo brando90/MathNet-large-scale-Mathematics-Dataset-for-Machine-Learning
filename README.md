@@ -1,4 +1,4 @@
-# eit_proj1
+# MathNet-large-scale-Mathematics-Dataset-for-Machine-Learning
 
 Welcome!
 
