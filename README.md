@@ -27,5 +27,4 @@ etc anything that is an issue that the developers of the library can help with.
   publisher    = {GitHub},
   url          = {https://github.com/brando90/MathNet-large-scale-Mathematics-Dataset-for-Machine-Learning/edit/master/README.md}
 }
-
 ```
